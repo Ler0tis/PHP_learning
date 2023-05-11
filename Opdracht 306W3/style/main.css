@@ -1,0 +1,12 @@
+
+.emoticons{
+    font-family: "monospace";
+    font-size: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+}
+.rabbit{
+    display: grid;
+    font-size: 30;
+}
