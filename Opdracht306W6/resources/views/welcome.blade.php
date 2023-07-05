@@ -6,7 +6,7 @@ require_once 'database.php';
 // Haal alle families op die actief zijn
 $status = '';
 $sql = "SELECT * FROM familie WHERE status IS NULL OR status = ?";
-$familiesResult = executePreparedStatement($conn, $sql, $status);
+$familiesResultaat = executePreparedStatement($conn, $sql, $status);
 ?>
 
 <!DOCTYPE html>
@@ -33,16 +33,15 @@ $familiesResult = executePreparedStatement($conn, $sql, $status);
             <th>Adres</th>
             <th>Acties</th>
         </tr>
-        <?php while ($family = $familiesResult->fetch_assoc()): ?>
+        <?php while ($familie = $familiesResultaat->fetch_assoc()): ?>
             <tr>
-                <td><?php echo $family['id']; ?></td>
-                <td><?php echo $family['naam']; ?></td>
-                <td><?php echo $family['adres']; ?></td>
-                
+                <td><?php echo $familie['id']; ?></td>
+                <td><?php echo $familie['naam']; ?></td>
+                <td><?php echo $familie['adres']; ?></td>
                 <td>
-                    <a href="view_familie.php?id=<?php echo $family['id']; ?>">Bekijken |</a>
-                    <a href="update_familie.php?id=<?php echo $family['id']; ?>">Bewerken |</a>
-                    <a href="delete_familie.php?id=<?php echo $family['id']; ?>">Verwijderen</a>
+                    <a href="view_familie.php?id=<?php echo $familie['id']; ?>">Bekijken |</a>
+                    <a href="update_familie.php?id=<?php echo $familie['id']; ?>">Bewerken |</a>
+                    <a href="delete_familie.php?id=<?php echo $familie['id']; ?>">Verwijderen</a>
                 </td>
             </tr>
         <?php endwhile; ?>

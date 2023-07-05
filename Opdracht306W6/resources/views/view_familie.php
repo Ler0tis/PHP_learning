@@ -5,23 +5,30 @@ require_once 'database.php';
 if (isset($_GET['id'])) {
     $familieId = $_GET['id'];
     
-    // Haal de familie op
+   // Haal de familie op
     $status = 'verwijderd';
-    $sql = "SELECT * FROM familie WHERE id = ? AND status <> ?";
+    $sql = "SELECT * FROM familie WHERE id = ? AND (status IS NULL OR status <> ?)";
     $familieResultaat = executePreparedStatement($conn, $sql, $familieId, $status);
-    $familie = $familieResultaat->fetch_assoc();
 
-    // Haal de familieleden op
-    $sql = "SELECT familie_id, id, naam, soort_lid, date_format(geboortedatum, '%d-%m-%Y') AS geboortedatum 
-    FROM familielid WHERE familie_id = ? AND status <> ?";
-    $membersResult = executePreparedStatement($conn, $sql, $familieId, $status);
-    $members = array();
-    while ($row = $membersResult->fetch_assoc()) {
-        $members[] = $row;
-    }
-} else {
-    die('Familie ID is niet opgegeven.');
+    if ($familieResultaat->num_rows > 0) {
+        $familie = $familieResultaat->fetch_assoc();
+        $familienaam = $familie['naam'];
+    } 
 }
+
+// Haal de familieleden op
+$sql = "SELECT familie_id, id, naam, soort_lid, 
+date_format(geboortedatum, '%d-%m-%Y') AS geboortedatum 
+FROM familielid WHERE familie_id = ? AND status <> ?";
+
+$membersResult = executePreparedStatement($conn, $sql, $familieId, $status);
+$members = array();
+while ($row = $membersResult->fetch_assoc()) {
+    $members[] = $row;
+}
+
+
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verkrijg de formuliergegevens
@@ -72,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h1>Familie Details</h1>
     <a href="welcome.blade.php">Terug naar Overzicht</a>
     <?php if ($familie): ?>
-        <h2>Naam: <?php echo $familie['naam']; ?></h2>
+        <h2>Naam: <?php echo $familienaam; ?></h2>
 
         <h3>Familieleden</h3>
         <table>

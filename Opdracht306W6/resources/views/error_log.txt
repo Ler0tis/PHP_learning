@@ -1,0 +1,13 @@
+
+In database.php:
+
+Voor de !stmt-> query:
+
+ // Foutopsporingsinformatie
+        echo 'Query: ' . $sql . '<br>';
+        echo 'Parameters: ';
+        var_dump($paramValues);
+
+        $stmt->bind_param($types, ...$params);
+        echo 'Statement parameters: ';
+        var_dump($stmt->param_count);
