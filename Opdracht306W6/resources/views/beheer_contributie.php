@@ -1,7 +1,7 @@
 
 <?php
 
-require_once 'database.php';
+require_once 'functions.php';
 
 // Basiscontributie per jaar
 $basisContributie = 100;

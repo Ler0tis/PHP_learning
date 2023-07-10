@@ -1,7 +1,7 @@
 
 <?php
 
-require_once 'database.php';
+require_once 'functions.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verkrijg formuliergegevens lidmaatschap

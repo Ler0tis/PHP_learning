@@ -1,12 +1,13 @@
 <?php
 // index.php
 
-require_once 'database.php';
+require_once 'functions.php';
 
 // Haal alle families op die actief zijn
 $status = '';
 $sql = "SELECT * FROM familie WHERE status IS NULL OR status = ?";
 $familiesResultaat = executePreparedStatement($conn, $sql, $status);
+
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +42,11 @@ $familiesResultaat = executePreparedStatement($conn, $sql, $status);
                 <td>
                     <a href="view_familie.php?id=<?php echo $familie['id']; ?>">Bekijken |</a>
                     <a href="update_familie.php?id=<?php echo $familie['id']; ?>">Bewerken |</a>
-                    <a href="delete_familie.php?id=<?php echo $familie['id']; ?>">Verwijderen</a>
+                    
+                    <form method="post" action="functions.php">
+                        <input type="hidden" name="familie_id" value="<?php echo $familie['id'];?>"> 
+                        <input type="submit" name="verwijder_familie" value="Verwijderen">
+                    </form>
                 </td>
             </tr>
         <?php endwhile; ?>

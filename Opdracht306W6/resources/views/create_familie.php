@@ -1,6 +1,6 @@
 <?php
 
-require_once 'database.php';
+require_once 'functions.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verkrijg de formuliergegevens
@@ -9,14 +9,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Voeg de familie toe aan de database
     $sql = "INSERT INTO familie (naam, adres) VALUES (?, ?)";
     $result = executePreparedStatement($conn, $sql, $naam, $adres);
-    var_dump($result);
 
     if ($result) {
-        header('Location: welcome.blade.php');
+        header("Location: welcome.blade.php");
         exit;
     } else {
-        echo 'Er is een fout opgetreden bij het toevoegen van de familie.';
-        
+        $errorMessage = 'Er is een fout opgetreden bij het toevoegen van de familie.';
+        header("Location: welcome.blade.php");
     }
 }
 ?>

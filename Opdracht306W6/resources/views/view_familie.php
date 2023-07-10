@@ -1,65 +1,106 @@
 <?php
 
-require_once 'database.php';
+require_once 'DatabaseException.php';
 
-if (isset($_GET['id'])) {
-    $familieId = $_GET['id'];
-    
-   // Haal de familie op
-    $status = 'verwijderd';
-    $sql = "SELECT * FROM familie WHERE id = ? AND (status IS NULL OR status <> ?)";
-    $familieResultaat = executePreparedStatement($conn, $sql, $familieId, $status);
+try {
+    require_once 'functions.php';
 
-    if ($familieResultaat->num_rows > 0) {
-        $familie = $familieResultaat->fetch_assoc();
-        $familienaam = $familie['naam'];
-    } 
-}
+    $familieId = isset($_GET['id']) ? $_GET['id'] : null;
+    $familie = null;
+    $familienaam = null;
+    $members = array();
 
-// Haal de familieleden op
-$sql = "SELECT familie_id, id, naam, soort_lid, 
-date_format(geboortedatum, '%d-%m-%Y') AS geboortedatum 
-FROM familielid WHERE familie_id = ? AND status <> ?";
+    if ($familieId) {
+        // Haal de familie op
+        $status = 'verwijderd';
+        $sql = "SELECT * FROM familie WHERE id = ? AND (status IS NULL OR status <> ?)";
+        $familieResultaat = executePreparedStatement($conn, $sql, $familieId, $status);
 
-$membersResult = executePreparedStatement($conn, $sql, $familieId, $status);
-$members = array();
-while ($row = $membersResult->fetch_assoc()) {
-    $members[] = $row;
-}
-
-
-
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Verkrijg de formuliergegevens
-    $naam = $_POST['naam'];
-    $geboortedatum = $_POST['geboortedatum'];
-    // Omzetten naar het formaat "YYYY-MM-DD" voor databaseopslag
-    $geboortedatum = date('Y-m-d', strtotime($geboortedatum));
-
-    // Controleer of het familielid al bestaat
-    $sql = "SELECT * FROM familielid WHERE naam = ? AND familie_id = ? ";
-    $checkResult = executePreparedStatement($conn, $sql, $naam, $familieId);
-    if ($checkResult->num_rows > 0) {
-        echo 'Dit familielid bestaat al in deze familie.';
-        exit;
+        if ($familieResultaat->num_rows > 0) {
+            $familie = $familieResultaat->fetch_assoc();
+            $familienaam = $familie['naam'];
+        }
     }
 
-    // Voeg het familielid toe aan de database
-    $sql = "INSERT INTO familielid (naam, geboortedatum, familie_id) 
-    VALUES (?, ?, ?)";
+    // Haal de familieleden op
+    $sql = "SELECT familie_id, id, naam, soort_lid, 
+    date_format(geboortedatum, '%d-%m-%Y') AS geboortedatum 
+    FROM familielid WHERE familie_id = ? AND (status IS NULL OR status <> ?)";
 
-    $result = executePreparedStatement($conn, $sql, $naam, $geboortedatum, $familieId);
-
-    if ($result) {
-        header("Location: view_familie.php?id=$familieId");
-        exit;
-    } else {
-        echo 'Er is een fout opgetreden bij het toevoegen van het familielid.';
+    $membersResult = executePreparedStatement($conn, $sql, $familieId, $status);
+    while ($row = $membersResult->fetch_assoc()) {
+        $members[] = $row;
     }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Verkrijg de formuliergegevens
+        $naam = isset($_POST['naam']) ? $_POST['naam'] : null;
+        $geboortedatum = isset($_POST['geboortedatum']) ? $_POST['geboortedatum'] : null;
+
+        if (!$naam || !$geboortedatum) {
+            echo 'Ontbrekende formuliergegevens.';
+            exit;
+        }
+
+        // Validate geboortedatum
+        $geboortedatumValide = false;
+        $datumObj = DateTime::createFromFormat('d-m-Y', $geboortedatum);
+
+        if ($datumObj && $datumObj->format('d-m-Y') === $geboortedatum) {
+            $huidigeDatum = new DateTime();
+            $maxLeeftijd = new DateInterval('P120Y'); // De max is nu 120 jaar oud.
+
+            // Controleer of de leeftijd binnen het toegestane bereik valt
+            $minGeboorteDatum = clone $huidigeDatum;
+            $minGeboorteDatum->sub($maxLeeftijd);
+
+            if ($datumObj < $minGeboorteDatum || $datumObj > $huidigeDatum) {
+                echo 'Ongeldige leeftijd.';
+                exit;
+            }
+
+            $geboortedatumValide = true;
+        }
+
+        if (!$geboortedatumValide) {
+            echo 'Ongeldige geboortedatum.';
+            exit;
+        }
+
+        // Omzetten naar het formaat "YYYY-MM-DD" voor databaseopslag
+        $geboortedatum = date('Y-m-d', strtotime($geboortedatum));
+
+        // Controleer of het familielid al bestaat
+        $sql = "SELECT * FROM familielid WHERE naam = ? AND familie_id = ? ";
+        $checkResult = executePreparedStatement($conn, $sql, $naam, $familieId);
+        if ($checkResult->num_rows > 0) {
+            echo 'Dit familielid bestaat al in deze familie.';
+            exit;
+        }
+
+        // Voeg het familielid toe aan de database
+        $sql = "INSERT INTO familielid (naam, geboortedatum, familie_id) 
+        VALUES (?, ?, ?)";
+        $result = executePreparedStatement($conn, $sql, $naam, $geboortedatum, $familieId);
+
+        if ($result) {
+            header("Location: view_familie.php?id=$familieId");
+            exit;
+        } else {
+            echo 'Er is een fout opgetreden bij het toevoegen van het familielid.';
+            header("Location: view_familie.php?id=$familieId");
+            exit;
+        }
+    }
+} catch (DatabaseException $e) {
+    echo "Er is een fout opgetreden in de database: " . $e->getMessage();
+    // Andere foutafhandeling of logging
+} catch (Exception $e) {
+    echo "Er is een onverwachte fout opgetreden: " . $e->getMessage();
+    // Andere foutafhandeling of logging
 }
+
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -104,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form method="post">
             <label for="naam">Naam:</label>
             <input type="text" name="naam" id="naam" placeholder="Roepnaam" required><br>
-            <label for="geboortedatum">Geboortedatum:</label>
+            <label for="gebortedatum">Geboortedatum:</label>
             <input type="text" name="geboortedatum" id="geboortedatum" placeholder="DD-MM-YYYY" required><br>
             <input type="submit" value="Toevoegen">
         </form>
