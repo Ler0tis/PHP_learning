@@ -30,9 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <a href="welcome.blade.php">Terug naar Overzicht</a><br><br>
     <form method="post">
         <label for="naam">Naam:</label>
-        <input type="text" name="naam" id="naam" required><br>
+        <input type="text" name="familieNaam" id="naam" required><br>
         <label for="adres">Adres:</label>
-        <input type="text" name="adres" id="adres" required><br>
+        <input type="text" name="familieAdres" id="adres" required><br>
         <input type="submit" value="Toevoegen">
     </form>
 </body>

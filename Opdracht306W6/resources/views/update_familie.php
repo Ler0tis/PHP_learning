@@ -2,79 +2,96 @@
 
 require_once 'functions.php';
 
-if (isset($_GET['id'])) {
-    $familieId = $_GET['id'];
+try {
+    if (isset($_GET['id'])) {
+        $familieId = $_GET['id'];
 
-    // Haal familie op
-    $familieSql = "SELECT * FROM familie WHERE id = $familieId";
-    $familieResultaat = executePreparedStatement($conn, $familieSql);
+        // Haal familie op
+        $familieSql = "SELECT * FROM familie WHERE id = ?";
+        $familieResultaat = executePreparedStatement($conn, $familieSql, $familieId);
 
-    // Haal familieleden op
-    $status = 'verwijderd';
-    $familielidSql = "SELECT familie_id, id, naam, date_format(geboortedatum, '%d-%m-%Y') AS geboortedatum 
-    FROM familielid WHERE familie_id = ? AND (status IS NULL OR status <> ?)";
-    $familielidResultaat = executePreparedStatement($conn, $familielidSql, $familieId, $status);
+        // Haal familieleden op
+        $status = 'verwijderd';
+        $familielidSql = "SELECT familie_id, id, naam, date_format(geboortedatum, '%d-%m-%Y') AS geboortedatum 
+        FROM familielid WHERE familie_id = ? AND (status IS NULL OR status <> ?)";
+        $familielidResultaat = executePreparedStatement($conn, $familielidSql, $familieId, $status);
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Haal de formuliergegevens op voor familie en check of ze bestaan in  de $_POST-ARRAY. 
-        //Als ze bestaan worden ze toegevoegen aan de variabelen, anders wordt er een lege string toegewezen
-        $familieNaam = isset($_POST['familieNaam']) ? $_POST['familieNaam'] : '';
-        $familieAdres = isset($_POST['familieAdres']) ? $_POST['familieAdres'] : '';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Haal de formuliergegevens op voor familie en check of ze bestaan in  de $_POST-ARRAY. 
+            // Als ze bestaan, worden ze toegevoegd aan de variabelen, anders wordt er een lege string toegewezen
+            $familieNaam = isset($_POST['familieNaam']) ? $_POST['familieNaam'] : '';
+            $familieAdres = isset($_POST['familieAdres']) ? $_POST['familieAdres'] : '';
 
-        if (!empty($familieNaam) && !empty($familieAdres)) {
-            // Werk de familie bij in de database
-            $familieUpdateSql = "UPDATE familie SET naam = ?, adres = ? WHERE id = ?";
-            $familieUpdateResultaat = executePreparedStatement($conn, $familieUpdateSql, $familieNaam, $familieAdres, $familieId);
+            if (!empty($familieNaam) && !empty($familieAdres)) {
+                // Werk de familie bij in de database
+                $familieUpdateSql = "UPDATE familie SET naam = ?, adres = ? WHERE id = ?";
+                $familieUpdateResultaat = executePreparedStatement($conn, $familieUpdateSql, $familieNaam, $familieAdres, $familieId);
 
-            if (!$familieUpdateResultaat) {
-                echo 'Er is een fout opgetreden bij het bijwerken van de familie.';
-                exit;
-            }
-        }
-
-        // Haal de formuliergegevens op voor familielid
-        $familielidId = $_POST['familielidId'];
-        $naamFamilielid = $_POST['naamFamilielid'];
-        $geboortedatum = $_POST['geboortedatum'];
-        $lidmaatschap = $_POST['soort_lid'];
-
-        // Omzetten naar het formaat "YYYY-MM-DD" voor databaseopslag
-        $geboortedatum = date('Y-m-d', strtotime($geboortedatum));
-
-        // Checkt of de NAAM is ingevuld. Zo ja, dan wordt de IF uitgevoerd
-        if (!empty($naamFamilielid)) {
-            if (!empty($geboortedatum)) {
-                // Update familielid inclusief geboortedatum
-                $familielidUpdateSql = "UPDATE familielid SET naam = ?, geboortedatum = ? WHERE id = ?";
-                $familielidUpdateResultaat = executePreparedStatement($conn, $familielidUpdateSql, $naamFamilielid, $geboortedatum, $familielidId);
-            } else {
-                // Update familielid zonder geboortedatum
-                $familielidUpdateSql = "UPDATE familielid SET naam = ? WHERE id = ?";
-                $familielidUpdateResultaat = executePreparedStatement($conn, $familielidUpdateSql, $naamFamilielid, $familielidId);
+                if (!$familieUpdateResultaat) {
+                    echo 'Familie is bijgewerkt.';
+                    exit;
+                } else {
+                    echo 'Er is een fout opgetreden bij het bijwerken van de familie.';
+                    exit;
+                }
             }
 
-            if (!$familielidUpdateResultaat) {
-                echo "Er is een fout opgetreden bij het bijwerken van de geboortedatum.";
-                exit();
-            }
-        }
+            // Haal de formuliergegevens op voor familielid
+            $familielidId = $_POST['familielidId'];
+            $naamFamilielid = $_POST['naamFamilielid'];
+            $geboortedatum = $_POST['geboortedatum'];
+            $lidmaatschap = $_POST['soort_lid'];
 
-        if (!empty($lidmaatschap)) {
-            // Voer UPDATE uit om lidmaatschap toe te voegen aan een familielid
-            $lidmaatschapUpdateSql = "UPDATE familielid SET soort_lid = ? WHERE id = ?";
-            $lidmaatschapUpdateResultaat = executePreparedStatement($conn, $lidmaatschapUpdateSql, $lidmaatschap, $familielidId);
+            // Zet de geboortedatum om naar het formaat "YYYY-MM-DD" voor databaseopslag
+            $geboortedatum = date('Y-m-d', strtotime($geboortedatum));
 
-            if (!$lidmaatschapUpdateResultaat) {
-                echo "Er is een fout opgetreden bij het bijwerken van het lidmaatschap.";
-                exit();
+            // Checkt of de NAAM is ingevuld. Zo ja, dan wordt de IF uitgevoerd
+            if (!empty($naamFamilielid)) {
+                if (!empty($geboortedatum) && strtotime($geboortedatum) === false) {
+                    echo "Ongeldige geboortedatum. Voer de geboortedatum in het formaat 'DD-MM-YYYY' in.";
+                    exit;
+
+                    } elseif(!empty($geboortedatum)) {
+                        // Update familielid inclusief geboortedatum
+                        $familielidUpdateSql = "UPDATE familielid SET naam = ?, geboortedatum = ? WHERE id = ?";
+                        $familielidUpdateResultaat = executePreparedStatement($conn, $familielidUpdateSql, $naamFamilielid, $geboortedatum, $familielidId);
+                    
+                    } else {
+                        // Update familielid zonder geboortedatum
+                        $familielidUpdateSql = "UPDATE familielid SET naam = ? WHERE id = ?";
+                        $familielidUpdateResultaat = executePreparedStatement($conn, $familielidUpdateSql, $naamFamilielid, $familielidId);
+                        
+                    }
+
+                }
+            
+
+            if (!empty($lidmaatschap)) {
+                // Voer UPDATE uit om lidmaatschap toe te voegen aan een familielid
+                $lidmaatschapUpdateSql = "UPDATE familielid SET soort_lid = ? WHERE id = ?";
+                // Maak een tussenvariabele om de stringwaarde te bevatten
+                $lidmaatschapValue = $lidmaatschap;
+                $lidmaatschapUpdateResultaat = executePreparedStatement($conn, $lidmaatschapUpdateSql, $lidmaatschapValue, $familielidId);
+    // Hier nog even naar KIJKEN, want lijkt nu dat als het FALSE is, de update wordt gedaan
+                if (!$lidmaatschapUpdateResultaat) {
+                    echo 'Lidmaatschap is toegevoegd.';
+                } else {
+                    echo "Er is een fout opgetreden bij het bijwerken van het lidmaatschap.";
+                    exit();
+                }
             }
-        }
-        
+
         header("Location: view_familie.php?id=$familieId");
-        exit();
+        }
+    } else {
+        throw new Exception('Familie ID is niet opgegeven.');
     }
-} else {
-    die('Familie ID is niet opgegeven.');
+} catch (DatabaseException $e) {
+    echo "Er is een fout opgetreden in de database: " . $e->getMessage();
+    // Andere foutafhandeling of logging
+} catch (Exception $e) {
+    echo "Er is een onverwachte fout opgetreden: " . $e->getMessage();
+    // Andere foutafhandeling of logging
 }
 
 ?>
@@ -83,16 +100,7 @@ if (isset($_GET['id'])) {
 <html>
 <head>
     <title>Familie Bewerken</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid black;
-            padding: 5px;
-        }
-    </style>
+    
 </head>
 <body>
     <h1>Familie Bewerken</h1>
@@ -123,8 +131,9 @@ if (isset($_GET['id'])) {
                     <td><label for="naamFamilielid">Naam: </label></td>
                     <td><input type="text" name="naamFamilielid" value="<?php echo $familielid['naam']; ?>"></td> 
 
-                    <td><label for="geboortedatum">Geboortedatum:</label></td>
-                    <td><input type="text" name="geboortedatum" id="geboortedatum" placeholder="DD-MM-YYYY"></td>
+                    <td>
+                    <label for="geboortedatum">Geboortedatum:</label></td>
+                    <td><input type="text" name="geboortedatum" id="geboortedatum" value="<?php echo $familielid['geboortedatum']; ?>"></td>
 
                     <td><label for="soort_lid">Lidmaatschap:</label></td>
                     <td>
@@ -143,17 +152,17 @@ if (isset($_GET['id'])) {
                             ?>
                         </select>
                     </td>
-
                     <td>
+                        <input type="hidden" name="familielid_id" value="<?php echo $familielid['id'];?>">
                         <input type="submit" value="Familielid bijwerken">
                         <input type="submit" name="verwijder_familielid" value="Verwijder">
                     </td>
                 </tr>
             </form>
         </table>
-        <?php endwhile; ?>
+    <?php endwhile; ?>
     <?php else: ?>
-        <p>Familie niet gevonden.</p>
+    <p>Familie niet gevonden.</p>
     <?php endif; ?>
 </body>
 </html>

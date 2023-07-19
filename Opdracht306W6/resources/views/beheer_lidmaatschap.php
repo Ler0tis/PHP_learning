@@ -2,31 +2,39 @@
 <?php
 
 require_once 'functions.php';
+include 'layout.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Verkrijg formuliergegevens lidmaatschap
-    $omschrijving = $_POST['omschrijving'];
+if (isset($_GET['id'])) {
+    $lidmaatschapId = $_GET['id'];
 
-    // Controle of lidmaatschap al bestaat
-    $sql = "SELECT * FROM lidmaatschap WHERE omschrijving = ?";
-    $controleerResultaat = executePreparedStatement($conn, $sql, $omschrijving);
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Verkrijg formuliergegevens lidmaatschap
+        $lidmaatschapId = $_POST['id'];
+        $omschrijving = $_POST['omschrijving'];
 
-    if ($controleerResultaat->num_rows > 0) {
-        echo "Dit lidmaatschap bestaat al in de database.";
-        exit();
+        // Controle of lidmaatschap al bestaat
+        $sql = "SELECT * FROM lidmaatschap WHERE omschrijving = ?";
+        $controleerResultaat = executePreparedStatement($conn, $sql, $omschrijving);
+
+        if ($controleerResultaat->num_rows > 0) {
+            echo "Dit lidmaatschap bestaat al in de database.";
+            exit();
+        }
+
+        $sql = "INSERT INTO lidmaatschap (omschrijving) 
+        VALUES (?)";
+
+        $resultaat = executePreparedStatement($conn, $sql, $omschrijving);
+
+        if ($resultaat) {
+            header("Location: beheer_lidmaatschap.php");
+            exit();
+        } else {
+            echo "Er is een fout opgetreden bij het toevoegen van het lidmaatschap.";
+        }
     }
 
-    $sql = "INSERT INTO lidmaatschap (omschrijving) 
-    VALUES (?)";
-
-    $resultaat = executePreparedStatement($conn, $sql, $omschrijving);
-
-    if ($resultaat) {
-        header("Location: beheer_lidmaatschap.php");
-        exit();
-    } else {
-        echo "Er is een fout opgetreden bij het toevoegen van het lidmaatschap.";
-    }
+    
 }
 
 // Haal lidmaatschappen op
@@ -54,18 +62,21 @@ $lidmaatschapResultaat = executePreparedStatement($conn, $sql);
     <table>
         <th>ID</th>
         <th>Omschrijving</th>
-        <?php if ($lidmaatschapResultaat && $lidmaatschapResultaat-> num_rows > 0): ?>
-            <?php while ($member = $lidmaatschapResultaat->fetch_assoc()): ?>
+        <th>Acties</th>
+            <?php while ($lidmaatschap = $lidmaatschapResultaat->fetch_assoc()): ?>
                 <tr>
-                    <td><?php echo $member['id'] ?></td>
-                    <td><?php echo $member['omschrijving']; ?></td>
+                    <td><?php echo $lidmaatschap['id'] ?></td>
+                    <td><?php echo $lidmaatschap['omschrijving']; ?></td>
+                    <td>
+                        <input type="hidden" name="lidmaatschap_id" value="<?php echo $lidmaatschapId['id'];?>">
+                        <input type="submit" value="Bijwerken">
+                        <input type="submit" name="verwijder_lidmaatschap" value="Verwijder">
+                    </td>
                 </tr>
             <?php endwhile; ?>
-        <?php else: ?>
             <tr>
-                <td>Geen lidmaatschappen geovnden.</td>
+                <td>Geen lidmaatschappen gevonden.</td>
             </tr>
-        <?php endif; ?>
     </table>
 </body>
 </html>

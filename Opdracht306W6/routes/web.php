@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LedenadministratieController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [LedenadministratieController::class, 'index'] );
+
+// Opslaan familie knop
+Route::post('/saveFamilie', [LedenadministratieController::class, 'saveFamilie'])->name('saveFamilie');
+    return view('index');

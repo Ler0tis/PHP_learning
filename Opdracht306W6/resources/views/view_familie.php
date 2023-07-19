@@ -37,7 +37,7 @@ try {
         $naam = isset($_POST['naam']) ? $_POST['naam'] : null;
         $geboortedatum = isset($_POST['geboortedatum']) ? $_POST['geboortedatum'] : null;
 
-        if (!$naam || !$geboortedatum) {
+        if (!$naam OR !$geboortedatum) {
             echo 'Ontbrekende formuliergegevens.';
             exit;
         }
@@ -88,7 +88,6 @@ try {
             exit;
         } else {
             echo 'Er is een fout opgetreden bij het toevoegen van het familielid.';
-            header("Location: view_familie.php?id=$familieId");
             exit;
         }
     }
@@ -118,7 +117,8 @@ try {
 </head>
 <body>
     <h1>Familie Details</h1>
-    <a href="welcome.blade.php">Terug naar Overzicht</a>
+    <a href="welcome.blade.php">Naar Overzicht |</a>
+    <a href="update_familie.php">Naar Familie bewerken</a>
     <?php if ($familie): ?>
         <h2>Naam: <?php echo $familienaam; ?></h2>
 
