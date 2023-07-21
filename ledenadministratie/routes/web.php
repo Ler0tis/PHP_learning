@@ -29,10 +29,15 @@ use App\Models\Listing;
 // All families
 Route::get('/', [FamilyController::class, 'index'] );
 
+// Show create form
+Route::get('/families/create', [FamilyController::class, 'create']);
+
+// Store familie data
+Route::post('/families', [FamilyController::class, 'store']);
+
 //Single family
 // A family where Family is the name of the model
-Route::get('/families/{family}', 
-[FamilyController::class, 'show']);
+Route::get('/families/{family}', [FamilyController::class, 'show']);
 
 
 

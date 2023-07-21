@@ -9,6 +9,9 @@ class Family extends Model
 {
     use HasFactory;
 
+    // OR in AppserviceProvider.php in Boot() Model::unguard(); and import class there. Need to specify exactly whats goes in DB (As in FamilyController.php)
+    protected $fillable = ['name', 'tags', 'address', 'email', 'website', 'description'];
+
     public function scopeFilter($query, array $filters) {
         if($filters['tag'] ?? false) {
             $query->where('tags', 'like', '%' . request('tag') . '%');

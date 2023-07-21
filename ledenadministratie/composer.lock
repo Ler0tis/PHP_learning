@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6390c1d9c75b2dee28c3af25970a10b7",
+    "content-hash": "589d79c265d59dd7cc78c32755c41d76",
     "packages": [
         {
             "name": "brick/math",
@@ -438,6 +438,157 @@
             "time": "2020-12-29T14:50:06+00:00"
         },
         {
+            "name": "fruitcake/laravel-cors",
+            "version": "v3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fruitcake/laravel-cors.git",
+                "reference": "7c036ec08972d8d5d9db637e772af6887828faf5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fruitcake/laravel-cors/zipball/7c036ec08972d8d5d9db637e772af6887828faf5",
+                "reference": "7c036ec08972d8d5d9db637e772af6887828faf5",
+                "shasum": ""
+            },
+            "require": {
+                "fruitcake/php-cors": "^1.2",
+                "illuminate/contracts": "^6|^7|^8|^9",
+                "illuminate/support": "^6|^7|^8|^9",
+                "php": "^7.4|^8.0"
+            },
+            "require-dev": {
+                "laravel/framework": "^6|^7.24|^8",
+                "orchestra/testbench-dusk": "^4|^5|^6|^7",
+                "phpunit/phpunit": "^9",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Fruitcake\\Cors\\CorsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Fruitcake\\Cors\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fruitcake",
+                    "homepage": "https://fruitcake.nl"
+                },
+                {
+                    "name": "Barry vd. Heuvel",
+                    "email": "barryvdh@gmail.com"
+                }
+            ],
+            "description": "Adds CORS (Cross-Origin Resource Sharing) headers support in your Laravel application",
+            "keywords": [
+                "api",
+                "cors",
+                "crossdomain",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/fruitcake/laravel-cors/issues",
+                "source": "https://github.com/fruitcake/laravel-cors/tree/v3.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://fruitcake.nl",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/barryvdh",
+                    "type": "github"
+                }
+            ],
+            "abandoned": true,
+            "time": "2022-02-23T14:53:22+00:00"
+        },
+        {
+            "name": "fruitcake/php-cors",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fruitcake/php-cors.git",
+                "reference": "58571acbaa5f9f462c9c77e911700ac66f446d4e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fruitcake/php-cors/zipball/58571acbaa5f9f462c9c77e911700ac66f446d4e",
+                "reference": "58571acbaa5f9f462c9c77e911700ac66f446d4e",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4|^8.0",
+                "symfony/http-foundation": "^4.4|^5.4|^6"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.4",
+                "phpunit/phpunit": "^9",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Fruitcake\\Cors\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fruitcake",
+                    "homepage": "https://fruitcake.nl"
+                },
+                {
+                    "name": "Barryvdh",
+                    "email": "barryvdh@gmail.com"
+                }
+            ],
+            "description": "Cross-origin resource sharing library for the Symfony HttpFoundation",
+            "homepage": "https://github.com/fruitcake/php-cors",
+            "keywords": [
+                "cors",
+                "laravel",
+                "symfony"
+            ],
+            "support": {
+                "issues": "https://github.com/fruitcake/php-cors/issues",
+                "source": "https://github.com/fruitcake/php-cors/tree/v1.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://fruitcake.nl",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/barryvdh",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-02-20T15:07:15+00:00"
+        },
+        {
             "name": "graham-campbell/result-type",
             "version": "v1.1.1",
             "source": {
@@ -823,74 +974,6 @@
                 }
             ],
             "time": "2023-04-17T16:11:26+00:00"
-        },
-        {
-            "name": "itsgoingd/clockwork",
-            "version": "v5.1.12",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/itsgoingd/clockwork.git",
-                "reference": "c9dbdbb1f0efd19bb80f1080ef63f1b9b1bc3b1b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/itsgoingd/clockwork/zipball/c9dbdbb1f0efd19bb80f1080ef63f1b9b1bc3b1b",
-                "reference": "c9dbdbb1f0efd19bb80f1080ef63f1b9b1bc3b1b",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "php": ">=5.6"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Clockwork\\Support\\Laravel\\ClockworkServiceProvider"
-                    ],
-                    "aliases": {
-                        "Clockwork": "Clockwork\\Support\\Laravel\\Facade"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Clockwork\\": "Clockwork/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "itsgoingd",
-                    "email": "itsgoingd@luzer.sk",
-                    "homepage": "https://twitter.com/itsgoingd"
-                }
-            ],
-            "description": "php dev tools in your browser",
-            "homepage": "https://underground.works/clockwork",
-            "keywords": [
-                "Devtools",
-                "debugging",
-                "laravel",
-                "logging",
-                "lumen",
-                "profiling",
-                "slim"
-            ],
-            "support": {
-                "issues": "https://github.com/itsgoingd/clockwork/issues",
-                "source": "https://github.com/itsgoingd/clockwork/tree/v5.1.12"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/itsgoingd",
-                    "type": "github"
-                }
-            ],
-            "time": "2022-12-13T00:04:12+00:00"
         },
         {
             "name": "laravel/framework",
@@ -5879,37 +5962,33 @@
         },
         {
             "name": "mockery/mockery",
-            "version": "1.6.2",
+            "version": "1.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mockery/mockery.git",
-                "reference": "13a7fa2642c76c58fa2806ef7f565344c817a191"
+                "reference": "d1413755e26fe56a63455f7753221c86cbb88f66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mockery/mockery/zipball/13a7fa2642c76c58fa2806ef7f565344c817a191",
-                "reference": "13a7fa2642c76c58fa2806ef7f565344c817a191",
+                "url": "https://api.github.com/repos/mockery/mockery/zipball/d1413755e26fe56a63455f7753221c86cbb88f66",
+                "reference": "d1413755e26fe56a63455f7753221c86cbb88f66",
                 "shasum": ""
             },
             "require": {
                 "hamcrest/hamcrest-php": "^2.0.1",
                 "lib-pcre": ">=7.0",
-                "php": "^7.4 || ^8.0"
+                "php": ">=7.4,<8.3"
             },
             "conflict": {
                 "phpunit/phpunit": "<8.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5 || ^9.3",
-                "psalm/plugin-phpunit": "^0.18",
-                "vimeo/psalm": "^5.9"
+                "psalm/plugin-phpunit": "^0.18.4",
+                "symplify/easy-coding-standard": "^11.5.0",
+                "vimeo/psalm": "^5.13.1"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "1.6.x-dev"
-                }
-            },
             "autoload": {
                 "files": [
                     "library/helpers.php",
@@ -5927,12 +6006,20 @@
                 {
                     "name": "Pádraic Brady",
                     "email": "padraic.brady@gmail.com",
-                    "homepage": "http://blog.astrumfutura.com"
+                    "homepage": "https://github.com/padraic",
+                    "role": "Author"
                 },
                 {
                     "name": "Dave Marshall",
                     "email": "dave.marshall@atstsolutions.co.uk",
-                    "homepage": "http://davedevelopment.co.uk"
+                    "homepage": "https://davedevelopment.co.uk",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Nathanael Esayeas",
+                    "email": "nathanael.esayeas@protonmail.com",
+                    "homepage": "https://github.com/ghostwriter",
+                    "role": "Lead Developer"
                 }
             ],
             "description": "Mockery is a simple yet flexible PHP mock object framework",
@@ -5950,10 +6037,13 @@
                 "testing"
             ],
             "support": {
+                "docs": "https://docs.mockery.io/",
                 "issues": "https://github.com/mockery/mockery/issues",
-                "source": "https://github.com/mockery/mockery/tree/1.6.2"
+                "rss": "https://github.com/mockery/mockery/releases.atom",
+                "security": "https://github.com/mockery/mockery/security/advisories",
+                "source": "https://github.com/mockery/mockery"
             },
-            "time": "2023-06-07T09:07:52+00:00"
+            "time": "2023-07-19T15:51:02+00:00"
         },
         {
             "name": "myclabs/deep-copy",

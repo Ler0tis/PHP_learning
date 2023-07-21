@@ -16,7 +16,8 @@ class FamilyController extends Controller
     public function index()
     {   
         return view('families.index', [
-            'families' => Family::all()
+            'families' => Family::latest()->filter(request(['tag',
+            'search']))->paginate(2)
         ]);
     }
 
@@ -27,5 +28,25 @@ class FamilyController extends Controller
         return view('families.show', [
             'family' => $family
         ]);
+    }
+
+    // Show Create Form
+    public function create()
+    {
+        return view('families.create');
+    }
+
+    // Store familie data
+    // Unique  'name' => 'required, Rule::unique('families')'
+    public function store(Request $request) {
+        $dataFields = $request->validate([
+            'name' => 'required',
+            'address' => 'required',
+            'email' => ['required', 'email']
+        ]);
+
+        Family::create($dataFields);
+
+        return redirect('/')->with('message', 'Familie succesvol toegevoegd!');
     }
 }

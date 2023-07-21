@@ -13,6 +13,7 @@
             crossorigin="anonymous"
             referrerpolicy="no-referrer"
         />
+        <script src="//unpkg.com/alpinejs" defer></script>
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
             tailwind.config = {
@@ -57,10 +58,12 @@
             <p class="ml-2">Copyright &copy; 2023, All Rights reserved</p>
 
             <a
-                href="create.html"
+                href="{{ url('families/create') }}"
                 class="absolute top-1/3 right-10 bg-black text-white py-2 px-5"
                 >YEEEEEEET</a
             >
         </footer>
+        <!-- Shows message that family is added -->
+        <x-flash-message />
     </body>
 </html>
