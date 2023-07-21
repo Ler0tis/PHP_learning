@@ -35,20 +35,20 @@
             <ul class="flex space-x-6 mr-6 text-lg">
                 <li>
                     <a href="register.html" class="hover:text-laravel"
-                        ><i class="fa-solid fa-user-plus"></i> Register</a
+                        ><i class="fa-solid fa-user-plus"></i> Registreren</a
                     >
                 </li>
                 <li>
                     <a href="login.html" class="hover:text-laravel"
                         ><i class="fa-solid fa-arrow-right-to-bracket"></i>
-                        Login</a
+                        Inloggen</a
                     >
                 </li>
             </ul>
         </nav>
         <main>
-
-        @yield('content')
+        {{--Use the slot instead of YIELD if you want to make use of x-layout--}}
+        {{$slot}}
 
         </main>
         <footer

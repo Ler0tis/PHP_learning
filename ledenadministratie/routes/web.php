@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FamilyController;
 use App\Models\Family;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -14,23 +15,24 @@ use App\Models\Listing;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
+// Common Resource Routes:
+// index - Show all families
+// show - show single Family
+// create - Show form to create new Family
+// store - Store new Family
+// edit - Show form to edit family
+// update - Update Family
+// destroy - Delete family
+
 */
 
 // All families
-Route::get('/', function () {
-    return view('families', [
-        'heading' => 'All Families',
-        'families' => Family::all()  
-    ]);
-});
+Route::get('/', [FamilyController::class, 'index'] );
 
+//Single family
 // A family where Family is the name of the model
-Route::get('/families/{family}', function(Family $family) {
-    // in plaats van $family = Family::find($id);
-    return view('family', [
-        'family' => $family
-    ]);
-});
+Route::get('/families/{family}', 
+[FamilyController::class, 'show']);
 
 
 
@@ -42,14 +44,4 @@ Route::get('/families/{family}', function(Family $family) {
 
 
 
-//Route::get('/hello', function () {
-//    return response('<h1>Hello World</h1>');
-//});
-//
-//Route::get('/posts/{id}', function($id) {
-//    return response('Post ' . $id);
-//})->where('id', '[0-9]+');
-//
-//Route::get('/search', function(Request $request) {
-//    dd($request);
-//});
+

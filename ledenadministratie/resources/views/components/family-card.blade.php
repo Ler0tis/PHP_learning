@@ -1,13 +1,14 @@
 @props(['family'])
 
+
+{{-- Overzicht families --}}
   <div class="flex">
     <div>
-      <h3 class="text-2xl">
+      <h3 class="text-2xl font-bold">
         <a href="/families/{{$family->id}}">{{$family->name}}</a>
       </h3>
-      <div class="text-xl font-bold mb-4">{{$family->address}}</div>
-      <div class="text-lg mt-4">
-        <i class="fa-solid fa-location-dot"></i> {{$family->email}}
-      </div>
+      <div class="text-xl mb-4">{{$family->address}}</div>
+
+     
     </div>
   </div>
