@@ -20,6 +20,7 @@ class CreateFamiliesTable extends Migration
             $table->string('address');
             $table->string('email');
             $table->string('website');
+            $table->string('picture')->nullable(); //Allowed to be NULL
             $table->longText('description');
             $table->timestamps();
         });

@@ -35,6 +35,15 @@ Route::get('/families/create', [FamilyController::class, 'create']);
 // Store familie data
 Route::post('/families', [FamilyController::class, 'store']);
 
+//Show edit form
+Route::get('/families/{family}/edit', [FamilyController::class, 'edit']);
+
+// Update family
+Route::put('/families/{family}', [FamilyController::class, 'update']);
+
+// Delete family
+Route::delete('/families/{family}', [FamilyController::class, 'destroy']);
+
 //Single family
 // A family where Family is the name of the model
 Route::get('/families/{family}', [FamilyController::class, 'show']);

@@ -17,7 +17,7 @@ class FamilyController extends Controller
     {   
         return view('families.index', [
             'families' => Family::latest()->filter(request(['tag',
-            'search']))->paginate(2)
+            'search']))->paginate(8)
         ]);
     }
 
@@ -42,11 +42,69 @@ class FamilyController extends Controller
         $dataFields = $request->validate([
             'name' => 'required',
             'address' => 'required',
-            'email' => ['required', 'email']
+            'email' => ['required', 'email'],
         ]);
+        // Optional fields, but if filled, its added
+        if($request->filled('tags')) {
+            $dataFields['tags'] = $request->input('tags');
+        }
+
+        if ($request->filled('website')) {
+            $dataFields['website'] = $request->input('website');
+        }
+
+        if ($request->filled('description')) {
+            $dataFields['description'] = $request->input('description');
+        }
+
+        // Stores the picture in the folder pictures
+        if($request->hasFile('picture')) {
+            $dataFields['picture'] = $request->file('picture')->store('pictures', 'public');
+        }
 
         Family::create($dataFields);
 
         return redirect('/')->with('message', 'Familie succesvol toegevoegd!');
+    }
+
+    public function edit(Family $family) {
+        return view('families.edit', ['family' => $family]);
+    }
+
+    // Update Family
+    public function update(Request $request, Family $family)
+    {
+        $dataFields = $request->validate([
+            'name' => 'required',
+            'address' => 'required',
+            'email' => ['required', 'email'],
+        ]);
+        // Optional fields, but if filled, its added
+        if ($request->filled('tags')) {
+            $dataFields['tags'] = $request->input('tags');
+        }
+
+        if ($request->filled('website')) {
+            $dataFields['website'] = $request->input('website');
+        }
+
+        if ($request->filled('description')) {
+            $dataFields['description'] = $request->input('description');
+        }
+
+        // Stores the picture in the folder pictures
+        if ($request->hasFile('picture')) {
+            $dataFields['picture'] = $request->file('picture')->store('pictures', 'public');
+        }
+
+        $family->update($dataFields);
+
+        return back()->with('message', 'Familie succesvol aangepast');
+    }
+
+    // Delete family
+    public function destroy(Family $family) {
+        $family->delete();
+        return redirect('/')->with('message', 'Familie succesvol verwijderd');
     }
 }
