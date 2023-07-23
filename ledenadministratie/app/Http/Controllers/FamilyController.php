@@ -62,6 +62,8 @@ class FamilyController extends Controller
             $dataFields['picture'] = $request->file('picture')->store('pictures', 'public');
         }
 
+        $dataFields['user_id'] = auth()->id();
+
         Family::create($dataFields);
 
         return redirect('/')->with('message', 'Familie succesvol toegevoegd!');
@@ -74,6 +76,11 @@ class FamilyController extends Controller
     // Update Family
     public function update(Request $request, Family $family)
     {
+        // Is logged in user owner?
+        if ($family->user_id != auth()->id()) {
+            abort(403, 'Unauthorized Action');
+        }
+
         $dataFields = $request->validate([
             'name' => 'required',
             'address' => 'required',
@@ -104,7 +111,17 @@ class FamilyController extends Controller
 
     // Delete family
     public function destroy(Family $family) {
+        // Is logged in user owner?
+        if ($family->user_id != auth()->id()) {
+            abort(403, 'Unauthorized Action');
+        }
+        
         $family->delete();
         return redirect('/')->with('message', 'Familie succesvol verwijderd');
+    }
+
+    // Manage Families and show them on beheer families (manage pagina)
+    public function manage() {
+        return view('families.manage', ['families' => auth()->user()->families()->get()]);
     }
 }

@@ -34,17 +34,39 @@
                 ><img class="w-24" src="{{asset('images/ironmanlogo.jpg')}}" alt="" class="logo"
             /></a>
             <ul class="flex space-x-6 mr-6 text-lg">
+                @auth
                 <li>
-                    <a href="register.html" class="hover:text-laravel"
+                    <span class="font-bold uppercase">
+                        Welkom {{auth()->user()->name}}
+                    </span>
+                </li>
+                <li>
+                    <a href="/families/manage" class="hover:text-laravel"
+                        ><i class="fa-solid fa-gear"></i>
+                        Beheer families</a
+                    >
+                </li>
+                <li>
+                    <form class="inline" method="POST" action="/logout">
+                        @csrf
+                        <button type="submit">
+                            <i class="fa-solid fa-door-closed"></i> Uitloggen
+                        </button>
+                    </form>
+                </li>
+                @else
+                <li>
+                    <a href="/register" class="hover:text-laravel"
                         ><i class="fa-solid fa-user-plus"></i> Registreren</a
                     >
                 </li>
                 <li>
-                    <a href="login.html" class="hover:text-laravel"
+                    <a href="/login" class="hover:text-laravel"
                         ><i class="fa-solid fa-arrow-right-to-bracket"></i>
                         Inloggen</a
                     >
                 </li>
+                @endauth
             </ul>
         </nav>
         <main>

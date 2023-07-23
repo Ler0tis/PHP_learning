@@ -15,6 +15,7 @@ class CreateFamiliesTable extends Migration
     {
         Schema::create('families', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // On delete user, the families made by that user are deleted to?
             $table->string('name');
             $table->string('tags');
             $table->string('address');

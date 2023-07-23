@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\FamilyController;
 use App\Models\Family;
+use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Models\Listing;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\FamilyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,27 +28,59 @@ use App\Models\Listing;
 */
 
 // All families
-Route::get('/', [FamilyController::class, 'index'] );
+Route::get('/', [FamilyController::class,
+ 'index']);
 
 // Show create form
-Route::get('/families/create', [FamilyController::class, 'create']);
+Route::get('/families/create', [FamilyController::class,
+ 'create'])->Middleware('auth');
 
 // Store familie data
-Route::post('/families', [FamilyController::class, 'store']);
+Route::post('/families', [FamilyController::class,
+ 'store'])->Middleware('auth');
+
+// Manage families
+Route::get('/families/manage', [FamilyController::class,
+ 'manage'])->Middleware('auth');
 
 //Show edit form
-Route::get('/families/{family}/edit', [FamilyController::class, 'edit']);
+Route::get('/families/{family}/edit', [FamilyController::class,
+ 'edit'])->Middleware('auth');
 
 // Update family
-Route::put('/families/{family}', [FamilyController::class, 'update']);
+Route::put('/families/{family}', [FamilyController::class,
+ 'update'])->Middleware('auth');
 
 // Delete family
-Route::delete('/families/{family}', [FamilyController::class, 'destroy']);
+Route::delete('/families/{family}', [FamilyController::class,
+ 'destroy'])->Middleware('auth');
 
 //Single family
 // A family where Family is the name of the model
-Route::get('/families/{family}', [FamilyController::class, 'show']);
+Route::get('/families/{family}', [FamilyController::class,
+ 'show'])->Middleware('auth');
 
+
+// Show USER register form
+Route::get('/register', [UserController::class,
+ 'create'])->Middleware('guest');
+
+// Create new USER
+Route::post('/users', [UserController::class,
+ 'store']);
+
+// Log out USER
+Route::post('/logout', [UserController::class,
+ 'logout'])->Middleware('auth');
+
+// Show login form
+Route::get('/login', [UserController::class,
+ 'login'])->name('login')->Middleware('guest');
+
+// Login USER
+Route::post('/users/authenticate', [UserController::class,
+ 'authenticate']);
+ 
 
 
 

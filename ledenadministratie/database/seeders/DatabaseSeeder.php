@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use App\Models\Family;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvent;
@@ -17,8 +18,15 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(5)->create();
 
-        // In FamilyFactory.php is the code and to quickly make some data for families
-        Family::factory(3)->create();
+        $user = User::factory()->create([
+            'name' => 'Admin',
+            'email' => 'admin@admin.com'
+        ]);
+
+        // On user Admin has admin rights over the 6 families 
+        Family::factory(6)->create([
+            'user_id' => $user->id
+        ]);
 
         // Family::create([
         //     'name' => 'Harry Potter',

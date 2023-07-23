@@ -41,4 +41,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    // Relations with Family. Ook dit ipv user_id ga ik family_id gebruiken om het te koppelen.
+    public function families() {
+        return $this->hasMany(Family::class, 'user_id');
+    }
 }
+
+
+
