@@ -2,16 +2,29 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Familymember;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Family extends Model
 {
     use HasFactory;
 
+    //Relation between Family and their members
+    public function familymembers() {
+        return $this->hasMany(Familymember::class);
+    }
+
     // OR in AppserviceProvider.php in Boot() Model::unguard(); and import class there. Need to specify exactly whats goes in DB (As in FamilyController.php)
-    protected $fillable = ['name', 'tags', 'address', 'email', 'website',
-     'description', 'picture', 'user_id'];
+    protected $fillable = [
+        'name',
+        'tags',
+        'address',
+        'email',
+        'website',
+        'description',
+        'picture',
+        'user_id'];
 
     public function scopeFilter($query, array $filters) {
         if($filters['tag'] ?? false) {
@@ -28,4 +41,5 @@ class Family extends Model
     public function user() {
         return $this->belongsTo(User::class, 'user_id');
     }
+    
 }

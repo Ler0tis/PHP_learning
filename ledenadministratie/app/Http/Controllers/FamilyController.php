@@ -8,6 +8,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Family;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class FamilyController extends Controller
 {
@@ -22,12 +23,12 @@ class FamilyController extends Controller
     }
 
     // Show single family
-    public function show(Family $family)
+    public function show($id)
     {
-        // in plaats van $family = Family::find($id);
-        return view('families.show', [
-            'family' => $family
-        ]);
+        $family = Family::findOrFail($id);
+        $familymembers = $family->familymembers;
+
+        return view('families.show', compact('family', 'familymembers'));
     }
 
     // Show Create Form
@@ -121,7 +122,9 @@ class FamilyController extends Controller
     }
 
     // Manage Families and show them on beheer families (manage pagina)
-    public function manage() {
-        return view('families.manage', ['families' => auth()->user()->families()->get()]);
+    public function manage()
+    {
+        return view('families.manage', ['families' => auth()->user()->families]);
     }
 }
+

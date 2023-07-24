@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FamilyController;
+use App\Http\Controllers\FamilymemberController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +32,7 @@ use App\Http\Controllers\FamilyController;
 Route::get('/', [FamilyController::class,
  'index']);
 
-// Show create form
+// Show Family create form
 Route::get('/families/create', [FamilyController::class,
  'create'])->Middleware('auth');
 
@@ -43,7 +44,7 @@ Route::post('/families', [FamilyController::class,
 Route::get('/families/manage', [FamilyController::class,
  'manage'])->Middleware('auth');
 
-//Show edit form
+//Show Family edit form
 Route::get('/families/{family}/edit', [FamilyController::class,
  'edit'])->Middleware('auth');
 
@@ -59,6 +60,13 @@ Route::delete('/families/{family}', [FamilyController::class,
 // A family where Family is the name of the model
 Route::get('/families/{family}', [FamilyController::class,
  'show'])->Middleware('auth');
+
+ // FAMILY MEMBERS
+ // Show FamilyMember create form
+Route::get('/familymembers/create', [FamilymemberController::class,'create']);
+
+// Store familie data
+Route::post('/familymembers', [FamilymemberController::class, 'store'])->Middleware('auth');
 
 
 // Show USER register form

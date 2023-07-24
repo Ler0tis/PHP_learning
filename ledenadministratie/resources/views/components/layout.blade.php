@@ -85,7 +85,7 @@
                 >YEEEEEEET</a
             >
         </footer>
-        <!-- Shows message that family is added -->
+        <!-- Shows message that family/familymember is added/removed etc -->
         <x-flash-message />
     </body>
 </html>

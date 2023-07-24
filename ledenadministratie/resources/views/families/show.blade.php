@@ -24,16 +24,19 @@
                     <div class="text-lg space-y-6">
                         {{$family->description}}
 
+                        <ul>
+                            @foreach ($family->familymembers as $familymember)
+                                <li>{{$familymember->name}} - {{$familymember->date_of_birth}}</li>
+                            @endforeach
+                        </ul>
+
+                        <a href="/familymembers/create" class="block bg-black text-white py-2 rounded-xl hover:opacity-80">
+                            <i class="fa-solid fa-plus"></i>Maak familielid aan</a>
+
                         <a href="mailto:{{$family->email}}"
                             class="block bg-laravel text-white mt-6 py-2 rounded-xl hover:opacity-80"><i
-                                class="fa-solid fa-envelope"></i>
+                            class="fa-solid fa-envelope"></i>
                             Contact Family</a>
-
-                        <a href="{{$family->website}}" target="_blank"
-                            class="block bg-black text-white py-2 rounded-xl hover:opacity-80"><i
-                                class="fa-solid fa-globe"></i>
-                            Visit
-                            Website</a>
                     </div>
                 </div>
             </div>
