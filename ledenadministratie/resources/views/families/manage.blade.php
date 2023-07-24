@@ -1,4 +1,6 @@
 <x-layout>
+    @include('partials._search')
+    
     <div class="bg-gray-50 border border-gray-200 p-10 rounded">
         <header>
             <h1 class="text-3xl text-center font-bold my-6 uppercase">
@@ -12,12 +14,12 @@
 
                 <tr class="border-gray-300">
                     <td class="px-4 py-8 border-t border-b border-gray-300 text-lg">
-                        <a href="show.html">
+                        <a href="/">
                             {{$family->name}}
                         </a>
                     </td>
                     <td class="px-4 py-8 border-t border-b border-gray-300 text-lg">
-                        <a href="/families{{$family->id}}/edit" class="text-blue-400 px-6 py-2 rounded-xl"><i
+                        <a href="/families/{{$family->id}}/edit" class="text-blue-400 px-6 py-2 rounded-xl"><i
                                 class="fa-solid fa-pen-to-square"></i>
                             Edit</a>
                     </td>
