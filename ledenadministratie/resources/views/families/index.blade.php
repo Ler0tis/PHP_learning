@@ -6,21 +6,26 @@
     @include('partials._hero')
     @include('partials._search')
 
-    <div class="lg:grid lg:grid-cols-2 gap-4 space-y-4 md:space-y-0 mx-4">
+    <div class="lg:flex mx-4 space-y-4 md:space-y-0">
+    {{--Navigatiemenu on the left side--}}
+    
 
-    @if(count($families) == 0)
-        <p>No families found.</p>
-    @endif
+    <div class="lg:w-4/5">
+        @if(count($families) == 0)
+            <p>No families found.</p>
+        @else
+            <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
+                @foreach($families as $family)
+                    <x-family-card :family="$family" />
+                @endforeach
+            </div>
 
-    @foreach($families as $family)
-    <x-family-card :family="$family" />
-    @endforeach
-
+            <div class="mt-6 p-4">
+                {{$families->links()}}
+            </div>
+        @endif
     </div>
-
-    <div class="mt-6 p-4">
-        {{$families->links()}}
-    </div>
+</div>
 </x-layout>
 
 

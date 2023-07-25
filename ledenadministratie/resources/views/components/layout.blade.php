@@ -29,63 +29,66 @@
         <title>Ledenadministratie</title>
     </head>
     <body class="mb-48">
-        <nav class="flex justify-between items-center mb-4">
-            <a href="/"
-                ><img class="w-24" src="{{asset('images/ironmanlogo.jpg')}}" alt="" class="logo"
-            /></a>
-            <ul class="flex space-x-6 mr-6 text-lg">
-                @auth
-                <li>
-                    <span class="font-bold uppercase">
-                        Welkom {{auth()->user()->name}}
-                    </span>
-                </li>
-                <li>
-                    <a href="/families/manage" class="hover:text-laravel"
-                        ><i class="fa-solid fa-gear"></i>
-                        Beheer families</a
-                    >
-                </li>
-                <li>
-                    <form class="inline" method="POST" action="/logout">
-                        @csrf
-                        <button type="submit">
-                            <i class="fa-solid fa-door-closed"></i> Uitloggen
-                        </button>
-                    </form>
-                </li>
-                @else
-                <li>
-                    <a href="/register" class="hover:text-laravel"
-                        ><i class="fa-solid fa-user-plus"></i> Registreren</a
-                    >
-                </li>
-                <li>
-                    <a href="/login" class="hover:text-laravel"
-                        ><i class="fa-solid fa-arrow-right-to-bracket"></i>
-                        Inloggen</a
-                    >
-                </li>
-                @endauth
-            </ul>
-        </nav>
-        <main>
-        {{--Use the slot instead of YIELD if you want to make use of x-layout--}}
-        {{$slot}}
+        <div class="flex">
+            <div class="w-1/8 flex items-center justify-center">
+                @include('partials._navigation')
+            </div>
 
-        </main>
-        <footer
-            class="fixed bottom-0 left-0 w-full flex items-center justify-start font-bold bg-laravel text-white h-24 mt-24 opacity-90 md:justify-center"
-        >
-            <p class="ml-2">Copyright &copy; 2023, All Rights reserved</p>
+            <div class="w-3/4">
+                <nav class="flex justify-between items-center mb-4">
+                    <a href="/"
+                        ><img class="w-24" src="{{asset('images/ironmanlogo.jpg')}}" alt="" class="logo"
+                    /></a>
+                    <ul class="flex space-x-6 mr-6 text-lg">
+                        @auth
+                        <li>
+                            <span class="font-bold uppercase">
+                                Welkom {{auth()->user()->name}}
+                            </span>
+                        </li>
+                        <li>
+                            <a href="/families/manage" class="hover:text-laravel"
+                                ><i class="fa-solid fa-gear"></i>
+                                Beheer families</a
+                            >
+                        </li>
+                        <li>
+                            <form class="inline" method="POST" action="/logout">
+                                @csrf
+                                <button type="submit">
+                                    <i class="fa-solid fa-door-closed"></i> Uitloggen
+                                </button>
+                            </form>
+                        </li>
+                        @else
+                        <li>
+                            <a href="/register" class="hover:text-laravel"
+                                ><i class="fa-solid fa-user-plus"></i> Registreren</a
+                            >
+                        </li>
+                        <li>
+                            <a href="/login" class="hover:text-laravel"
+                                ><i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                Inloggen</a
+                            >
+                        </li>
+                        @endauth
+                    </ul>
+                </nav>
+                <main>
+                {{--Use the slot instead of YIELD if you want to make use of x-layout--}}
+                {{$slot}}
 
-            <a
-                href="{{ url('families/create') }}"
-                class="absolute top-1/3 right-10 bg-black text-white py-2 px-5"
-                >YEEEEEEET</a
-            >
-        </footer>
-        <!-- Shows message that family/familymember is added/removed etc -->
-        <x-flash-message />
+                </main>
+                <footer class="fixed bottom-0 left-0 w-full flex items-center justify-start 
+                font-bold bg-laravel text-white h-24 mt-24 opacity-90 md:justify-center">
+                <p class="ml-2">Copyright &copy; 2023, All Rights reserved</p>
+
+                    
+                </footer>
+                <!-- Shows message that family/familymember is added/removed etc -->
+                <x-flash-message />
+            </div>
+        </div>
     </body>
 </html>
