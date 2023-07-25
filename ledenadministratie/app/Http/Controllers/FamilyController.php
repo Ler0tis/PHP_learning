@@ -18,7 +18,7 @@ class FamilyController extends Controller
     {   
         return view('families.index', [
             'families' => Family::latest()->filter(request(['tag',
-            'search']))->paginate(8)
+            'search']))->paginate(16)
         ]);
     }
 
