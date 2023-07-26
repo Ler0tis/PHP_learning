@@ -62,8 +62,9 @@
                 @error('picture')
                 <p class="text-red-500 text-xs mt-1">{{$message}}</p>
                 @enderror
-
             </div>
+            
+            <input type="hidden" name="family_id" value="{{$family_id}}"
 
             <div class="mb-6">
                 <button class="bg-laravel text-white rounded py-2 px-4 hover:bg-black">

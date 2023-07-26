@@ -26,11 +26,16 @@
 
                         <ul>
                             @foreach ($family->familymembers as $familymember)
-                                <li>{{$familymember->name}} - {{$familymember->date_of_birth}}</li>
+                                <li>{{$familymember->picture}}</li>
+                                <li>{{$familymember->name}} - {{$familymember->date_of_birth}}
+                                 {{--<a href="{{route('familymember.edit', ['id => $familymember->id']) }}">Edit--}}</li>
                             @endforeach
                         </ul>
 
-                        <a href="/familymembers/create" class="block bg-black text-white py-2 rounded-xl hover:opacity-80">
+                        
+
+                        <a href="{{ route('familymembers.create', ['family_id' => $family->id]) }}"
+                            class="block bg-black text-white py-2 rounded-xl hover:opacity-80">
                             <i class="fa-solid fa-plus"></i>Maak familielid aan</a>
 
                         <a href="mailto:{{$family->email}}"

@@ -63,10 +63,14 @@ Route::get('/families/{family}', [FamilyController::class,
 
  // FAMILY MEMBERS
  // Show FamilyMember create form
-Route::get('/familymembers/create', [FamilymemberController::class,'create']);
+// web.php
+
+Route::get('/familymembers/create/{family_id?}', [FamilymemberController::class, 'create'])
+    ->name('familymembers.create');
 
 // Store familie data
-Route::post('/familymembers', [FamilymemberController::class, 'store'])->Middleware('auth');
+Route::post('/familymembers', [FamilymemberController::class, 'store'])->middleware('auth');
+
 
 
 // Show USER register form
