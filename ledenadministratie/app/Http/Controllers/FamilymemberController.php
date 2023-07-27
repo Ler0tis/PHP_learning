@@ -21,7 +21,7 @@ class FamilymemberController extends Controller
             'name' => 'required|string|max:255',
             'date_of_birth' => 'required|date_format:d-m-Y',
             'email' => 'required|email',
-            'picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'picture' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'family_id' => 'nullable|exists:families,id',
         ]);
 
@@ -39,17 +39,31 @@ class FamilymemberController extends Controller
         if ($request->has('family_id')) {
             $familyMember->family_id = $request->input('family_id');
         }
-
+               // Stores the picture in the folder pictures instead of DB 
+        if ($request->hasFile('picture')) {
+            $path = $request->file('picture')->store('pictures', 'public');
+            $familyMember->picture = $path;
+        }
 
         $familyMember->save();
 
-        // Stores the picture in the folder pictures
-        if ($request->hasFile('picture')) {
-            $dataFields['picture'] = $request->file('picture')->store('pictures', 'public');
-        }
-
-    
-
         return redirect('/')->with('message', 'Familielid succesvol toegevoegd!');
     }
+
+    // app/Http/Controllers/FamilyMemberController.php
+
+    public function edit($id)
+    {
+        $familyMember = Familymember::findOrFail($id);
+        return view('family-members.edit', compact('familyMember'));
+    }
+
+    public function destroy($id)
+    {
+        $familyMember = Familymember::findOrFail($id);
+        $familyMember->delete();
+        
+        return redirect('/')->with('succes', 'Familymember is succesfully deleted');
+    }
+
 }

@@ -71,6 +71,12 @@ Route::get('/familymembers/create/{family_id?}', [FamilymemberController::class,
 // Store familie data
 Route::post('/familymembers', [FamilymemberController::class, 'store'])->middleware('auth');
 
+// Edit Familymembers
+Route::get('/familymembers/{id}/edit', 'FamilyMemberController@edit')->name('family.members.edit');
+
+// Delete familymember
+Route::delete('/familymembers/{id}', 'FamilyMemberController@destroy')->name('family.members.destroy');
+
 
 
 // Show USER register form

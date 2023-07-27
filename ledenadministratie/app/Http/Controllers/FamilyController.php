@@ -26,7 +26,7 @@ class FamilyController extends Controller
     public function show($id)
     {
         $family = Family::findOrFail($id);
-        $familymembers = $family->familymembers;
+        $familymembers = Family::findOrFail($id);
 
         return view('families.show', compact('family', 'familymembers'));
     }

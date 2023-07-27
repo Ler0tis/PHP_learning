@@ -1,5 +1,4 @@
 <x-layout>
-    
     @include('partials._search')
 
     <div class="bg-gray-50 border border-gray-200 p-10 rounded">
