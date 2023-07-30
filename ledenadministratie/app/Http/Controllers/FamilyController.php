@@ -104,7 +104,7 @@ class FamilyController extends Controller
 
         $family->update($dataFields);
 
-        return back()->with('message', 'Familie succesvol aangepast');
+        return back()->with('message', 'Family succesfully updated');
     }
 
     // Delete family
@@ -115,7 +115,7 @@ class FamilyController extends Controller
         }
         
         $family->delete();
-        return redirect('/')->with('message', 'Familie succesvol verwijderd');
+        return redirect('/')->with('message', 'Familie succesfully deleted');
     }
 
     // Manage Families and show them on beheer families (manage pagina)

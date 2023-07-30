@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FamilyController;
+use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\FamilymemberController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -18,13 +20,13 @@ use App\Http\Controllers\FamilymemberController;
 | contains the "web" middleware group. Now create something great!
 |
 // Common Resource Routes:
-// index - Show all families
-// show - show single Family
-// create - Show form to create new Family
-// store - Store new Family
-// edit - Show form to edit family
-// update - Update Family
-// destroy - Delete family
+// index - Show all entities
+// show - show single Entity
+// create - Show form to create new Entity
+// store - Store new Entity
+// edit - Show form to edit Entity
+// update - Update Entity
+// destroy - Delete Entity
 
 */
 
@@ -32,7 +34,7 @@ use App\Http\Controllers\FamilymemberController;
 // Route::get('/families/{family}', [FamilyController::class, 'show'])->name('families.show');
 
 
-
+///////////////////////////// Families ////////////////////////////////////
 // All families
 Route::get('/', [FamilyController::class,
  'index']);
@@ -67,7 +69,8 @@ Route::get('/families/{family}', [FamilyController::class,
  'show'])->Middleware('auth');
 
 
- // FAMILY MEMBERS
+
+ ///////////// FAMILY MEMBERS////////////////////////////////////////
  // Show FamilyMember create form
 Route::get('/familymembers/create/{family_id?}', [FamilymemberController::class, 'create'])
     ->name('familymembers.create');
@@ -85,6 +88,21 @@ Route::put('/familymembers/{familymember}',
 
 // Delete familymember
 Route::delete('/familymembers/{id}', [FamilymemberController::class,'destroy'])->Middleware('auth');
+
+
+// Show Memberships
+Route::get('/memberships', [MembershipController::class, 'index'])->Middleware('auth');
+
+// Route::get('/memberships/create', [MembershipController::class, 'create'])->Middleware('auth');
+
+// Store Memberships data
+
+// Show Memberships edit form
+
+// Update Memberships
+
+// Delete Membership
+
 
 
 
