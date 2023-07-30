@@ -8,7 +8,7 @@
     <div class="content-container">
         <header>
             <h1 class="text-3xl text-center font-bold my-5 uppercase">
-                Overzicht families
+                Overview families
             </h1>
         </header>
 

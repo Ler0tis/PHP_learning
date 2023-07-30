@@ -43,33 +43,33 @@
                         @auth
                         <li>
                             <span class="font-bold uppercase">
-                                Welkom {{auth()->user()->name}}
+                                Welcome {{auth()->user()->name}}
                             </span>
                         </li>
                         <li>
                             <a href="/families/manage" class="hover:text-laravel"
                                 ><i class="fa-solid fa-gear"></i>
-                                Beheer families</a
+                                Manage families</a
                             >
                         </li>
                         <li>
                             <form class="inline" method="POST" action="/logout">
                                 @csrf
                                 <button type="submit">
-                                    <i class="fa-solid fa-door-closed"></i> Uitloggen
+                                    <i class="fa-solid fa-door-closed"></i> Log out
                                 </button>
                             </form>
                         </li>
                         @else
                         <li>
                             <a href="/register" class="hover:text-laravel"
-                                ><i class="fa-solid fa-user-plus"></i> Registreren</a
+                                ><i class="fa-solid fa-user-plus"></i> Registrate</a
                             >
                         </li>
                         <li>
                             <a href="/login" class="hover:text-laravel"
                                 ><i class="fa-solid fa-arrow-right-to-bracket"></i>
-                                Inloggen</a
+                                Login</a
                             >
                         </li>
                         @endauth

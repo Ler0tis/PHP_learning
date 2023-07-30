@@ -12,9 +12,9 @@
             {{--CSRF = against cross site scripting( SQL-INJECTION)--}}
             @csrf
             <div class="mb-6">
-                <label for="name" class="inline-block text-lg mb-2">Naam</label>
+                <label for="name" class="inline-block text-lg mb-2">Name</label>
                 <input type="text" class="border border-gray-200 rounded p-2 w-full" name="name"
-                    placeholder="Voornaam" value="{{old('name')}}" />
+                    placeholder="First name" value="{{old('name')}}" />
                 {{--Error handeling for differnt labels--}}
                 @error('name')
                 <p class="text-red-500 text-xs mt-1">{{$message}}</p>
@@ -22,7 +22,7 @@
             </div>
 
             <div class="mb-6">
-                <label for="date_of_birth" class="inline-block text-lg mb-2">Geboortedatum</label>
+                <label for="date_of_birth" class="inline-block text-lg mb-2">Date of birth</label>
                 <input type="text" class="border border-gray-200 rounded p-2 w-full" name="date_of_birth"
                     placeholder="DD-MM-YYYY" value="{{old('date_of_birth')}}" />
 
@@ -43,10 +43,10 @@
 
             <div class="mb-6">
                 <label for="tags" class="inline-block text-lg mb-2">
-                    Tags (Komma gescheiden)
+                    Tags (comma seperated)
                 </label>
                 <input type="text" class="border border-gray-200 rounded p-2 w-full" name="tags"
-                    placeholder="Laravel, Zwemmen, OCR, etc" value="{{old('tags')}}" />
+                    placeholder="Laravel, Swimming, OCR, etc" value="{{old('tags')}}" />
 
                 @error('tags')
                 <p class="text-red-500 text-xs mt-1">{{$message}}</p>
@@ -55,7 +55,7 @@
 
             <div class="mb-6">
                 <label for="picture" class="inline-block text-lg mb-2">
-                    Profielfoto
+                    Profile picture
                 </label>
                 <input type="file" class="border border-gray-200 rounded p-2 w-full" name="picture" />
 
@@ -68,10 +68,10 @@
 
             <div class="mb-6">
                 <button class="bg-laravel text-white rounded py-2 px-4 hover:bg-black">
-                    Opslaan
+                    Save
                 </button>
 
-                <a href="/" class="text-black ml-4"> Annuleren </a>
+                <a href="/" class="text-black ml-4"> Cancel </a>
             </div>
         </form>
     </div>

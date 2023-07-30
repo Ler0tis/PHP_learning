@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Familymember;
+use Illuminate\Validation\Rule;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -40,6 +41,26 @@ class Family extends Model
     // Relations to USER. kan ik dit gebruiken voor een familielid die hoort bij een familie?
     public function user() {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // Make sure the address and email are unique among all families/members
+    public static function rules($family = null) {
+        $rules = [
+            'name' => 'required',
+            'address' => [
+                'required',
+                Rule::unique('families')->ignore($family),
+            ],
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('families')->ignore($family),
+            ],
+
+        ];
+
+        return $rules;
+        
     }
     
 }

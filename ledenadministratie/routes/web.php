@@ -28,6 +28,11 @@ use App\Http\Controllers\FamilymemberController;
 
 */
 
+// Redirect for getting back to the family page (werkt nog niet 
+// Route::get('/families/{family}', [FamilyController::class, 'show'])->name('families.show');
+
+
+
 // All families
 Route::get('/', [FamilyController::class,
  'index']);
@@ -61,21 +66,26 @@ Route::delete('/families/{family}', [FamilyController::class,
 Route::get('/families/{family}', [FamilyController::class,
  'show'])->Middleware('auth');
 
+
  // FAMILY MEMBERS
  // Show FamilyMember create form
-// web.php
-
 Route::get('/familymembers/create/{family_id?}', [FamilymemberController::class, 'create'])
     ->name('familymembers.create');
 
-// Store familie data
-Route::post('/familymembers', [FamilymemberController::class, 'store'])->middleware('auth');
+// Store family member data
+Route::post('/familymembers', [FamilymemberController::class, 'store'])->Middleware('auth');
 
-// Edit Familymembers
-Route::get('/familymembers/{id}/edit', 'FamilyMemberController@edit')->name('family.members.edit');
+//Show Family member edit form
+Route::get('/familymembers/{familymember}/edit', [FamilymemberController::class,
+ 'edit'])->Middleware('auth')->name('familymembers.edit');
+
+// Update Family members
+Route::put('/familymembers/{familymember}', 
+[FamilymemberController::class, 'update'])->name('familymembers.update')->Middleware('auth');
 
 // Delete familymember
-Route::delete('/familymembers/{id}', 'FamilyMemberController@destroy')->name('family.members.destroy');
+Route::delete('/familymembers/{id}', [FamilymemberController::class,'destroy'])->Middleware('auth');
+
 
 
 

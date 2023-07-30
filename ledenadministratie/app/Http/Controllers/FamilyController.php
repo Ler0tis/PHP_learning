@@ -1,19 +1,20 @@
 <?php
 
 //Tips and tricks
-// Can use the request() icw dd();
+
+// dd($request->all());
 
 
 namespace App\Http\Controllers;
 
 use App\Models\Family;
+use App\Models\Familymember;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class FamilyController extends Controller
 {
 
-    // use the right folder + page. Like FolderName.index
+    // Show all families Last added is first in column
     public function index()
     {   
         return view('families.index', [
@@ -26,7 +27,7 @@ class FamilyController extends Controller
     public function show($id)
     {
         $family = Family::findOrFail($id);
-        $familymembers = Family::findOrFail($id);
+        $familymembers = Familymember::where('family_id', $id)->get();
 
         return view('families.show', compact('family', 'familymembers'));
     }
@@ -40,11 +41,7 @@ class FamilyController extends Controller
     // Store familie data
     // Unique  'name' => 'required, Rule::unique('families')'
     public function store(Request $request) {
-        $dataFields = $request->validate([
-            'name' => 'required',
-            'address' => 'required',
-            'email' => ['required', 'email'],
-        ]);
+        $dataFields = $request->validate(Family::rules());
         // Optional fields, but if filled, its added
         if($request->filled('tags')) {
             $dataFields['tags'] = $request->input('tags');
@@ -67,7 +64,7 @@ class FamilyController extends Controller
 
         Family::create($dataFields);
 
-        return redirect('/')->with('message', 'Familie succesvol toegevoegd!');
+        return redirect('/')->with('message', 'Family succesfully added!');
     }
 
     public function edit(Family $family) {
@@ -83,9 +80,9 @@ class FamilyController extends Controller
         }
 
         $dataFields = $request->validate([
-            'name' => 'required',
-            'address' => 'required',
-            'email' => ['required', 'email'],
+            'name' => 'required|unique:families',
+            'address' => 'required|unique:families',
+            'email' => 'required|email|unique:families',
         ]);
         // Optional fields, but if filled, its added
         if ($request->filled('tags')) {
