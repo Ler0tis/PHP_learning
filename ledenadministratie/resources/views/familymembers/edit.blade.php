@@ -56,6 +56,25 @@
                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
+
+            {{-- Selectie voor de membership --}}
+            <div class="mb-6">
+                <label for="membership_id">Select Membership:</label>
+                <select name="membership_id" id="membership_id">
+                    <option value="">No Membership</option>
+                    @foreach ($memberships as $membership)
+                    <option value="{{ $membership->id }}" @if ($familymember->membership && 
+                        $familymember->membership->id === $membership->id) selected @endif>
+                        {{ $membership->description }}
+                    </option>
+                    @endforeach
+                </select>
+
+                @error('membership_id')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+
+            </div>
             
             <input type="hidden" name="familymember_id" value="{{ $familymember->id }}">
 

@@ -79,29 +79,34 @@ Route::get('/familymembers/create/{family_id?}', [FamilymemberController::class,
 Route::post('/familymembers', [FamilymemberController::class, 'store'])->Middleware('auth');
 
 //Show Family member edit form
-Route::get('/familymembers/{familymember}/edit', [FamilymemberController::class,
- 'edit'])->Middleware('auth')->name('familymembers.edit');
+Route::get('/familymembers/{familymember}/edit', [FamilymemberController::class, 'edit'])->Middleware('auth')->name('familymembers.edit');
+
 
 // Update Family members
-Route::put('/familymembers/{familymember}', 
-[FamilymemberController::class, 'update'])->name('familymembers.update')->Middleware('auth');
+Route::put('/familymembers/{familymember}', [FamilymemberController::class, 'update'])->name('familymembers.update')->Middleware('auth');
+
 
 // Delete familymember
 Route::delete('/familymembers/{id}', [FamilymemberController::class,'destroy'])->Middleware('auth');
 
-
+/////////////////////////// Memberships ///////////////////////////////////////
 // Show Memberships
 Route::get('/memberships', [MembershipController::class, 'index'])->Middleware('auth');
 
-// Route::get('/memberships/create', [MembershipController::class, 'create'])->Middleware('auth');
+// Show create form 
+Route::get('/memberships/create', [MembershipController::class, 'create'])->Middleware('auth');
 
 // Store Memberships data
+Route::post('/memberships', [MembershipController::class, 'store'])->Middleware('auth');
 
 // Show Memberships edit form
+Route::get('/memberships/{membership}/edit', [MembershipController::class, 'edit'])->Middleware('auth')->name('memberships.edit');
 
 // Update Memberships
+Route::put('/memberships/{membership}', [MembershipController::class, 'update'])->name('memberships.update')->Middleware('auth');
 
 // Delete Membership
+Route::delete('/memberships/{id}', [MembershipController::class, 'destroy'])->Middleware('auth');
 
 
 

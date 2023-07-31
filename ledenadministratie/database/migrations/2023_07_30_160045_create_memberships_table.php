@@ -15,9 +15,8 @@ class CreateMembershipsTable extends Migration
     {
         Schema::create('memberships', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('family_id')->constrained();
-            $table->foreignId('familymember_id')->constrained(); // Defines relations between tables by ID
-            $table->string('description');
+            $table->foreignId('familymember_id')->constrained()->nullable(); // Defines relations between tables by ID
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

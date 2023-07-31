@@ -56,4 +56,8 @@ class Familymember extends Model
 
         return $rules;
     }
+
+    public function membership() {
+        return $this->belongsTo(Membership::class);
+    }
 }

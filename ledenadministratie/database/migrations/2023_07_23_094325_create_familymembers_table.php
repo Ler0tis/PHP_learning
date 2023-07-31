@@ -16,10 +16,11 @@ class CreateFamilymembersTable extends Migration
         Schema::create('familymembers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('family_id')->constrained(); // Defines relations between tables by ID
-            $table->string('name');
-            $table->date('date_of_birth');
-            $table->string('email');
+            $table->string('name')->nullable();
+            $table->date('date_of_birth')->nullable();
+            $table->string('email')->nullable();
             $table->string('picture')->nullable();
+            $table->string('membership')->nullable();
             $table->timestamps();
         });
     }

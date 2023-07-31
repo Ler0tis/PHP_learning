@@ -20,7 +20,7 @@
             </div>
             <div class="mb-6">
                 <label for="password" class="inline-block text-lg mb-2">
-                    Wachtwoord
+                    Password
                 </label>
                 <input type="password" class="border border-gray-200 rounded p-2 w-full"
                  name="password" value="{{old('password')}}" />
@@ -33,14 +33,14 @@
 
             <div class="mb-6">
                 <button type="submit" class="bg-laravel text-white rounded py-2 px-4 hover:bg-black">
-                    Log in
+                    Login
                 </button>
             </div>
 
             <div class="mt-8">
                 <p>
-                    Nog geen account?
-                    <a href="/register" class="text-laravel">Registreren</a>
+                    No account yet??
+                    <a href="/register" class="text-laravel">Registrate</a>
                 </p>
             </div>
         </form>

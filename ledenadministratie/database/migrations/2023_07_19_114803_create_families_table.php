@@ -16,13 +16,13 @@ class CreateFamiliesTable extends Migration
         Schema::create('families', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // On delete user, the families made by that user are deleted to?
-            $table->string('name');
-            $table->string('tags');
-            $table->string('address');
-            $table->string('email');
-            $table->string('website');
-            $table->string('picture')->nullable(); //Allowed to be NULL
-            $table->longText('description');
+            $table->string('name')->nullable();
+            $table->string('tags')->nullable();
+            $table->string('address')->nullable();
+            $table->string('email')->nullable();
+            $table->string('website')->nullable();
+            $table->string('picture')->nullable();
+            $table->longText('description')->nullable();
             $table->timestamps();
         });
     }

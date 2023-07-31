@@ -2,16 +2,16 @@
     <div class="bg-gray-50 border border-gray-200 p-10 rounded max-w-lg mx-auto mt-24">
         <header class="text-center">
             <h2 class="text-2xl font-bold uppercase mb-1">
-                Registreren
+                Registrate
             </h2>
-            <p class="mb-4">Maak een account aan</p>
+            <p class="mb-4">Make a new account</p>
         </header>
 
         <form method="POST" action="/users">
             @csrf
             <div class="mb-6">
                 <label for="name" class="inline-block text-lg mb-2">
-                    Naam
+                    Name
                 </label>
                 <input type="text" class="border border-gray-200 rounded p-2 w-full"
                  name="name" value="{{old('name')}}"/>
@@ -22,7 +22,7 @@
             </div>
 
             <div class="mb-6">
-                <label for="email" class="inline-block text-lg mb-2">Email/Gebruikersnaam</label>
+                <label for="email" class="inline-block text-lg mb-2">Email</label>
                 <input type="email" class="border border-gray-200 rounded p-2 w-full"
                  name="email" value="{{old('email')}}"/>
 
@@ -33,7 +33,7 @@
 
             <div class="mb-6">
                 <label for="password" class="inline-block text-lg mb-2">
-                    Wachtwoord
+                    Password
                 </label>
                 <input type="password" class="border border-gray-200 rounded p-2 w-full"
                  name="password" />
@@ -45,7 +45,7 @@
 
             <div class="mb-6">
                 <label for="password2" class="inline-block text-lg mb-2">
-                    Bevestig wachtwoord
+                    Confirm password
                 </label>
                 <input type="password" class="border border-gray-200 rounded p-2 w-full"
                  name="password_confirmation" />
@@ -57,14 +57,14 @@
 
             <div class="mb-6">
                 <button type="submit" class="bg-laravel text-white rounded py-2 px-4 hover:bg-black">
-                    Opslaan
+                    Save
                 </button>
             </div>
 
             <div class="mt-8">
                 <p>
-                    Al een account?
-                    <a href="/login" class="text-laravel">Naar inloggen</a>
+                    Already an account?
+                    <a href="/login" class="text-laravel">To login</a>
                 </p>
             </div>
         </form>
