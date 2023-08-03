@@ -2,7 +2,7 @@
     <div class="bg-gray-50 border border-gray-200 p-10 rounded max-w-lg mx-auto mt-24">
         <header class="text-center">
             <h2 class="text-2xl font-bold uppercase mb-1">
-                Login
+                Log in
             </h2>
         </header>
 
@@ -39,8 +39,8 @@
 
             <div class="mt-8">
                 <p>
-                    No account yet??
-                    <a href="/register" class="text-laravel">Registrate</a>
+                    No account? 
+                    <a href="/register" class="text-laravel">Register here</a>
                 </p>
             </div>
         </form>

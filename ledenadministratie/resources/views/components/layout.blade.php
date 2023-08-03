@@ -32,6 +32,7 @@
         <a href="/">
             <img class="w-24" src="{{asset('images/ironmanlogo.jpg')}}" alt="" class="logo" />
         </a>
+        @auth
         <div class="flex">
             <div class="w-1/8 flex-direction: column items-center justify-center">
                 @include('partials._navigation')
@@ -40,7 +41,7 @@
             <div class="w-3/4">
                 <nav class="flex justify-between items-center mb-4">
                     <ul class="flex space-x-4 mr-4 text-lg">
-                        @auth
+                        
                         <li>
                             <span class="font-bold uppercase">
                                 Welcome {{auth()->user()->name}}
@@ -60,22 +61,10 @@
                                 </button>
                             </form>
                         </li>
-                        @else
-                        <li>
-                            <a href="/register" class="hover:text-laravel"
-                                ><i class="fa-solid fa-user-plus"></i> Registrate</a
-                            >
-                        </li>
-                        <li>
-                            <a href="/login" class="hover:text-laravel"
-                                ><i class="fa-solid fa-arrow-right-to-bracket"></i>
-                                Login</a
-                            >
-                        </li>
-                        @endauth
                     </ul>
                 </nav>
                 <main>
+                @endauth
                 {{--Use the slot instead of YIELD if you want to make use of x-layout--}}
                 {{$slot}}
 

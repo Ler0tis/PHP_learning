@@ -15,15 +15,5 @@
         <li class="py-2 px-4"><a href="/">YEEEET</li>
         <li class="py-2 px-4"><a href="/">YEEEET</li>
         <li class="py-2 px-4"><a href="/">YEEEET</li>
-        <li class="py-2 px-4"><a href="/">YEEEET</li>
-        <li class="py-2 px-4"><a href="/">YEEEET</li>
-        <li class="py-2 px-4"><a href="/">YEEEET</li>
-        <li class="py-2 px-4"><a href="/">YEEEET</li>
-        <li class="py-2 px-4"><a href="/">YEEEET</li>
-        <li class="py-2 px-4"><a href="/">YEEEET</li>
-        <li class="py-2 px-4"><a href="/">YEEEET</li>
-        <li class="py-2 px-4"><a href="/">YEEEET</li>
-        <li class="py-2 px-4"><a href="/">YEEEET</li>
-        <li class="py-2 px-4"><a href="/">YEEEET</li>
     </ul>
 </nav>

@@ -37,7 +37,7 @@ use App\Http\Controllers\FamilymemberController;
 ///////////////////////////// Families ////////////////////////////////////
 // All families
 Route::get('/', [FamilyController::class,
- 'index']);
+ 'index'])->Middleware('auth');
 
 // Show Family create form
 Route::get('/families/create', [FamilyController::class,
@@ -79,7 +79,7 @@ Route::get('/familymembers/create/{family_id?}', [FamilymemberController::class,
 Route::post('/familymembers', [FamilymemberController::class, 'store'])->Middleware('auth');
 
 //Show Family member edit form
-Route::get('/familymembers/{familymember}/edit', [FamilymemberController::class, 'edit'])->Middleware('auth')->name('familymembers.edit');
+Route::get('/familymembers/{familymember}/edit', [FamilymemberController::class, 'edit'])->name('familymembers.edit')->Middleware('auth');
 
 
 // Update Family members
@@ -100,7 +100,7 @@ Route::get('/memberships/create', [MembershipController::class, 'create'])->Midd
 Route::post('/memberships', [MembershipController::class, 'store'])->Middleware('auth');
 
 // Show Memberships edit form
-Route::get('/memberships/{membership}/edit', [MembershipController::class, 'edit'])->Middleware('auth')->name('memberships.edit');
+Route::get('/memberships/{membership}/edit', [MembershipController::class, 'edit'])->name('memberships.edit')->Middleware('auth');
 
 // Update Memberships
 Route::put('/memberships/{membership}', [MembershipController::class, 'update'])->name('memberships.update')->Middleware('auth');

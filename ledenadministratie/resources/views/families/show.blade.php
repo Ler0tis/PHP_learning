@@ -3,9 +3,10 @@
 @endphp
 
 <x-layout>
-    <a href="/" class="inline-block text-black ml-4 mb-4">
-    <i class="fa-solid fa-arrow-left"></i> Back
-    </a>
+    <a href="{{ route('familymembers.create', ['family_id' => $family->id]) }}"
+        class="w-40 whitespace-nowrap block bg-black text-white py-2 rounded-xl hover:opacity-80">
+        <i class="fa-solid fa-plus"></i> Add member</a>
+
     <div class="mx-4">
         <div class="flex flex-col items-center justify-center text-center">
             <h3 class="text-2xl font-bold mb-2">{{$family->name}}</h3>
@@ -63,9 +64,7 @@
                     </tbody>
                 </table>
 
-                <a href="{{ route('familymembers.create', ['family_id' => $family->id]) }}"
-                    class="block bg-black text-white py-2 rounded-xl hover:opacity-80">
-                    <i class="fa-solid fa-plus"></i>New family member</a>
+                
                 
                 <a href="mailto:{{$family->email}}" class="block bg-laravel text-white mt-6 py-2 rounded-xl hover:opacity-80"><i
                         class="fa-solid fa-envelope"></i>

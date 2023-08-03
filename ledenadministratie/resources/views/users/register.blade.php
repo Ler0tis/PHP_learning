@@ -2,9 +2,9 @@
     <div class="bg-gray-50 border border-gray-200 p-10 rounded max-w-lg mx-auto mt-24">
         <header class="text-center">
             <h2 class="text-2xl font-bold uppercase mb-1">
-                Registrate
+                Register
             </h2>
-            <p class="mb-4">Make a new account</p>
+            <p class="mb-4">Make your new account here</p>
         </header>
 
         <form method="POST" action="/users">
@@ -64,7 +64,7 @@
             <div class="mt-8">
                 <p>
                     Already an account?
-                    <a href="/login" class="text-laravel">To login</a>
+                    <a href="/login" class="text-laravel">Click here to log in</a>
                 </p>
             </div>
         </form>
