@@ -38,11 +38,6 @@ class Family extends Model
         }
     }
 
-    // Relations to USER. kan ik dit gebruiken voor een familielid die hoort bij een familie?
-    public function user() {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
     // Make sure the address and email are unique among all families/members
     public static function rules($family = null) {
         $rules = [

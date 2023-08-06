@@ -36,7 +36,11 @@
                                 <p>Name: {{ $familymember->name }} {{ $family->name }} </p>
                                 <p>Birthdate: {{ Carbon::createFromFormat('Y-m-d', $familymember->date_of_birth)->format('d-m-Y') }}</p>
                                 <p>E-mail: {{$familymember->email}} </p>
-                                <p>Current membership: {{ $familymember->membership ? $familymember->membership->description : 'No membership' }}</p>
+                                <p>Current membership: {{ $familymember->contribution ? $familymember->contribution->membership->description : 'No membership' }}</p>
+                                <p>Contribution: {{ $familymember->contribution ? $familymember->contribution->amount : 'No contribution' }}</p>
+                                @if ($familymember->contribution)
+                                <p>Discount: {{ $familymember->contribution->amount * ($familymember->contribution->membership->discount / 100) }}</p>
+                                @endif
                             </td>
                             <td class="px-4 py-8 border-t border-b border-gray-300 text-lg">
                                 <a href="{{ route('familymembers.edit', ['familymember' => $familymember->id]) }}"
@@ -63,9 +67,6 @@
                         @endunless
                     </tbody>
                 </table>
-
-                
-                
                 <a href="mailto:{{$family->email}}" class="block bg-laravel text-white mt-6 py-2 rounded-xl hover:opacity-80"><i
                         class="fa-solid fa-envelope"></i>
                     Contact Family</a>

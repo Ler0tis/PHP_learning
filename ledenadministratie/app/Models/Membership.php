@@ -24,8 +24,21 @@ class Membership extends Model
         return $rules; 
     }
 
+    public function getBaseContribution() {
+        return $this->contribution->amount;
+    }
+
+    public function getDiscount($age) {
+        return $this->contribution->age_limit <= $age ? $this->contribution->discount : 0;
+    }
+
     // Define relation between membership and familymember
     public function familymember() {
         return $this->belongsTo(Familymember::class);
+    }
+
+    // Define relation for contribution
+    public function contribution() {
+        return $this->hasOne(Contribution::class);
     }
 }

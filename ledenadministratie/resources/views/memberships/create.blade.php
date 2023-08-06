@@ -1,4 +1,3 @@
-{{--Get the form and input send to DATABASE--}}
 
 <x-layout>
     <a href="/" class="inline-block text-black ml-4 mb-4">

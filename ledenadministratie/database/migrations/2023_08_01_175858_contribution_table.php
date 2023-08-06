@@ -13,11 +13,13 @@ class ContributionTable extends Migration
      */
     public function up()
     {
-        Schema::create('contribution', function (Blueprint $table) {
+        Schema::create('contributions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('membership_id')->constrained()->nullable(); // Defines relations between tables by ID
-            $table->int('age')->nullable();
+            $table->integer('min_age')->nullable();
+            $table->integer('max_age')->nullable();
             $table->decimal('amount')->nullable();
+            $table->decimal('discount')->nullable();
             $table->timestamps();
         });
     }

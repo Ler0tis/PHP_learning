@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContributionController;
 use App\Models\Family;
 use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
@@ -108,6 +109,16 @@ Route::put('/memberships/{membership}', [MembershipController::class, 'update'])
 // Delete Membership
 Route::delete('/memberships/{id}', [MembershipController::class, 'destroy'])->Middleware('auth');
 
+
+
+/////////// CONTRIBUTION ////////////////
+// All contributions
+Route::get('/contributions', [ContributionController::class, 'index'])->name('contributions.index')->Middleware('auth');
+
+Route::post('contributions', [ContributionController::class, 'store'])->name('contributions.store')->Middleware('auth');
+
+// Show create form 
+Route::get('/contributions/create', [ContributionController::class, 'create'])->Middleware('auth');
 
 
 
