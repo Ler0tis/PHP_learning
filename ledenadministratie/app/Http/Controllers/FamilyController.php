@@ -74,16 +74,7 @@ class FamilyController extends Controller
     // Update Family
     public function update(Request $request, Family $family)
     {
-        // Is logged in user owner?
-        if ($family->user_id != auth()->id()) {
-            abort(403, 'Unauthorized Action');
-        }
-
-        $dataFields = $request->validate([
-            'name' => 'required|unique:families',
-            'address' => 'required|unique:families',
-            'email' => 'required|email|unique:families',
-        ]);
+        $dataFields = $request->validate(Family::rules());
         // Optional fields, but if filled, its added
         if ($request->filled('tags')) {
             $dataFields['tags'] = $request->input('tags');

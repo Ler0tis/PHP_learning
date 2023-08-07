@@ -57,18 +57,7 @@ class FamilymemberController extends Controller
 
     public function update(Request $request, Familymember $familymember)
     {
-        $dataFields = $request->validate([
-            'name' => 'required|string|max:255',
-            'date_of_birth' => [
-                'required',
-                'date_format:d-m-Y',
-                'before_or_equal:today',
-                'after_or_equal:' . Carbon::now()->subYears(100)->format('d-m-Y'),
-            ],
-            'email' => 'required|email',
-            'picture' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'family_id' => 'nullable|exists:families,id',
-        ]);
+        $dataFields = $request->validate(Familymember::rules());
 
         $dataFields['date_of_birth'] = Carbon::createFromFormat('d-m-Y', $request->input('date_of_birth'))->format('Y-m-d');
 

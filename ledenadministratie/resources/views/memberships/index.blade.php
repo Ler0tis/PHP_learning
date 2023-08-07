@@ -12,8 +12,6 @@
             @else
             <table class="w-full table-auto rounded-sm">
                 @foreach ($memberships as $membership)
-                    {{-- <li>{{ $membership->description }}</li> --}}
-
                 <tr class="border-gray-300">
                     <td class="px-4 py-8 border-t border-b border-gray-300 text-lg">
                         <a href="/memberships/{{$membership->id}}">

@@ -120,6 +120,15 @@ Route::post('contributions', [ContributionController::class, 'store'])->name('co
 // Show create form 
 Route::get('/contributions/create', [ContributionController::class, 'create'])->Middleware('auth');
 
+// Show Contribution edit form
+Route::get('/contributions/{contribution}/edit', [ContributionController::class, 'edit'])->name('contributions.edit')->Middleware('auth');
+
+// Update Contribution
+Route::put('/contributions/{contribution}', [ContributionController::class, 'update'])->name('contributions.update')->Middleware('auth');
+
+// Delete
+Route::delete('/contributions/{id}', [ContributionController::class, 'destroy'])->Middleware('auth');
+
 
 
 
