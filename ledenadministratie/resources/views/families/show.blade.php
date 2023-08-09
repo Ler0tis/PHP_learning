@@ -42,18 +42,17 @@
                                 <p>Discount: {{ $familymember->contribution->amount * ($familymember->contribution->membership->discount / 100) }}</p>
                                 @endif
                             </td>
-                            <td class="px-4 py-8 border-t border-b border-gray-300 text-lg">
-                                <a href="{{ route('familymembers.edit', ['familymember' => $familymember->id]) }}"
-                                    class="text-blue-400 px-6 py-2 rounded-xl">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </a>
-                            </td>
-                            <td class="px-4 py-8 border-t border-b border-gray-300 text-lg">
-                                <form method="POST" action="/familymembers/{{$familymember->id}}" method="POST" style="display: inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="text-red-500"><i class="fa-solid fa-trash"></i></button>
-                                </form>
+                            <td class="px-4 py-4 border-t border-b border-gray-300 text-lg">
+                                <div class="flex items-center justify-center space-x-4">
+                                    <a href="/families/{{$family->id}}/edit" class="text-blue-400 px-2 py-2 rounded-xl">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                    <form method="POST" action="/families/{{$family->id}}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="text-red-500 px-2 py-2"><i class="fa-solid fa-trash"></i></button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @endforeach

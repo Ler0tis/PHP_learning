@@ -53,8 +53,8 @@
                 @enderror
             </div>
             <div class="mb-6">
-                <label for="discount" class="inline-block text-lg mb-2">Discount</label>
-                <input type="number" class="border border-gray-200 rounded p-2 w-full" 
+                <label for="discount" class="inline-block text-lg mb-2">Discount in %</label>
+                <input type="text" class="border border-gray-200 rounded p-2 w-full" 
                 name="discount" value="{{ $contribution->discount }}"/>
                 
                 @error('discount')

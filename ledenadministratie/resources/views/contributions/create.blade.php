@@ -19,7 +19,8 @@
             </div>
             <div class="mb-6">
                 <label for="amount" class="inline-block text-lg mb-2">Base contribution:</label>
-                <input type="integer" class="border border-gray-200 rounded p-2 w-full" name="amount" />
+                <input type="integer" class="border border-gray-200 rounded p-2 w-full" 
+                name="amount" value="{{ $contribution->amount }}" />
                 {{--Error handeling for differnt labels--}}
                 @error('amount')
                 <p class="text-red-500 text-xs mt-1">{{$message}}</p>
@@ -42,8 +43,9 @@
                 @enderror
             </div>
             <div class="mb-6">
-                <label for="discount" class="inline-block text-lg mb-2">Discount:</label>
-                <input type="integer" class="border border-gray-200 rounded p-2 w-full" name="discount" />
+                <label for="discount" class="inline-block text-lg mb-2">Discount in %</label>
+                <input type="integer" class="border border-gray-200 rounded p-2 w-full" 
+                name="discount" value="{{ $contribution->discount }}"/>
                 
                 @error('discount')
                 <p class="text-red-500 text-xs mt-1">{{$message}}</p>

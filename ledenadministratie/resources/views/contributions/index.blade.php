@@ -1,5 +1,5 @@
 <x-layout>
-    <div class="bg-gray-50 border border-gray-200 p-10 rounded max-w-lg mx-auto mt-24">
+    <div class="bg-gray-50 border border-gray-200 p-10 rounded max-w-xl mx-auto mt-24">
         <header class="text-center">
             <h2 class="text-2xl font-bold uppercase mb-1">
                 List of contributions
@@ -33,25 +33,25 @@
                             {{ $contribution->max_age }}
                         </td>
                         <td class="px-4 py-8 border-t border-b border-gray-300 text-lg">
-                            {{ $contribution->discount }}%
+                            {{ $contribution->discount_with_symbol }}
                         </td>
                         <td class="px-4 py-8 border-t border-b border-gray-300 text-lg">
-                            {{ $contribution->amount }}
+                            {{ $contribution->amount_with_symbol }}
                         </td>
 
-                        <td class="px-4 py-2">
-                            <a href="{{ route('contributions.edit', ['contribution' => $contribution->id]) }}"
-                                class="text-blue-400 px-6 py-2 rounded-xl">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </a>
-                        </td>
-                        <td class="px-4 py-8 border-t border-b border-gray-300 text-lg">
-                            <form method="POST" action="/contributions/{{$contribution->id}}" method="POST" style="display: inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button class="text-red-500" onclick="return confirm('Are you sure you want to delete this contribution?')">
-                                    <i class="fa-solid fa-trash"></i></button>
-                            </form>
+                        <td class="px-4 py-4 border-t border-b border-gray-300 text-lg">
+                            <div class="flex items-center justify-center space-x-4">
+                                <a href="{{ route('contributions.edit', ['contribution' => $contribution->id]) }}"
+                                    class="text-blue-400 px-6 py-2 rounded-xl">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                                <form method="POST" action="/contributions/{{$contribution->id}}" method="POST" style="display: inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="text-red-500" onclick="return confirm('Are you sure you want to delete this contribution?')">
+                                        <i class="fa-solid fa-trash"></i></button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @endforeach
