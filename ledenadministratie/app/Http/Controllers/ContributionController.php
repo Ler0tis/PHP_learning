@@ -2,26 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Contribution;
-use Illuminate\Http\Request;
-use App\Models\Familymember;
+use App\Models\FinancialYear;
 use App\Models\Membership;
+use App\Models\Contribution;
+use App\Models\Familymember;
+use Illuminate\Http\Request;
 
 class ContributionController extends Controller {
 
     public function index() {
         
         $contributions = Contribution::with('membership')->get();
+        
         return view('contributions.index', compact('contributions'));
     }
 
     public function create() {
         $memberships = Membership::all();
+        $financialYears = FinancialYear::all();
 
         $contribution = new Contribution();
         $contribution->membership_id = null;
         
-        return view('contributions.create', compact('contribution', 'memberships'));
+        return view('contributions.create', compact('contribution', 'financialYears', 'memberships'));
     }
 
     public function store(Request $request) {
@@ -34,6 +37,8 @@ class ContributionController extends Controller {
             // Als er geen 'membership_id' is ingevuld, stel deze in op null of een andere passende waarde
             $dataFields['membership_id'] = null;
         }
+
+        $dataFields['financial_year_id'] = $request->input('financial_year_id'); // CAN SELECT A FINANCIAL YEAR
 
         $contribution = Contribution::create($dataFields);
 
@@ -68,5 +73,12 @@ class ContributionController extends Controller {
 
         return redirect('/')->with('message', 'Contribution is succesfully deleted');
     }
+
+
+    // public function showContributionsByYear(FinancialYear $year)
+    // {
+    //     $contributions = $year->contributions()->with('membership')->get();
+    //     return view('contributions.show_by_year', compact('contributions', 'year'));
+    // }
 }
 

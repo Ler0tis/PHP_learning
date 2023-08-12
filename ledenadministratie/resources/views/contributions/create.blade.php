@@ -53,6 +53,16 @@
             </div>
 
             <div class="mb-6">
+                <label for="financial_year_id" class="inline-block text-lg mb-2">Financial Year:</label>
+                <select class="border border-gray-200 rounded p-2 w-full" name="financial_year_id">
+                    <option value="">Select a financial year</option>
+                    @foreach ($financialYears as $financialYear)
+                    <option value="{{ $financialYear->id }}">{{ $financialYear->year }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="mb-6">
                 <button class="bg-laravel text-white rounded py-2 px-4 hover:bg-black">
                     Save
                 </button>

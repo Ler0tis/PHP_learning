@@ -17,6 +17,7 @@ class Contribution extends Model
         'max_age',
         'amount',
         'discount',
+        'year_id',
     ];
 
     // Should be a error message when using a double membership for contribution?? Still TODO
@@ -43,7 +44,8 @@ class Contribution extends Model
                 'max:100',
             ],
             'discount' => 'required|numeric',
-            'amount' => 'required|numeric'
+            'amount' => 'required|numeric',
+            'year_id' => 'nullable|exists:years,id'
         ];
 
         return $rules;
@@ -60,9 +62,14 @@ class Contribution extends Model
         return $this->attributes['discount'] . '%';
     }
 
-    // Relation between contribution and membership
+    /////////// Relations between tables ////////////////
     public function membership() {
         return $this->belongsTo(Membership::class);
+    }
+
+    public function financialYear()
+    {
+        return $this->belongsTo(FinancialYear::class);
     }
 }
 

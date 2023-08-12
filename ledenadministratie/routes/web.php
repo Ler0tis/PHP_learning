@@ -9,7 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\FamilyController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\FamilymemberController;
-
+use App\Http\Controllers\FinancialYearController;
 
 /*
 |--------------------------------------------------------------------------
@@ -128,6 +128,13 @@ Route::put('/contributions/{contribution}', [ContributionController::class, 'upd
 
 // Delete
 Route::delete('/contributions/{id}', [ContributionController::class, 'destroy'])->Middleware('auth');
+
+
+/////////// Financial Years ////////////////
+Route::get('/financialyears', [FinancialYearController::class, 'index'])->name('financialyears.index')->Middleware('auth');
+
+Route::resource('financial-years', FinancialYearController::class)->Middleware('auth');
+
 
 
 
