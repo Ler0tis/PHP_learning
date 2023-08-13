@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Membership;
+use App\Models\Contribution;
 use App\Models\Familymember;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -24,10 +25,8 @@ class FamilymemberController extends Controller
     {
         $dataFields = $request->validate(Familymember::rules());
 
-        // Set data of birth_of_date to the right format to save in the database
         $dateOfBirth = \DateTime::createFromFormat('d-m-Y', $request->input('date_of_birth'))->format('Y-m-d');
 
-        // Create a new Familymember instance with provided data
         $familyMember = new Familymember([
             'name' => $request->input('name'),
             'date_of_birth' => $dateOfBirth,
@@ -35,16 +34,23 @@ class FamilymemberController extends Controller
             'family_id' => $request->input('family_id'),
         ]);
 
-        // Store the picture in the folder pictures instead of the database
         if ($request->hasFile('picture')) {
             $path = $request->file('picture')->store('pictures', 'public');
             $familyMember->picture = $path;
         }
 
+        $membership = $this->selectMembership($request->input('date_of_birth'));
+        $familyMember->membership()->associate($membership);
+
         $familyMember->save();
 
         return redirect('/')->with('message', 'Familymember is successfully added.');
     }
+
+
+
+
+
 
     // Show edit form for Family members and the memberships from DB
     public function edit(Familymember $familymember) {
@@ -106,6 +112,24 @@ class FamilymemberController extends Controller
         return redirect('/')->with('message', 'Familymember is succesfully deleted');
     }
 
-    
+    public function selectMembership($dateOfBirth)
+    {
+        $birthDate = Carbon::createFromFormat('d-m-Y', $dateOfBirth);
+        $currentDate = Carbon::now();
+
+        $age = $birthDate->diffInYears($currentDate);
+
+        $membership = Membership::whereHas('contribution', function ($query) use ($age) {
+            $query->where('min_age', '<=', $age)
+                ->where('max_age', '>=', $age);
+        })->first();
+
+        return $membership;
+    }
+
+
+
+
+
 
 }

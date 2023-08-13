@@ -39,6 +39,6 @@ class Membership extends Model
 
     // Define relation for contribution
     public function contribution() {
-        return $this->hasOne(Contribution::class);
+        return $this->hasMany(Contribution::class);
     }
 }

@@ -11,15 +11,16 @@ use Illuminate\Http\Request;
 class ContributionController extends Controller {
 
     public function index() {
-        
-        $contributions = Contribution::with('membership')->get();
-        
-        return view('contributions.index', compact('contributions'));
+
+        $financialYears = FinancialYear::all();
+        $contributions = Contribution::with('membership', 'financialYear')->get();
+
+        return view('contributions.index', compact('financialYears', 'contributions'));
     }
 
     public function create() {
         $memberships = Membership::all();
-        $financialYears = FinancialYear::all();
+        $financialYears = FinancialYear::all(); // Deze hoeft niet meer als het goed is ivm de automatische die wordt gedana in STORE en in de view ook niet van create
 
         $contribution = new Contribution();
         $contribution->membership_id = null;
@@ -27,24 +28,39 @@ class ContributionController extends Controller {
         return view('contributions.create', compact('contribution', 'financialYears', 'memberships'));
     }
 
-    public function store(Request $request) {
+   
+    public function store(Request $request)
+    {
         $dataFields = $request->validate(Contribution::rules());
 
-        // Voeg de 'membership_id' toe aan de $dataFields-array als deze niet leeg is
+        // Add 'membership_id' to $dataFields-array if not empty
         if (!empty($request->input('membership_id'))) {
             $dataFields['membership_id'] = $request->input('membership_id');
         } else {
-            // Als er geen 'membership_id' is ingevuld, stel deze in op null of een andere passende waarde
+            // No membership id? = null
             $dataFields['membership_id'] = null;
         }
 
-        $dataFields['financial_year_id'] = $request->input('financial_year_id'); // CAN SELECT A FINANCIAL YEAR
+        // $dataFields['amount'] = $dataFields['default_amount']; NOG VOOR CONTRIBUTIE GENERIEK MAKEN
 
-        $contribution = Contribution::create($dataFields);
+        // Variable for current year
+        $currentYear = date('Y');
+
+        // Is current year already in database?
+        $financialYear = FinancialYear::where('year', $currentYear)->first();
+
+        // No current year, make new on.
+        if (!$financialYear) {
+            $financialYear = FinancialYear::create(['year' => $currentYear]);
+        }
+
+        // Connect FinancialYear to Contribution by ID
+        $dataFields['financial_year_id'] = $financialYear->id;
+
+        Contribution::create($dataFields);
 
         $contributions = Contribution::with('membership')->get();
         return view('contributions.index', compact('contributions'))->with('message', 'Contribution successfully created');
-
     }
 
     public function edit($id) {

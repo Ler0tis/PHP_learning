@@ -69,7 +69,10 @@ class Familymember extends Model
         return $rules;
     }
 
+    // Relations
+
     public function membership() {
-        return $this->belongsTo(Membership::class, 'age', 'age');
+        return $this->belongsTo(Membership::class);
     }
+
 }

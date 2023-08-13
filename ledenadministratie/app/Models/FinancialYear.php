@@ -11,6 +11,7 @@ class FinancialYear extends Model
 
     protected $fillable = ['year'];
 
+    
 
 
     // Relation with contributions

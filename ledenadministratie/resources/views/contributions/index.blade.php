@@ -1,5 +1,5 @@
 <x-layout>
-    <div class="bg-gray-50 border border-gray-200 p-10 rounded max-w-xl mx-auto mt-24">
+    <div class="bg-gray-50 border border-gray-200 p-10 rounded max-w-xxl mx-auto mt-24">
         <header class="text-center">
             <h2 class="text-2xl font-bold uppercase mb-1">
                 List of contributions
@@ -13,6 +13,7 @@
                 <table class="w-full table-auto rounded-sm">
                     <thead>
                         <tr>
+                            <th>Financial Year</th>
                             <th>Membership</th>
                             <th>Min age</th>
                             <th>Max age</th>
@@ -23,6 +24,10 @@
 
                     @foreach ($contributions as $contribution)
                     <tr class="border-gray-300">
+                        <td class="px-4 py-8 border-t border-b border-gray-300 text-lg">
+                            {{ $contribution->financialYear->year }}
+                        </td>
+
                         <td class="px-4 py-8 border-t border-b border-gray-300 text-lg">
                             {{ $contribution->membership->description }}
                         </td>

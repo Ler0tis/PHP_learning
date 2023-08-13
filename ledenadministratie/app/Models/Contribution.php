@@ -17,7 +17,7 @@ class Contribution extends Model
         'max_age',
         'amount',
         'discount',
-        'year_id',
+        'financial_year_id',
     ];
 
     // Should be a error message when using a double membership for contribution?? Still TODO
@@ -45,7 +45,7 @@ class Contribution extends Model
             ],
             'discount' => 'required|numeric',
             'amount' => 'required|numeric',
-            'year_id' => 'nullable|exists:years,id'
+            'financial_year_id' => 'nullable|exists:financial_year,id'
         ];
 
         return $rules;

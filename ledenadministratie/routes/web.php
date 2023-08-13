@@ -131,6 +131,8 @@ Route::delete('/contributions/{id}', [ContributionController::class, 'destroy'])
 
 
 /////////// Financial Years ////////////////
+
+
 Route::get('/financialyears', [FinancialYearController::class, 'index'])->name('financialyears.index')->Middleware('auth');
 
 Route::resource('financial-years', FinancialYearController::class)->Middleware('auth');
