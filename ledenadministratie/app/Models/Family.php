@@ -38,24 +38,31 @@ class Family extends Model
         }
     }
 
-    // Make sure the address and email are unique among all families/members
-    public static function rules($family = null) {
+    public static function rules($family = null)
+    {
         $rules = [
+            // Validation that the name can be the same, but address has to be different
             'name' => 'required',
             'address' => [
                 'required',
-                Rule::unique('families')->ignore($family),
+                Rule::unique('families')->where(function ($query) use ($family) {
+                    $query->where('name', request('name'));
+
+                    if ($family) {
+                        $query->where('id', '!=', $family->id);
+                    }
+                }),
             ],
             'email' => [
+                'sometimes',
                 'required',
                 'email',
                 Rule::unique('families')->ignore($family),
+                
             ],
-
         ];
 
         return $rules;
-        
     }
     
 }

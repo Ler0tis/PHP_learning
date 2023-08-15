@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\Familymember;
+use App\Models\Membership;
+use App\Observers\MembershipObserver;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 
@@ -40,5 +42,8 @@ class AppServiceProvider extends ServiceProvider
 
             return !$exists; // Return true if name is unique within family
         });
+
+        // For config in MembershipOberserver to check if the age range is changed
+        Membership::observe(MembershipObserver::class);
     }
 }

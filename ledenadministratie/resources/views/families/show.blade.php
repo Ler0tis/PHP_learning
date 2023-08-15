@@ -36,18 +36,21 @@
                                 <p>Name: {{ $familymember->name }} {{ $family->name }} </p>
                                 <p>Birthdate: {{ Carbon::createFromFormat('Y-m-d', $familymember->date_of_birth)->format('d-m-Y') }}</p>
                                 <p>E-mail: {{$familymember->email}} </p>
-                                <p>Current membership: {{ $familymember->contribution ? $familymember->contribution->membership->description : 'No membership' }}</p>
-                                <p>Contribution: {{ $familymember->contribution ? $familymember->contribution->amount : 'No contribution' }}</p>
-                                @if ($familymember->contribution)
-                                <p>Discount: {{ $familymember->contribution->amount * ($familymember->contribution->membership->discount / 100) }}</p>
+                                @if ($familymember->membership)
+                                    <p>Current membership: {{ $familymember->membership->description }}</p>
+                                    <p>Contribution: {{ $familymember->membership->amount }}</p>
+                                @else
+                                    <p>No membership</p>
                                 @endif
                             </td>
                             <td class="px-4 py-4 border-t border-b border-gray-300 text-lg">
                                 <div class="flex items-center justify-center space-x-4">
-                                    <a href="/families/{{$family->id}}/edit" class="text-blue-400 px-2 py-2 rounded-xl">
+                                    <a href="{{ route('familymembers.edit', ['familymember' => $familymember->id]) }}" 
+                                        class="text-blue-400 px-2 py-2 rounded-xl">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
-                                    <form method="POST" action="/families/{{$family->id}}">
+
+                                    <form method="POST" action="/familymembers/{{$familymember->id}}">
                                         @csrf
                                         @method('DELETE')
                                         <button class="text-red-500 px-2 py-2"><i class="fa-solid fa-trash"></i></button>

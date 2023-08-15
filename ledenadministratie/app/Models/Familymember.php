@@ -21,10 +21,12 @@ class Familymember extends Model
 
     public static function rules($familymember = null)
     {
-        $familyId = optional($familymember)->family_id; // Get the family_id is available
+        $familyId = optional($familymember)->family_id; // Get the family_id if available
 
         $rules = [
             'name' => [
+                'sometimes',
+                // Allow skipping validation if the field is not provided
                 'required',
                 'string',
                 'max:255',
@@ -33,11 +35,11 @@ class Familymember extends Model
                     if ($familyId) {
                         $query->where('family_id', $familyId);
                     }
-                    // If member exist, ignore unique check
+                    // If member exists, ignore unique check
                     if ($familymember) {
                         $query->where('id', '!=', $familymember->id);
                     }
-                    // If family_id = empty (with new member) only check for name
+                    // If family_id is empty (with new member) only check for name
                     if (!$familyId && request()->input('family_id')) {
                         $query->where('family_id', request()->input('family_id'));
                     }
@@ -52,6 +54,8 @@ class Familymember extends Model
                 Rule::unique('familymembers')->ignore($familymember),
             ],
             'email' => [
+                'sometimes',
+                // Allow skipping validation if the field is not provided
                 'required',
                 'email',
                 Rule::unique('familymembers')->where(function ($query) use ($familymember) {

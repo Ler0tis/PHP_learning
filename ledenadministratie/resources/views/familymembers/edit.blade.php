@@ -58,7 +58,7 @@
             </div>
 
             {{-- Selectie voor de membership --}}
-            <div class="mb-6">
+            {{-- <div class="mb-6">
                 <label for="membership_id">Select Membership:</label>
                 <select name="membership_id" id="membership_id">
                     <option value="">No Membership</option>
@@ -74,7 +74,7 @@
                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
 
-            </div>
+            </div> --}}
             
             <input type="hidden" name="familymember_id" value="{{ $familymember->id }}">
 

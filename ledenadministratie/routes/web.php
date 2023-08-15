@@ -82,13 +82,13 @@ Route::post('/familymembers', [FamilymemberController::class, 'store'])->Middlew
 //Show Family member edit form
 Route::get('/familymembers/{familymember}/edit', [FamilymemberController::class, 'edit'])->name('familymembers.edit')->Middleware('auth');
 
-
 // Update Family members
 Route::put('/familymembers/{familymember}', [FamilymemberController::class, 'update'])->name('familymembers.update')->Middleware('auth');
 
-
 // Delete familymember
 Route::delete('/familymembers/{id}', [FamilymemberController::class,'destroy'])->Middleware('auth');
+
+
 
 /////////////////////////// Memberships ///////////////////////////////////////
 // Show Memberships

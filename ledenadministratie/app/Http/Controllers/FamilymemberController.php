@@ -49,9 +49,6 @@ class FamilymemberController extends Controller
 
 
 
-
-
-
     // Show edit form for Family members and the memberships from DB
     public function edit(Familymember $familymember) {
         // Retrieve all available memberships
@@ -63,7 +60,7 @@ class FamilymemberController extends Controller
 
     public function update(Request $request, Familymember $familymember)
     {
-        $dataFields = $request->validate(Familymember::rules());
+        $dataFields = $request->validate(Familymember::rules($familymember));
 
         $dataFields['date_of_birth'] = Carbon::createFromFormat('d-m-Y', $request->input('date_of_birth'))->format('Y-m-d');
 
@@ -75,31 +72,9 @@ class FamilymemberController extends Controller
             $familymember->membership()->dissociate();
         }
 
-        // Custom validation rule for name/email if any changes
-        $request->validate([
-            'name' => [
-                'sometimes',
-                // Only validate if the name/email is provided and different from the original name
-                'string',
-                'max:255',
-                Rule::unique('familymembers')->where(function ($query) use ($familymember) {
-                    return $query->where('family_id', $familymember->family_id);
-                })->ignore($familymember),
-            ],
-        ]);
-
-        $request->validate([
-            'email' => [
-                'sometimes',
-                'email',
-                Rule::unique('familymembers')->ignore($familymember),
-            ],
-        ]);
-
         $familymember->update($dataFields);
 
-        return redirect()->route('familymembers.edit', ['familymember' => $familymember->id])
-            ->with('message', 'Familymember updated!');
+        return redirect('/')->with('success', 'Familielid succesvol bijgewerkt!');
     }
         //HANDMATIG URL AANMAKEN EN REDIRECTEN (WERKT)
         //return redirect('/families/' . $familymember->family_id)->with('message', 'Familymember updated!');

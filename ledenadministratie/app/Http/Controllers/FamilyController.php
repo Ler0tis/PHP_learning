@@ -39,7 +39,6 @@ class FamilyController extends Controller
     }
 
     // Store familie data
-    // Unique  'name' => 'required, Rule::unique('families')'
     public function store(Request $request) {
         $dataFields = $request->validate(Family::rules());
         // Optional fields, but if filled, its added
@@ -74,7 +73,7 @@ class FamilyController extends Controller
     // Update Family
     public function update(Request $request, Family $family)
     {
-        $dataFields = $request->validate(Family::rules());
+        $dataFields = $request->validate(Family::rules($family));
         // Optional fields, but if filled, its added
         if ($request->filled('tags')) {
             $dataFields['tags'] = $request->input('tags');
@@ -88,7 +87,7 @@ class FamilyController extends Controller
             $dataFields['description'] = $request->input('description');
         }
 
-        // Stores the picture in the folder pictures
+        // Stores the picture in the folder pictures HEB IK DIT NOG NODIG?
         if ($request->hasFile('picture')) {
             $dataFields['picture'] = $request->file('picture')->store('pictures', 'public');
         }
@@ -106,7 +105,7 @@ class FamilyController extends Controller
         }
         
         $family->delete();
-        return redirect('/')->with('message', 'Familie succesfully deleted');
+        return redirect('/')->with('message', 'Family succesfully deleted');
     }
 
     // Manage Families and show them on beheer families (manage pagina)
