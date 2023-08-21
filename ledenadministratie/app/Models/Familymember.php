@@ -79,4 +79,10 @@ class Familymember extends Model
         return $this->belongsTo(Membership::class);
     }
 
+    public function contribution()
+    {
+        return $this->belongsTo(Contribution::class);
+    }
+
+
 }

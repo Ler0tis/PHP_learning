@@ -161,6 +161,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        // App\Services\ContributionServiceProvider::class, // For ContributionServeProvider (calculated amount per Year)
 
         /*
          * Package Service Providers...

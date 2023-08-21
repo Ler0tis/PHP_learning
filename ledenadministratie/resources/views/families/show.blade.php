@@ -3,26 +3,39 @@
 @endphp
 
 <x-layout>
-    <a href="{{ route('familymembers.create', ['family_id' => $family->id]) }}"
-        class="w-40 whitespace-nowrap block bg-black text-white py-2 rounded-xl hover:opacity-80">
-        <i class="fa-solid fa-plus"></i> Add member</a>
-
     <div class="mx-4">
         <div class="flex flex-col items-center justify-center text-center">
             <h3 class="text-2xl font-bold mb-2">{{$family->name}}</h3>
             <div class="text-xl font mb-4">
                 <i class="fa-solid fa-location-arrow"></i>{{$family->address}}
             </div>
-
+        
             <x-family-tags :tagsCsv="$family->tags" />
-
+        
             <div class="text-lg my-4">{{$family->description}}</div>
             <div class="border border-gray-200 w-full mb-6"></div>
+        
             <div>
+                <h4 class="text-lg font-bold mb-2">Total Contribution for this family per year: </h4>
+                <p>
+                    @php
+                    $totalContribution = 0;
+                    foreach ($family->familymembers as $familymember) {
+                    $totalContribution += $calculatedAmounts[$familymember->id];
+                    }
+                    @endphp
+                    € {{ $totalContribution }}
+                </p>
+            </div>
+        </div>
                 <h3 class="text-3xl font-bold mb-4">
                     Familymembers
                 </h3>
+                <a href="{{ route('familymembers.create', ['family_id' => $family->id]) }}"
+                    class="w-40 whitespace-nowrap block bg-black text-white py-2 rounded-xl hover:opacity-80">
+                    <i class="fa-solid fa-plus"></i> Add member nog meer aanpassen zodat het verder naar links STAAT</a>
                 <table class="w-full table-auto rounded-sm">
+
                     <tbody>
                         @unless(is_null($family->familymembers) || $family->familymembers->count() === 0)
                         @foreach ($family->familymembers as $familymember)
@@ -38,7 +51,7 @@
                                 <p>E-mail: {{$familymember->email}} </p>
                                 @if ($familymember->membership)
                                     <p>Current membership: {{ $familymember->membership->description }}</p>
-                                    <p>Contribution: {{ $familymember->membership->amount }}</p>
+                                    <p>Contribution per year: € {{ $calculatedAmounts[$familymember->id] }}</p>
                                 @else
                                     <p>No membership</p>
                                 @endif

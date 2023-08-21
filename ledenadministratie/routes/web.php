@@ -115,6 +115,7 @@ Route::delete('/memberships/{id}', [MembershipController::class, 'destroy'])->Mi
 // All contributions
 Route::get('/contributions', [ContributionController::class, 'index'])->name('contributions.index')->Middleware('auth');
 
+// Save data from new contribution in DB
 Route::post('contributions', [ContributionController::class, 'store'])->name('contributions.store')->Middleware('auth');
 
 // Show create form 
@@ -131,7 +132,6 @@ Route::delete('/contributions/{id}', [ContributionController::class, 'destroy'])
 
 
 /////////// Financial Years ////////////////
-
 
 Route::get('/financialyears', [FinancialYearController::class, 'index'])->name('financialyears.index')->Middleware('auth');
 

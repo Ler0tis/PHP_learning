@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FinancialYear;
+use App\Models\Family;
 use App\Models\Membership;
 use App\Models\Contribution;
 use App\Models\Familymember;
 use Illuminate\Http\Request;
+use App\Models\FinancialYear;
 
 class ContributionController extends Controller {
 
@@ -40,8 +41,6 @@ class ContributionController extends Controller {
             // No membership id? = null
             $dataFields['membership_id'] = null;
         }
-
-        // $dataFields['amount'] = $dataFields['default_amount']; NOG VOOR CONTRIBUTIE GENERIEK MAKEN
 
         // Variable for current year
         $currentYear = date('Y');
@@ -89,6 +88,35 @@ class ContributionController extends Controller {
 
         return redirect('/')->with('message', 'Contribution is succesfully deleted');
     }
+
+    // Bij het berekenen van het totaalbedrag
+    // Bij het berekenen van het totaalbedrag
+    // public function calculateAmount(Request $request, Family $family)
+    // {
+    //     // Altijd het basisbedrag van €100 gebruiken
+    //     $baseAmount = 100;
+
+    //     $membershipId = $request->input('membership');
+    //     $membership = Membership::find($membershipId);
+
+    //     if (!$membership) {
+    //         return redirect()->back()->with('message', 'Geen bijpassend lidmaatschap gevonden.');
+    //     }
+
+    //     $contribution = Contribution::where('membership_id', $membershipId)->first();
+
+    //     if (!$contribution) {
+    //         return redirect()->back()->with('message', 'Geen bijpassende contributie gevonden.');
+    //     }
+
+    //     $discount = $contribution->discount ?? 0; // Neem aan dat er geen korting is als er geen contributie is
+
+    //     $calculatedAmountPerYear = $baseAmount * (1 - ($discount / 100));
+
+    //     return view('family.show.index', compact('family', 'calculatedAmountPerYear'));
+    // }
+
+
 
 
     // public function showContributionsByYear(FinancialYear $year)

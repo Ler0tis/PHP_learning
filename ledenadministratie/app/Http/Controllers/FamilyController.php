@@ -8,8 +8,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Family;
+use App\Models\Membership;
 use App\Models\Familymember;
 use Illuminate\Http\Request;
+use App\Services\ContributionService;
+use App\Http\Controllers\ContributionController;
 
 class FamilyController extends Controller
 {
@@ -24,12 +27,20 @@ class FamilyController extends Controller
     }
 
     // Show single family
-    public function show($id)
+    public function show($id, ContributionService $contributionService)
     {
         $family = Family::findOrFail($id);
         $familymembers = Familymember::where('family_id', $id)->get();
 
-        return view('families.show', compact('family', 'familymembers'));
+        $calculatedAmounts = []; // An array to store the calculated amount for members
+
+        foreach ($familymembers as $familymember) {
+            $membershipId = $familymember->membership_id;
+            $calculatedAmountPerYear = $contributionService->calculateAmountPerYear($membershipId, 100);
+            $calculatedAmounts[$familymember->id] = $calculatedAmountPerYear;
+        }
+
+        return view('families.show', compact('family', 'familymembers', 'calculatedAmounts'));
     }
 
     // Show Create Form
@@ -71,8 +82,7 @@ class FamilyController extends Controller
     }
 
     // Update Family
-    public function update(Request $request, Family $family)
-    {
+    public function update(Request $request, Family $family) {
         $dataFields = $request->validate(Family::rules($family));
         // Optional fields, but if filled, its added
         if ($request->filled('tags')) {
@@ -109,9 +119,38 @@ class FamilyController extends Controller
     }
 
     // Manage Families and show them on beheer families (manage pagina)
-    public function manage()
-    {
+    public function manage() {
         return view('families.manage', ['families' => auth()->user()->families]);
+    }
+
+
+    // Function to calculate the contribution based on the discount
+    protected function calculateAmountPerYear($membershipId, $baseAmount) {
+        $membership = Membership::find($membershipId);
+        $contribution = $membership->contribution;
+
+        if ($contribution) {
+            $discount = $contribution->discount;
+            $calculatedDiscount = $baseAmount * ($discount / 100);
+            $calculatedAmountPerYear = $baseAmount - $calculatedDiscount;
+        } else {
+            $calculatedAmountPerYear = $baseAmount;
+        }
+
+        return $calculatedAmountPerYear;
+    }
+
+    public function getFamilyContributions($familyId) {
+        $familymembers = Familymember::where('family_id', $familyId)->get();
+        $totalContribution = 0;
+
+        foreach ($familymembers as $familymember) {
+            $membershipId = $familymember->membership_id;
+            $contribution = $this->calculateAmountPerYear($membershipId, 100);
+            $totalContribution += $contribution;
+        }
+
+        return $totalContribution;
     }
 }
 

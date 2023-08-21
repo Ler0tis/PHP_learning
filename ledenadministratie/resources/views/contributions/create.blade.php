@@ -17,18 +17,10 @@
                     @endforeach
                 </select>
             </div>
-            <div class="mb-6">
-                <label for="amount" class="inline-block text-lg mb-2">Base contribution:</label>
-                <input type="integer" class="border border-gray-200 rounded p-2 w-full" 
-                name="amount" value="{{ $contribution->amount }}" />
-                {{--Error handeling for differnt labels--}}
-                @error('amount')
-                <p class="text-red-500 text-xs mt-1">{{$message}}</p>
-                @enderror
-            </div>
+            
             <div class="mb-6">
                 <label for="min_age" class="inline-block text-lg mb-2">Min age:</label>
-                <input type="integer" class="border border-gray-200 rounded p-2 w-full" name="min_age"/>
+                <input type="number" class="border border-gray-200 rounded p-2 w-full" name="min_age"/>
                 
                 @error('min_age')
                 <p class="text-red-500 text-xs mt-1">{{$message}}</p>
@@ -36,7 +28,7 @@
             </div>
             <div class="mb-6">
                 <label for="max_age" class="inline-block text-lg mb-2">Max age:</label>
-                <input type="integer" class="border border-gray-200 rounded p-2 w-full" name="max_age" />
+                <input type="number" class="border border-gray-200 rounded p-2 w-full" name="max_age" />
                 
                 @error('max_age')
                 <p class="text-red-500 text-xs mt-1">{{$message}}</p>
@@ -44,15 +36,15 @@
             </div>
             <div class="mb-6">
                 <label for="discount" class="inline-block text-lg mb-2">Discount in %</label>
-                <input type="integer" class="border border-gray-200 rounded p-2 w-full" 
-                name="discount" value="{{ $contribution->discount }}"/>
+                <input type="number" class="border border-gray-200 rounded p-2 w-full" 
+                name="discount" id="discount" min="0" max="100" step="1" value="{{ $contribution->discount }}"/>
                 
                 @error('discount')
                 <p class="text-red-500 text-xs mt-1">{{$message}}</p>
                 @enderror
             </div>
 
-            {{-- <div class="mb-6">
+            <!-- <div class="mb-6">
                 <label for="financial_year_id" class="inline-block text-lg mb-2">Financial Year:</label>
                 <select class="border border-gray-200 rounded p-2 w-full" name="financial_year_id">
                     <option value="">Select a financial year</option>
@@ -60,7 +52,7 @@
                     <option value="{{ $financialYear->id }}">{{ $financialYear->year }}</option>
                     @endforeach
                 </select>
-            </div> --}}
+            </div> -->
 
             <div class="mb-6">
                 <button class="bg-laravel text-white rounded py-2 px-4 hover:bg-black">

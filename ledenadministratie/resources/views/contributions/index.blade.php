@@ -40,9 +40,9 @@
                         <td class="px-4 py-8 border-t border-b border-gray-300 text-lg">
                             {{ $contribution->discount_with_symbol }}
                         </td>
-                        <td class="px-4 py-8 border-t border-b border-gray-300 text-lg">
+                        <!-- <td class="px-4 py-8 border-t border-b border-gray-300 text-lg">
                             {{ $contribution->amount_with_symbol }}
-                        </td>
+                        </td> -->
 
                         <td class="px-4 py-4 border-t border-b border-gray-300 text-lg">
                             <div class="flex items-center justify-center space-x-4">

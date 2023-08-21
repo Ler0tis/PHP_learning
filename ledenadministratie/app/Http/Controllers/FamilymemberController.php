@@ -39,10 +39,27 @@ class FamilymemberController extends Controller
             $familyMember->picture = $path;
         }
 
+        // // Haal het ingevoerde kortingspercentage op
+        // $discountPercentage = $request->discount_percentage / 100;
+
+        // $baseAmount = 100; // Het basisbedrag van €100
+
+        // // Bereken het bedrag na toepassing van het ingevoerde kortingspercentage
+        // $calculatedAmount = $baseAmount - ($baseAmount * $discountPercentage);
+
+        // Koppel het juiste lidmaatschap aan de familymember
         $membership = $this->selectMembership($request->input('date_of_birth'));
         $familyMember->membership()->associate($membership);
 
         $familyMember->save();
+
+        // // Creëer een nieuwe Contribution record
+        // $contribution = new Contribution([
+        //     'membership_id' => $membership->id,
+        //     'amount' => $calculatedAmount,
+        // ]);
+
+        // $familyMember->contribution()->save($contribution);
 
         return redirect('/')->with('message', 'Familymember is successfully added.');
     }
@@ -101,10 +118,5 @@ class FamilymemberController extends Controller
 
         return $membership;
     }
-
-
-
-
-
 
 }

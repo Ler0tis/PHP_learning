@@ -18,7 +18,7 @@ class ContributionTable extends Migration
             $table->foreignId('membership_id')->constrained()->nullable(); // Defines relations between tables by ID
             $table->integer('min_age')->nullable();
             $table->integer('max_age')->nullable();
-            $table->decimal('amount')->nullable();
+            $table->decimal('amount', 10, 2)->default(100); // Default amount for a contribution
             $table->decimal('discount')->nullable();
             $table->timestamps();
         });
