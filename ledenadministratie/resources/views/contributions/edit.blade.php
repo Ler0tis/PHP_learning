@@ -11,8 +11,8 @@
             ['contribution' => $contribution->id]) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
-            <div>
-                <label for="membership_id">Membership</label>
+            <div >
+                <label for="membership_id" class="bg-laravel text-white rounded">Membership</label>
                 <select name="membership_id" required>
                     @foreach ($memberships as $membership)
                     <option value="{{ $membership->id }}" 
@@ -22,20 +22,7 @@
                 </select>
             </div>
             <div class="mb-6">
-                <label for="amount" class="inline-block text-lg mb-2">Base contribution</label>
-                <input type="text" class="border border-gray-200 rounded p-2 w-full" name="amount_display"
-                    value="{{ $contribution->amount_with_symbol }}" />
-            
-                {{-- Verborgen veld voor het daadwerkelijke numerieke bedrag --}}
-                <input type="hidden" name="amount" value="{{ $contribution->amount }}" />
-            
-                {{--Error handeling voor differnt labels--}}
-                @error('amount')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
-            </div>
-            <div class="mb-6">
-                <label for="min_age" class="inline-block text-lg mb-2">Min age</label>
+                <label for="min_age" class="inline-block text-lg mb-2">Minimum Age</label>
                 <input type="number" class="border border-gray-200 rounded p-2 w-full" 
                 name="min_age" value="{{ $contribution->min_age }}"/>
                 
@@ -44,7 +31,7 @@
                 @enderror
             </div>
             <div class="mb-6">
-                <label for="max_age" class="inline-block text-lg mb-2">Max age</label>
+                <label for="max_age" class="inline-block text-lg mb-2">Maximum Age</label>
                 <input type="number" class="border border-gray-200 rounded p-2 w-full"
                  name="max_age" value="{{ $contribution->max_age }}" />
                 

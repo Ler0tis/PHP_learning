@@ -12,7 +12,6 @@ use App\Models\Membership;
 use App\Models\Familymember;
 use Illuminate\Http\Request;
 use App\Services\ContributionService;
-use App\Http\Controllers\ContributionController;
 
 class FamilyController extends Controller
 {
@@ -65,11 +64,6 @@ class FamilyController extends Controller
             $dataFields['description'] = $request->input('description');
         }
 
-        // Stores the picture in the folder pictures
-        if($request->hasFile('picture')) {
-            $dataFields['picture'] = $request->file('picture')->store('pictures', 'public');
-        }
-
         $dataFields['user_id'] = auth()->id();
 
         Family::create($dataFields);
@@ -95,11 +89,6 @@ class FamilyController extends Controller
 
         if ($request->filled('description')) {
             $dataFields['description'] = $request->input('description');
-        }
-
-        // Stores the picture in the folder pictures HEB IK DIT NOG NODIG?
-        if ($request->hasFile('picture')) {
-            $dataFields['picture'] = $request->file('picture')->store('pictures', 'public');
         }
 
         $family->update($dataFields);

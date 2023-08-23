@@ -11,10 +11,6 @@ class Family extends Model
 {
     use HasFactory;
 
-    //Relation between Family and their members
-    public function familymembers() {
-        return $this->hasMany(Familymember::class);
-    }
 
     // OR in AppserviceProvider.php in Boot() Model::unguard(); and import class there. Need to specify exactly whats goes in DB (As in FamilyController.php)
     protected $fillable = [
@@ -24,7 +20,6 @@ class Family extends Model
         'email',
         'website',
         'description',
-        'picture',
         'user_id'];
 
     public function scopeFilter($query, array $filters) {
@@ -63,6 +58,12 @@ class Family extends Model
         ];
 
         return $rules;
+    }
+
+    //Relation between Family and their members
+    public function familymembers()
+    {
+        return $this->hasMany(Familymember::class);
     }
     
 }

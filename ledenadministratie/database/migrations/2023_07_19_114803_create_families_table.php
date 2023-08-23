@@ -21,7 +21,6 @@ class CreateFamiliesTable extends Migration
             $table->string('address')->nullable();
             $table->string('email')->nullable();
             $table->string('website')->nullable();
-            $table->string('picture')->nullable();
             $table->longText('description')->nullable();
             $table->timestamps();
         });

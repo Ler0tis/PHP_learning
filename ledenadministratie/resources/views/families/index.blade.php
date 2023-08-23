@@ -1,8 +1,7 @@
 
 {{--Use the x-layout instead of extends and section for better maintainability--}}
-<x-layout>
-    {{--Zet de partials die je wilt zien op de betreffende page hier.--}}
 
+<x-layout>
     @include('partials._search')
 
     <div class="content-container">

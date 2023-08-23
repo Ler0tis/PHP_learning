@@ -12,7 +12,6 @@ use App\Models\FinancialYear;
 class ContributionController extends Controller {
 
     public function index() {
-
         $financialYears = FinancialYear::all();
         $contributions = Contribution::with('membership', 'financialYear')->get();
 
@@ -21,7 +20,7 @@ class ContributionController extends Controller {
 
     public function create() {
         $memberships = Membership::all();
-        $financialYears = FinancialYear::all(); // Deze hoeft niet meer als het goed is ivm de automatische die wordt gedana in STORE en in de view ook niet van create
+        $financialYears = FinancialYear::all();
 
         $contribution = new Contribution();
         $contribution->membership_id = null;
@@ -30,8 +29,7 @@ class ContributionController extends Controller {
     }
 
    
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $dataFields = $request->validate(Contribution::rules());
 
         // Add 'membership_id' to $dataFields-array if not empty
@@ -88,41 +86,5 @@ class ContributionController extends Controller {
 
         return redirect('/')->with('message', 'Contribution is succesfully deleted');
     }
-
-    // Bij het berekenen van het totaalbedrag
-    // Bij het berekenen van het totaalbedrag
-    // public function calculateAmount(Request $request, Family $family)
-    // {
-    //     // Altijd het basisbedrag van €100 gebruiken
-    //     $baseAmount = 100;
-
-    //     $membershipId = $request->input('membership');
-    //     $membership = Membership::find($membershipId);
-
-    //     if (!$membership) {
-    //         return redirect()->back()->with('message', 'Geen bijpassend lidmaatschap gevonden.');
-    //     }
-
-    //     $contribution = Contribution::where('membership_id', $membershipId)->first();
-
-    //     if (!$contribution) {
-    //         return redirect()->back()->with('message', 'Geen bijpassende contributie gevonden.');
-    //     }
-
-    //     $discount = $contribution->discount ?? 0; // Neem aan dat er geen korting is als er geen contributie is
-
-    //     $calculatedAmountPerYear = $baseAmount * (1 - ($discount / 100));
-
-    //     return view('family.show.index', compact('family', 'calculatedAmountPerYear'));
-    // }
-
-
-
-
-    // public function showContributionsByYear(FinancialYear $year)
-    // {
-    //     $contributions = $year->contributions()->with('membership')->get();
-    //     return view('contributions.show_by_year', compact('contributions', 'year'));
-    // }
 }
 

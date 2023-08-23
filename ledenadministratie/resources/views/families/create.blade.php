@@ -1,9 +1,6 @@
-{{--Get the form and input send to DATABASE--}}
+
 
 <x-layout>
-    <a href="/" class="inline-block text-black ml-4 mb-4">
-     <i class="fa-solid fa-arrow-left"></i> Back
-    </a>
     <div class="bg-gray-50 border border-gray-200 p-10 rounded max-w-lg mx-auto mt-24">
         <header class="text-center">
             <h2 class="text-2xl font-bold uppercase mb-1">
@@ -72,17 +69,7 @@
                 <p class="text-red-500 text-xs mt-1">{{$message}}</p>
                 @enderror
             </div>
-
-            <!-- <div class="mb-6">
-                <label for="picture" class="inline-block text-lg mb-2">
-                </label>
-                <input type="file" class="border border-gray-200 rounded p-2 w-full" name="picture" />
-
-                @error('picture')
-                <p class="text-red-500 text-xs mt-1">{{$message}}</p>
-                @enderror
-            </div> -->
-
+            
             <div class="mb-6">
                 <label for="description" class="inline-block text-lg mb-2">
                     Additional information

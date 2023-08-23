@@ -23,6 +23,7 @@
                             <a href="/families/{{$family->id}}/edit" class="text-blue-400 px-2 py-2 rounded-xl">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </a>
+
                             <form method="POST" action="/families/{{$family->id}}">
                                 @csrf
                                 @method('DELETE')
@@ -40,7 +41,6 @@
                     </td>
                 </tr>
                 @endunless
-                
             </tbody>
         </table>
     </div>
