@@ -24,9 +24,9 @@ class FamilymemberController extends Controller
     // Store familymember data
     public function store(Request $request, Familymember $familymember)
     {
-        $dataFields = $request->validate(Familymember::rules());
+        $dataFields = $request->validate(Familymember::rules($familymember));
 
-        $dateOfBirth = Carbon\Carbon::createFromFormat('d-m-Y', $request->input('date_of_birth'))->format('Y-m-d');
+        $dateOfBirth = Carbon::createFromFormat('d-m-Y', $request->input('date_of_birth'))->format('Y-m-d');
 
         $familyMember = new Familymember([
             'name' => $request->input('name'),
@@ -59,9 +59,9 @@ class FamilymemberController extends Controller
 
 
     public function update(Request $request, Familymember $familymember) {
-    $dataFields = $request->validate(Familymember::rules());
+    $dataFields = $request->validate(Familymember::rules($familymember));
     
-    $formattedDateOfBirth = \DateTime::createFromFormat('d-m-Y', $request->input('date_of_birth'));
+    $formattedDateOfBirth = Carbon::createFromFormat('d-m-Y', $request->input('date_of_birth'));
     $formattedDateOfBirth = $formattedDateOfBirth->format('Y-m-d');
     
     // Overige velden bijwerken

@@ -29,8 +29,7 @@
             <div class="mb-6">
                 <label for="date_of_birth" class="inline-block text-lg mb-2">Date of birth</label>
                 <input type="text" class="border border-gray-200 rounded p-2 w-full" name="date_of_birth"
-                    placeholder="DD-MM-YYYY" value="{{ $familymember->date_of_birth }}" />
-
+                    placeholder="DD-MM-YYYY" value="{{ Carbon::parse($familymember->date_of_birth)->format('d-m-Y') }}" />
                 @error('date_of_birth')
                 <p class="text-red-500 text-xs mt-1">{{$message}}</p>
                 @enderror

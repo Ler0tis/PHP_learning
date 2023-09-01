@@ -7,7 +7,7 @@
         <div class="flex flex-col items-center justify-center text-center">
             <h3 class="text-2xl font-bold mb-2">{{$family->name}}</h3>
             <div class="text-xl font mb-4">
-                <i class="fa-solid fa-location-arrow"></i>{{$family->address}}
+                <i class="fa fa-location-dot fa-lg pr-4"></i>{{$family->address}}
             </div>
         
             <x-family-tags :tagsCsv="$family->tags" />
@@ -32,8 +32,8 @@
                     Familymembers
                 </h3>
                 <a href="{{ route('familymembers.create', ['family_id' => $family->id]) }}"
-                    class="w-40 whitespace-nowrap block bg-black text-white py-2 rounded-xl hover:opacity-80">
-                    <i class="fa-solid fa-plus"></i> Add member nog meer aanpassen zodat het verder naar links STAAT</a>
+                    class="w-40 whitespace-nowrap block bg-black text-white py-2 rounded-xl hover:opacity-80 text-center">
+                    <i class="fa-solid fa-plus pr-2"></i>  Add member</a>
                 <table class="w-full table-auto rounded-sm">
 
                     <tbody>
@@ -47,8 +47,7 @@
                             </td>
                             <td class="px-4 py-8 border-t border-b border-gray-300 text-lg">
                                 <p>Name: {{ $familymember->name }} {{ $family->name }} </p>
-                                {{-- <p>Birthdate: {{ Carbon::createFromFormat('d-m-Y', $familymember->date_of_birth)->format('Y-m-d') }}</p> --}}
-                                <p>Birthdate: {{ $familymember->date_of_birth }}</p>
+                                <p>Birthdate: {{ Carbon::parse($familymember->date_of_birth)->format('d-m-Y') }}</p>
                                 <p>E-mail: {{$familymember->email}} </p>
                                 @if ($familymember->membership)
                                     <p>Current membership: {{ $familymember->membership->description }}</p>

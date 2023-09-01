@@ -19,34 +19,35 @@ class Familymember extends Model
         'picture',
     ];
 
-    public static function rules($familymember = null)
+    public static function rules(Familymember $familymember = null)
     {
-        $familyId = optional($familymember)->family_id; // Get the family_id if available
+        $familyId = optional($familymember)->family_id;
 
-        $rules = [
+        return [
             'name' => [
-                'sometimes',
-                // Allow skipping validation if the field is not provided
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('familymembers')->where(function ($query) use ($familyId, $familymember) {
-                    // Name must be unique within the same family, if family_id is entered
-                    if ($familyId) {
-                        $query->where('family_id', $familyId);
-                    }
-                    // If member exists, ignore unique check
-                    if ($familymember) {
-                        $query->where('id', '!=', $familymember->id);
-                    }
-                    // If family_id is empty (with new member) only check for name
-                    if (!$familyId && request()->input('family_id')) {
-                        $query->where('family_id', request()->input('family_id'));
-                    }
-                    return $query;
-                }),
+                Rule::unique('familymembers')
+                    ->ignore($familymember->id)
+                    ->where(function ($query) use ($familyId, $familymember) {
+                        $query->where('name', request('name'));
+
+                        if ($familyId) {
+                            $query->where('family_id', $familyId);
+                        }
+
+                        if ($familymember) {
+                            $query->where('id', '!=', $familymember->id);
+                        }
+
+                        if (!$familyId && request('family_id')) {
+                            $query->where('family_id', request('family_id'));
+                        }
+                    }),
             ],
             'date_of_birth' => [
+                'sometimes',
                 'required',
                 'date_format:d-m-Y',
                 'before_or_equal:today',
@@ -55,26 +56,24 @@ class Familymember extends Model
             ],
             'email' => [
                 'sometimes',
-                // Allow skipping validation if the field is not provided
                 'required',
                 'email',
-                Rule::unique('familymembers')->where(function ($query) use ($familymember) {
-                    // Email must be unique if email has any changes
-                    if ($familymember && $familymember->email === request()->input('email')) {
-                        return $query->whereNull('email');
-                    }
-                    return $query;
-                })->ignore($familymember),
+                Rule::unique('familymembers')
+                    ->ignore($familymember->id)
+                    ->where(function ($query) use ($familymember) {
+                        $query->where('email', request('email'));
+
+                        if ($familymember && $familymember->email === request('email')) {
+                            $query->orWhereNull('email');
+                        }
+                    }),
             ],
             'picture' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'family_id' => 'nullable|exists:families,id',
         ];
-
-        return $rules;
     }
 
     // Relations
-
     public function membership() {
         return $this->belongsTo(Membership::class);
     }
