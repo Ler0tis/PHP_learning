@@ -12,6 +12,7 @@ use Illuminate\Validation\Rule;
 
 
 
+
 class FamilymemberController extends Controller
 {
 
@@ -25,7 +26,7 @@ class FamilymemberController extends Controller
     {
         $dataFields = $request->validate(Familymember::rules());
 
-        $dateOfBirth = \DateTime::createFromFormat('d-m-Y', $request->input('date_of_birth'))->format('Y-m-d');
+        $dateOfBirth = Carbon\Carbon::createFromFormat('d-m-Y', $request->input('date_of_birth'))->format('Y-m-d');
 
         $familyMember = new Familymember([
             'name' => $request->input('name'),
@@ -39,32 +40,14 @@ class FamilymemberController extends Controller
             $familyMember->picture = $path;
         }
 
-        // // Haal het ingevoerde kortingspercentage op
-        // $discountPercentage = $request->discount_percentage / 100;
-
-        // $baseAmount = 100; // Het basisbedrag van €100
-
-        // // Bereken het bedrag na toepassing van het ingevoerde kortingspercentage
-        // $calculatedAmount = $baseAmount - ($baseAmount * $discountPercentage);
-
         // Koppel het juiste lidmaatschap aan de familymember
         $membership = $this->selectMembership($request->input('date_of_birth'));
         $familyMember->membership()->associate($membership);
 
         $familyMember->save();
 
-        // // Creëer een nieuwe Contribution record
-        // $contribution = new Contribution([
-        //     'membership_id' => $membership->id,
-        //     'amount' => $calculatedAmount,
-        // ]);
-
-        // $familyMember->contribution()->save($contribution);
-
         return redirect('/')->with('message', 'Familymember is successfully added.');
     }
-
-
 
     // Show edit form for Family members and the memberships from DB
     public function edit(Familymember $familymember) {
@@ -75,24 +58,62 @@ class FamilymemberController extends Controller
     }
 
 
-    public function update(Request $request, Familymember $familymember)
-    {
-        $dataFields = $request->validate(Familymember::rules($familymember));
+    public function update(Request $request, Familymember $familymember) {
+    $dataFields = $request->validate(Familymember::rules());
+    
+    $formattedDateOfBirth = \DateTime::createFromFormat('d-m-Y', $request->input('date_of_birth'));
+    $formattedDateOfBirth = $formattedDateOfBirth->format('Y-m-d');
+    
+    // Overige velden bijwerken
+    $familymember->name = $dataFields['name'];
+    $familymember->email = $dataFields['email'];
+    // ... andere velden ...
+    
+    if ($request->hasFile('picture')) {
+    $path = $request->file('picture')->store('pictures', 'public');
+    $familymember->picture = $path;
+    }
+    
+    // Kijk of de geboortedatum is gewijzigd
+    if ($familymember->date_of_birth !== $formattedDateOfBirth) {
+    $membership = $this->selectMembership($request->input('date_of_birth'));
+    $familymember->membership()->associate($membership);
+    }
+    
+    $familymember->date_of_birth = $formattedDateOfBirth; // Bijwerken van de geboortedatum
+    
+    $familymember->save();
+    
+    return redirect('/')->with('message', 'Familymember is successfully updated.');
+    }
 
-        $dataFields['date_of_birth'] = Carbon::createFromFormat('d-m-Y', $request->input('date_of_birth'))->format('Y-m-d');
+
+
+    protected function calculateAmountPerYear($membershipId, $baseAmount)
+    {
+    $membership = Membership::find($membershipId);
+    $contribution = $membership->contribution;
+    
+    if ($contribution) {
+    $discount = $contribution->discount;
+    $calculatedDiscount = $baseAmount * ($discount / 100);
+    $calculatedAmountPerYear = $baseAmount - $calculatedDiscount;
+    } else {
+    $calculatedAmountPerYear = $baseAmount;
+    }
+    
+    return $calculatedAmountPerYear;
+    }
+
+
 
         // If a membership is selected, associate it with the family member
-        if ($request->has('membership_id')) {
-            $familymember->membership()->associate($request->input('membership_id'));
-        } else {
-            // If no membership is selected, remove any existing association
-            $familymember->membership()->dissociate();
-        }
-
-        $familymember->update($dataFields);
-
-        return redirect('/')->with('success', 'Familielid succesvol bijgewerkt!');
-    }
+        // if ($request->has('membership_id')) {
+        // $familymember->membership()->associate($request->input('membership_id'));
+        // } else {
+        // // If no membership is selected, remove any existing association
+        // $familymember->membership()->dissociate();
+        // }
         //HANDMATIG URL AANMAKEN EN REDIRECTEN (WERKT)
         //return redirect('/families/' . $familymember->family_id)->with('message', 'Familymember updated!');
 

@@ -19,6 +19,7 @@ class CreateFamilymembersTable extends Migration
             $table->string('name')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->string('email')->nullable();
+            $table->string('tags')->nullable();
             $table->string('picture')->nullable();
             $table->string('membership')->nullable();
             $table->timestamps();

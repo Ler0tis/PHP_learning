@@ -1,4 +1,4 @@
-{{--Get the form and input send to DATABASE--}}
+
 @php
     use Carbon\Carbon;
 @endphp
@@ -29,7 +29,7 @@
             <div class="mb-6">
                 <label for="date_of_birth" class="inline-block text-lg mb-2">Date of birth</label>
                 <input type="text" class="border border-gray-200 rounded p-2 w-full" name="date_of_birth"
-                    placeholder="DD-MM-YYYY" value="{{ Carbon::createFromFormat('Y-m-d', $familymember->date_of_birth)->format('d-m-Y') }}" />
+                    placeholder="DD-MM-YYYY" value="{{ $familymember->date_of_birth }}" />
 
                 @error('date_of_birth')
                 <p class="text-red-500 text-xs mt-1">{{$message}}</p>
@@ -45,6 +45,18 @@
                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
+
+            <div class="mb-6">
+                <label for="tags" class="inline-block text-lg mb-2">
+                    Tags (comma seperated)
+                </label>
+                <input type="text" class="border border-gray-200 rounded p-2 w-full" name="tags"
+                    placeholder="Laravel, Swimming, OCR, etc" value="{{old('tags')}}" />
+
+                @error('tags')
+                <p class="text-red-500 text-xs mt-1">{{$message}}</p>
+                @enderror
+            </div>
             
             <div class="mb-6">
                 <label for="picture" class="inline-block text-lg mb-2">
@@ -56,26 +68,6 @@
                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
-
-            {{-- Selectie voor de membership --}}
-            {{-- <div class="mb-6">
-                <label for="membership_id">Select Membership:</label>
-                <select name="membership_id" id="membership_id">
-                    <option value="">No Membership</option>
-                    @foreach ($memberships as $membership)
-                    <option value="{{ $membership->id }}" @if ($familymember->membership && 
-                        $familymember->membership->id === $membership->id) selected @endif>
-                        {{ $membership->description }}
-                    </option>
-                    @endforeach
-                </select>
-
-                @error('membership_id')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
-
-            </div> --}}
-            
             <input type="hidden" name="familymember_id" value="{{ $familymember->id }}">
 
             <div class="mb-6">

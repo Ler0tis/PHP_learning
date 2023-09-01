@@ -47,7 +47,8 @@
                             </td>
                             <td class="px-4 py-8 border-t border-b border-gray-300 text-lg">
                                 <p>Name: {{ $familymember->name }} {{ $family->name }} </p>
-                                <p>Birthdate: {{ Carbon::createFromFormat('Y-m-d', $familymember->date_of_birth)->format('d-m-Y') }}</p>
+                                {{-- <p>Birthdate: {{ Carbon::createFromFormat('d-m-Y', $familymember->date_of_birth)->format('Y-m-d') }}</p> --}}
+                                <p>Birthdate: {{ $familymember->date_of_birth }}</p>
                                 <p>E-mail: {{$familymember->email}} </p>
                                 @if ($familymember->membership)
                                     <p>Current membership: {{ $familymember->membership->description }}</p>

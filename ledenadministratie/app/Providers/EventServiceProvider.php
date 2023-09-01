@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Familymember;
-use App\Observers\FamilyMemberObserver;
+// use App\Observers\FamilyMemberObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -20,6 +20,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        // FamilymemberUpdated::class => [
+        //     RecalculateContribution::class,
+        // ],
     ];
 
     /**
@@ -29,7 +32,7 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Register observer with familymember
-        Familymember::observe(FamilyMemberObserver::class);
+        // Register observer of Familymember familymember
+        // Familymember::observe(FamilyMemberObserver::class);
     }
 }

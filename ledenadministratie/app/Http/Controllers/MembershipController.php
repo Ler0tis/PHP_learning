@@ -50,8 +50,6 @@ class MembershipController extends Controller
 
     }
 
-
-
     public function destroy($id) {
         $membership = Membership::findOrFail($id);
         $membership->delete();

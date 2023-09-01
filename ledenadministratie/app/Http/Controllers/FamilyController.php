@@ -18,10 +18,12 @@ class FamilyController extends Controller
 
     // Show all families Last added is first in column
     public function index()
-    {   
+    {
         return view('families.index', [
-            'families' => Family::latest()->filter(request(['tag',
-            'search']))->paginate(16)
+            'families' => Family::latest()->filter(request([
+                'tag',
+                'search'
+            ]))->paginate(16)
         ]);
     }
 
@@ -49,10 +51,11 @@ class FamilyController extends Controller
     }
 
     // Store familie data
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $dataFields = $request->validate(Family::rules());
         // Optional fields, but if filled, its added
-        if($request->filled('tags')) {
+        if ($request->filled('tags')) {
             $dataFields['tags'] = $request->input('tags');
         }
 
@@ -71,12 +74,14 @@ class FamilyController extends Controller
         return redirect('/')->with('message', 'Family succesfully added!');
     }
 
-    public function edit(Family $family) {
+    public function edit(Family $family)
+    {
         return view('families.edit', ['family' => $family]);
     }
 
     // Update Family
-    public function update(Request $request, Family $family) {
+    public function update(Request $request, Family $family)
+    {
         $dataFields = $request->validate(Family::rules($family));
         // Optional fields, but if filled, its added
         if ($request->filled('tags')) {
@@ -97,39 +102,43 @@ class FamilyController extends Controller
     }
 
     // Delete family
-    public function destroy(Family $family) {
+    public function destroy(Family $family)
+    {
         // Is logged in user owner?
         if ($family->user_id != auth()->id()) {
             abort(403, 'Unauthorized Action');
         }
-        
+
         $family->delete();
         return redirect('/')->with('message', 'Family succesfully deleted');
     }
 
     // Manage Families and show them on beheer families (manage pagina)
-    public function manage() {
+    public function manage()
+    {
         return view('families.manage', ['families' => auth()->user()->families]);
     }
 
 
     // Function to calculate the contribution based on the discount
-    protected function calculateAmountPerYear($membershipId, $baseAmount) {
-        $membership = Membership::find($membershipId);
-        $contribution = $membership->contribution;
+    // protected function calculateAmountPerYear($membershipId, $baseAmount)
+    // {
+    //     $membership = Membership::find($membershipId);
+    //     $contribution = $membership->contribution;
 
-        if ($contribution) {
-            $discount = $contribution->discount;
-            $calculatedDiscount = $baseAmount * ($discount / 100);
-            $calculatedAmountPerYear = $baseAmount - $calculatedDiscount;
-        } else {
-            $calculatedAmountPerYear = $baseAmount;
-        }
+    //     if ($contribution) {
+    //         $discount = $contribution->discount;
+    //         $calculatedDiscount = $baseAmount * ($discount / 100);
+    //         $calculatedAmountPerYear = $baseAmount - $calculatedDiscount;
+    //     } else {
+    //         $calculatedAmountPerYear = $baseAmount;
+    //     }
 
-        return $calculatedAmountPerYear;
-    }
+    //     return $calculatedAmountPerYear;
+    // }
 
-    public function getFamilyContributions($familyId) {
+    public function getFamilyContributions($familyId)
+    {
         $familymembers = Familymember::where('family_id', $familyId)->get();
         $totalContribution = 0;
 
@@ -142,4 +151,3 @@ class FamilyController extends Controller
         return $totalContribution;
     }
 }
-
