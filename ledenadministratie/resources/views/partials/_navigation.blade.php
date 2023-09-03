@@ -10,6 +10,5 @@
         <li class="py-2 px-4"><a href="{{ url('/memberships') }}">Memberships</li>
         <li class="py-2 px-4"><a href="{{ url('/contributions') }}">Contribution</li>
         <li class="py-2 px-4"><a href="{{ url('/financialyears') }}">Financial Years</li>
-        <li class="py-2 px-4"><a href="/">YEEEET</li>
     </ul>
 </nav>

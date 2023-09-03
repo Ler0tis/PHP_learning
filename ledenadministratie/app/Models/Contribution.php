@@ -24,7 +24,6 @@ class Contribution extends Model
         'membership_id',
         'min_age',
         'max_age',
-        'amount',
         'discount',
         'financial_year_id',
     ];

@@ -5,16 +5,19 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Membership;
-use App\Models\Contribution;
 use App\Models\Familymember;
+use App\Services\MembershipService;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-
-
-
 
 class FamilymemberController extends Controller
 {
+
+    protected $membershipService;
+
+    public function __construct(MembershipService $membershipService)
+    {
+        $this->membershipService = $membershipService;
+    }
 
     // Show familymember create form
     public function create($family_id = null) {
@@ -52,13 +55,14 @@ class FamilymemberController extends Controller
     // Show edit form for Family members and the memberships from DB
     public function edit(Familymember $familymember) {
         // Retrieve all available memberships
-        $memberships = Membership::all();
+        $memberships = Membership::all(['*']);
         
         return view('familymembers.edit', compact('familymember', 'memberships'));
     }
 
 
     public function update(Request $request, Familymember $familymember) {
+
     $dataFields = $request->validate(Familymember::rules($familymember));
     
     $formattedDateOfBirth = Carbon::createFromFormat('d-m-Y', $request->input('date_of_birth'));
@@ -68,13 +72,11 @@ class FamilymemberController extends Controller
     $familymember->name = $dataFields['name'];
     $familymember->email = $dataFields['email'];
     // ... andere velden ...
-    
     if ($request->hasFile('picture')) {
     $path = $request->file('picture')->store('pictures', 'public');
     $familymember->picture = $path;
     }
-    
-    // Kijk of de geboortedatum is gewijzigd
+    // CHECK if birthdate is changed
     if ($familymember->date_of_birth !== $formattedDateOfBirth) {
     $membership = $this->selectMembership($request->input('date_of_birth'));
     $familymember->membership()->associate($membership);
@@ -87,35 +89,8 @@ class FamilymemberController extends Controller
     return redirect('/')->with('message', 'Familymember is successfully updated.');
     }
 
-
-
-    protected function calculateAmountPerYear($membershipId, $baseAmount)
-    {
-    $membership = Membership::find($membershipId);
-    $contribution = $membership->contribution;
-    
-    if ($contribution) {
-    $discount = $contribution->discount;
-    $calculatedDiscount = $baseAmount * ($discount / 100);
-    $calculatedAmountPerYear = $baseAmount - $calculatedDiscount;
-    } else {
-    $calculatedAmountPerYear = $baseAmount;
-    }
-    
-    return $calculatedAmountPerYear;
-    }
-
-
-
-        // If a membership is selected, associate it with the family member
-        // if ($request->has('membership_id')) {
-        // $familymember->membership()->associate($request->input('membership_id'));
-        // } else {
-        // // If no membership is selected, remove any existing association
-        // $familymember->membership()->dissociate();
-        // }
-        //HANDMATIG URL AANMAKEN EN REDIRECTEN (WERKT)
-        //return redirect('/families/' . $familymember->family_id)->with('message', 'Familymember updated!');
+    //HANDMATIG URL AANMAKEN EN REDIRECTEN (WERKT)
+    //return redirect('/families/' . $familymember->family_id)->with('message', 'Familymember updated!');
 
     public function destroy($id)
     {
@@ -125,19 +100,19 @@ class FamilymemberController extends Controller
         return redirect('/')->with('message', 'Familymember is succesfully deleted');
     }
 
-    public function selectMembership($dateOfBirth)
-    {
-        $birthDate = Carbon::createFromFormat('d-m-Y', $dateOfBirth);
-        $currentDate = Carbon::now();
+    // public function selectMembership($dateOfBirth)
+    // {
+    //     $birthDate = Carbon::createFromFormat('d-m-Y', $dateOfBirth);
+    //     $currentDate = Carbon::now();
 
-        $age = $birthDate->diffInYears($currentDate);
+    //     $age = $birthDate->diffInYears($currentDate);
 
-        $membership = Membership::whereHas('contribution', function ($query) use ($age) {
-            $query->where('min_age', '<=', $age)
-                ->where('max_age', '>=', $age);
-        })->first();
+    //     $membership = Membership::whereHas('contribution', function ($query) use ($age) {
+    //         $query->where('min_age', '<=', $age)
+    //             ->where('max_age', '>=', $age);
+    //     })->first();
 
-        return $membership;
-    }
+    //     return $membership;
+    // }
 
 }

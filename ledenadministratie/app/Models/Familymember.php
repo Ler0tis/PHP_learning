@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use App\Models\Contribution;
 use Illuminate\Validation\Rule;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -75,12 +76,14 @@ class Familymember extends Model
 
     // Relations
     public function membership() {
-        return $this->belongsTo(Membership::class);
+        return $this->belongsTo(Membership::class, 'membership_id')
+        ->withDefault();
     }
 
     public function contribution()
     {
-        return $this->belongsTo(Contribution::class);
+        return $this->belongsTo(Contribution::class, 'membership_id')
+        ->withDefault();
     }
 
 

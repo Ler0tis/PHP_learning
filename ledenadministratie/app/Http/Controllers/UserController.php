@@ -31,7 +31,7 @@ class UserController extends Controller
         // Login
         auth()->login($user);
 
-        return redirect('/')->with('message', 'Gebruiker aangemaakt en ingelogd.');
+        return redirect('/')->with('message', 'User created and logged in');
 
     }
 
@@ -42,7 +42,7 @@ class UserController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/')->with('message', 'Succesvol uitgelogd');
+        return redirect('/')->with('message', 'User logged out');
     }
 
     // Show login form
@@ -58,12 +58,15 @@ class UserController extends Controller
         ]);
 
         // attempt to login user and if failed, gets errormessage.
-        if(auth()->attempt($dataFields)) {
+        // $request->remember is standard uses to remember UN and PW using cookies
+        if(auth()->attempt($dataFields, $request->remember)) {
             $request->session()->regenerate();
 
-            return redirect('/')->with('message', 'Succesvol ingelogd');
+            return redirect('/')->with('message', 'User logged in');
         }
 
-        return back()->withErrors(['email' => 'Ongeldige gegevens'])->onlyInput('email');
+        return back()
+        ->withErrors(['email' => 'Invalid username/password combination'])
+        ->withInput($request->only('email', 'remember'));
     }
 }

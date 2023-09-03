@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Membership;
+use App\Models\Contribution;
+use Illuminate\Http\Request;
 
 
 class MembershipController extends Controller
@@ -13,7 +14,7 @@ class MembershipController extends Controller
     }
 
     public function index() {
-        $memberships = Membership::all();
+        $memberships = Membership::all(['*']);
 
         return view('memberships.index', compact('memberships'));
     }
@@ -51,9 +52,13 @@ class MembershipController extends Controller
     }
 
     public function destroy($id) {
+        // No problems with RESTRICTION using Foreighn keys
         $membership = Membership::findOrFail($id);
+        Contribution::where('membership_id', $membership->id)->delete();
+
         $membership->delete();
 
-        return redirect('/')->with('message', 'Membership is succesfully deleted');
+        return redirect('/')
+            ->with('message', 'Membership is successfully deleted');
     }
 }

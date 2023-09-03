@@ -2,25 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Family;
 use App\Models\Membership;
 use App\Models\Contribution;
-use App\Models\Familymember;
+use App\Models\Family;
 use Illuminate\Http\Request;
 use App\Models\FinancialYear;
+use App\Services\MembershipService;
+
+
 
 class ContributionController extends Controller {
 
+    // SERVICES //
+    protected $membershipService;
+
+    public function __construct(MembershipService $membershipService)
+    {
+        $this->membershipService = $membershipService;
+    }
+
+
     public function index() {
-        $financialYears = FinancialYear::all();
-        $contributions = Contribution::with('membership', 'financialYear')->get();
+        $financialYears = FinancialYear::all(['*']);
+        $contributions = Contribution::with('membership', 'financialYear')->get(['*']);
 
         return view('contributions.index', compact('financialYears', 'contributions'));
     }
 
     public function create() {
-        $memberships = Membership::all();
-        $financialYears = FinancialYear::all();
+        $memberships = Membership::all(['*']);
+        $financialYears = FinancialYear::all(['*']);
 
         $contribution = new Contribution();
         $contribution->membership_id = null;
@@ -29,8 +40,13 @@ class ContributionController extends Controller {
     }
 
    
-    public function store(Request $request) {
-        $dataFields = $request->validate(Contribution::rules());
+    public function store(Request $request, Contribution $contribution, Family $familyId) {
+        $dataFields = $request->validate(Contribution::rules($contribution));
+
+        $newMembership = $this->selectMembership($contribution->min_age);
+        // Get family before you can loop trough members
+        $family = Family::findOrFail($familyId);
+        $familymembers = $family->familymembers;
 
         // Add 'membership_id' to $dataFields-array if not empty
         if (!empty($request->input('membership_id'))) {
@@ -54,16 +70,27 @@ class ContributionController extends Controller {
         // Connect FinancialYear to Contribution by ID
         $dataFields['financial_year_id'] = $financialYear->id;
 
+        // Loop trough all members and assing the right membership_id
+        foreach ($familymembers as $familymember) {
+            $membership = $this->membershipService->selectMembership($familymember->date_of_birth);
+
+            if ($membership) {
+                $familymember->membership_id = $membership->id;
+                $familymember->save();
+        }
+
+    }
+
         Contribution::create($dataFields);
 
-        $contributions = Contribution::with('membership')->get();
+        $contributions = Contribution::with('membership')->get(['*']);
         return view('contributions.index', compact('contributions'))->with('message', 'Contribution successfully created');
     }
 
     public function edit($id) {
 
         $contribution = Contribution::findOrFail($id);
-        $memberships = Membership::all();
+        $memberships = Membership::all(['*']);
 
         return view('contributions.edit', compact('contribution', 'memberships'));
     }
