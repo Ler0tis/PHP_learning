@@ -2,33 +2,36 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use App\Models\Membership;
+use App\Models\Contribution;
+use App\Models\Familymember;
 
 class ContributionService {
 
-    // public function recalculateAndRefreshData(Contribution $contribution)
-    // {
-    //     $newMembership = selectMembership($contribution->familymember->date_of_birth);
-    //     $newcontribution = calculateAmountPerYear($newMembership->id, $contribution->amount);
 
-    //     $contribution->update([
-    //         'membership_id' => $newMembership->id,
-    //         'amount' => $newContribution,
-    //         // ... andere velden ...
-    //     ]);
+    public function updateFamilyMembersMembership(Contribution $contribution) {
+        // Haal alle familymembers op die aan de betreffende familie zijn gekoppeld
+        $allFamilymembers = Familymember::all();
 
-    //     $familymembers = FamilyMember::where('membership_id', $contribution->membership_id)->get();
+        foreach ($allFamilymembers as $familymember) {
+            // Controleer of membership_id NULL is
+            if ($familymember->membership_id === null) {
+                // Bereken de leeftijd van de familymember
+                $age = Carbon::parse($familymember->date_of_birth)->age;
 
-    //     foreach ($familymembers as $familymember) {
-    //         $familymember->update([
-    //             'membership_id' => $newMembership->id,
-    //             'contribution' => $newContribution,
-    //             // ... andere velden ...
-    //         ]);
-    //     }
+                // Controleer of de leeftijd binnen de criteria van de contributie valt
+                if ($age >= $contribution->min_age && $age <= $contribution->max_age) {
+                    // Wijs het nieuwe membership_id toe
+                    $familymember->membership_id = $contribution->membership_id;
+                    $familymember->save();
+                }
+            }
+        }
+    }
 
-    // }
-    
+
+
     public function calculateAmountPerYear($membershipId, $baseAmount)
     {
         $membership = Membership::find($membershipId);

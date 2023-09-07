@@ -20,7 +20,8 @@ class FamilymemberController extends Controller
     }
 
     // Show familymember create form
-    public function create($family_id = null) {
+    public function create($family_id = null)
+    {
         return view('familymembers.create', compact('family_id'));
     }
 
@@ -44,7 +45,7 @@ class FamilymemberController extends Controller
         }
 
         // Koppel het juiste lidmaatschap aan de familymember
-        $membership = $this->selectMembership($request->input('date_of_birth'));
+        $membership = $this->membershipService->selectMembership($request->input('date_of_birth'));
         $familyMember->membership()->associate($membership);
 
         $familyMember->save();
@@ -53,40 +54,42 @@ class FamilymemberController extends Controller
     }
 
     // Show edit form for Family members and the memberships from DB
-    public function edit(Familymember $familymember) {
+    public function edit(Familymember $familymember)
+    {
         // Retrieve all available memberships
         $memberships = Membership::all(['*']);
-        
+
         return view('familymembers.edit', compact('familymember', 'memberships'));
     }
 
 
-    public function update(Request $request, Familymember $familymember) {
+    public function update(Request $request, Familymember $familymember)
+    {
 
-    $dataFields = $request->validate(Familymember::rules($familymember));
-    
-    $formattedDateOfBirth = Carbon::createFromFormat('d-m-Y', $request->input('date_of_birth'));
-    $formattedDateOfBirth = $formattedDateOfBirth->format('Y-m-d');
-    
-    // Overige velden bijwerken
-    $familymember->name = $dataFields['name'];
-    $familymember->email = $dataFields['email'];
-    // ... andere velden ...
-    if ($request->hasFile('picture')) {
-    $path = $request->file('picture')->store('pictures', 'public');
-    $familymember->picture = $path;
-    }
-    // CHECK if birthdate is changed
-    if ($familymember->date_of_birth !== $formattedDateOfBirth) {
-    $membership = $this->selectMembership($request->input('date_of_birth'));
-    $familymember->membership()->associate($membership);
-    }
-    
-    $familymember->date_of_birth = $formattedDateOfBirth; // Bijwerken van de geboortedatum
-    
-    $familymember->save();
-    
-    return redirect('/')->with('message', 'Familymember is successfully updated.');
+        $dataFields = $request->validate(Familymember::rules($familymember));
+
+        $formattedDateOfBirth = Carbon::createFromFormat('d-m-Y', $request->input('date_of_birth'));
+        $formattedDateOfBirth = $formattedDateOfBirth->format('Y-m-d');
+
+        // Overige velden bijwerken
+        $familymember->name = $dataFields['name'];
+        $familymember->email = $dataFields['email'];
+        // ... andere velden ...
+        if ($request->hasFile('picture')) {
+            $path = $request->file('picture')->store('pictures', 'public');
+            $familymember->picture = $path;
+        }
+        // CHECK if birthdate is changed
+        if ($familymember->date_of_birth !== $formattedDateOfBirth) {
+            $membership = $this->membershipService->selectMembership($request->input('date_of_birth'));
+            $familymember->membership()->associate($membership);
+        }
+
+        $familymember->date_of_birth = $formattedDateOfBirth; // Bijwerken van de geboortedatum
+
+        $familymember->save();
+
+        return redirect('/')->with('message', 'Familymember is successfully updated.');
     }
 
     //HANDMATIG URL AANMAKEN EN REDIRECTEN (WERKT)
@@ -96,7 +99,7 @@ class FamilymemberController extends Controller
     {
         $familyMember = Familymember::findOrFail($id);
         $familyMember->delete();
-        
+
         return redirect('/')->with('message', 'Familymember is succesfully deleted');
     }
 
