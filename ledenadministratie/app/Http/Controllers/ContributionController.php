@@ -103,14 +103,13 @@ class ContributionController extends Controller
             // Call update_method from Service to update the new data for contribution 
             $this->contributionService->updateFamilyMembersMembership($updatedContribution);
 
-            return redirect('/')->with('message', 'Contribution succesfully updated');
+            return redirect()->route('contributions.index')->with('message', 'Contribution succesfully updated');
 
         } catch (\Exception $e) {
             Log::error('Error while updating the contribution: ' . $e->getMessage());
 
             return back()->with('error', 'There is an error while updating the contribution.');
         }
-        
     }
 
     public function destroy($id)
@@ -119,7 +118,7 @@ class ContributionController extends Controller
             $contribution = Contribution::findOrFail($id);
             $contribution->delete();
 
-            return redirect('/')->with('message', 'Contribution is succesfully deleted');
+            return redirect()->route('contributions.index')->with('message', 'Contribution is succesfully deleted');
 
         } catch (\Exception $e) {
             Log::error('Error while deleting the contribution: ' . $e->getMessage());

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Family;
 use App\Models\Membership;
 use App\Models\Familymember;
 use Illuminate\Http\Request;
@@ -27,10 +28,9 @@ class FamilymemberController extends Controller
 
     // Store familymember data
     public function store(Request $request, Familymember $familymember) {
-
-        
         try {
             $dataFields = $request->validate(Familymember::rules($familymember));
+            $family = Family::find($request->input('family_id'));
 
             $dateOfBirth = Carbon::createFromFormat('d-m-Y', $request->input('date_of_birth'))->format('Y-m-d');
 
@@ -52,7 +52,8 @@ class FamilymemberController extends Controller
 
             $familyMember->save();
 
-            return redirect('/')->with('message', 'Familymember is successfully added.');
+            return redirect()->route('families.show', ['family' => $family->id])
+            ->with('message', 'Familymember is successfully added.');
 
         } catch (\Exception $e) {
             Log::error('Error while creating the familymember: ' . $e->getMessage());
@@ -96,7 +97,10 @@ class FamilymemberController extends Controller
             $familymember->date_of_birth = $formattedDateOfBirth;
             $familymember->save();
 
-            return redirect('/')->with('message', 'Familymember is successfully updated.');
+            $family = Family::find($request->input('family_id'));
+            
+            return redirect()->route('families.show', ['family' => $family->id])
+            ->with('message', 'Familymember is successfully updated.');
 
         } catch (\Exception $e) {
             Log::error('Error while updating the familymember: ' . $e->getMessage());
@@ -105,15 +109,15 @@ class FamilymemberController extends Controller
         }
     }
 
-    //HANDMATIG URL AANMAKEN EN REDIRECTEN (WERKT)
-    //return redirect('/families/' . $familymember->family_id)->with('message', 'Familymember updated!');
-
     public function destroy($id) {
         try {
             $familyMember = Familymember::findOrFail($id);
             $familyMember->delete();
 
-            return redirect('/')->with('message', 'Familymember is succesfully deleted');
+            $familyId = $familyMember->family_id;
+
+            return redirect()->route('families.show', ['family' => $familyId])
+            ->with('message', 'Familymember is successfully deleted');
 
         } catch (\Exception $e) {
             Log::error('Error while deleting the familymember: ' . $e->getMessage());

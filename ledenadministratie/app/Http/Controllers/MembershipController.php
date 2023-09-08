@@ -32,7 +32,7 @@ class MembershipController extends Controller
 
             Membership::create($dataFields);
 
-            return redirect('/')->with('message', 'Membership is updated');
+            return redirect('memberships')->with('message', 'Membership is created');
 
         } catch (\Exception $e) {
             Log::error('Error while creating the membership: ' . $e->getMessage());
@@ -57,7 +57,7 @@ class MembershipController extends Controller
 
             $membership->update($dataFields);
 
-            return redirect('/')->with('message', 'Membership is updated');
+            return redirect('memberships')->with('message', 'Membership is updated');
 
         } catch (\Exception $e) {
             Log::error('Error while updating the familymember: ' . $e->getMessage());
@@ -75,7 +75,7 @@ class MembershipController extends Controller
 
             $membership->delete();
 
-            return redirect('/')
+            return redirect('memberships')
                 ->with('message', 'Membership is successfully deleted');
             
         } catch (\Exception $e) {

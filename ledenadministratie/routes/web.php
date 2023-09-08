@@ -39,6 +39,7 @@ use App\Http\Controllers\FinancialYearController;
 
 // All families
 Route::get('/', [FamilyController::class,'index'])
+
 ->Middleware('auth');
 
 // Show Family create form
@@ -68,6 +69,7 @@ Route::delete('/families/{family}', [FamilyController::class,'destroy'])
 //Single family
 // A family where Family is the name of the model
 Route::get('/families/{family}', [FamilyController::class,'show'])
+->name('families.show')
 ->Middleware('auth');
 
 

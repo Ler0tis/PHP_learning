@@ -49,7 +49,6 @@ class Contribution extends Model
         return $rules;
     }
 
-
     public function getDiscountWithSymbolAttribute() {
 
         return $this->attributes['discount'] . '%';

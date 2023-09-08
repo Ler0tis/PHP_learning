@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Family;
-use App\Models\Membership;
 use App\Models\Familymember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -104,7 +103,7 @@ class FamilyController extends Controller
 
         $family->update($dataFields);
 
-        return back()->with('message', 'Family succesfully updated');
+        return redirect('/')->with('message', 'Family succesfully updated');
 
         } catch (\Exception $e) {
             Log::error('Error while updating the family: ' . $e->getMessage());
@@ -112,8 +111,7 @@ class FamilyController extends Controller
             return back()->with('error', 'There is an error while updating the family.');
         }
     }
-
-    // Delete family
+    
     public function destroy(Family $family) {
 
         try {
@@ -128,7 +126,7 @@ class FamilyController extends Controller
         } catch (\Exception $e) {
             Log::error('Error while deleting the family: ' . $e->getMessage());
 
-            return back()->with('error', 'There is an error while deleting the family.');
+            return redirect('/')->with('error', 'There is an error while deleting the family.');
         }
     }
 
