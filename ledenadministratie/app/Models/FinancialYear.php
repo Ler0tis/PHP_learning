@@ -10,10 +10,7 @@ class FinancialYear extends Model
     use HasFactory;
 
     protected $fillable = ['year'];
-
     
-
-
     // Relation with contributions
     public function contributions()
     {

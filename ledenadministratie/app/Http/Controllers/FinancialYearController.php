@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-
-use Illuminate\Http\Request;
 use App\Models\FinancialYear;
 
-class FinancialYearController extends Controller
-{
+class FinancialYearController extends Controller {
+    
     public function index() {
         $financialYears = FinancialYear::all();
         return view('financialyears.index', compact('financialYears'));

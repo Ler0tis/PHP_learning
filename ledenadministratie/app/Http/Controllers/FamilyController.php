@@ -1,16 +1,12 @@
 <?php
 
-//Tips and tricks
-
-// dd($request->all());
-
-
 namespace App\Http\Controllers;
 
 use App\Models\Family;
 use App\Models\Membership;
 use App\Models\Familymember;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Services\ContributionService;
 
 class FamilyController extends Controller
@@ -51,27 +47,36 @@ class FamilyController extends Controller
     }
 
     // Store familie data
-    public function store(Request $request)
-    {
-        $dataFields = $request->validate(Family::rules());
-        // Optional fields, but if filled, its added
-        if ($request->filled('tags')) {
-            $dataFields['tags'] = $request->input('tags');
+    public function store(Request $request) {
+
+        try {
+            $dataFields = $request->validate(Family::rules());
+            // Optional fields, but if filled, its added
+            if ($request->filled('tags')) {
+                $dataFields['tags'] = $request->input('tags');
+            }
+
+            if ($request->filled('website')) {
+                $dataFields['website'] = $request->input('website');
+            }
+
+            if ($request->filled('description')) {
+                $dataFields['description'] = $request->input('description');
+            }
+
+            $dataFields['user_id'] = auth()->id();
+
+            Family::create($dataFields);
+
+            return redirect('/')->with('message', 'Family succesfully added!');
+
+
+        } catch (\Exception $e) {
+            Log::error('Error while creating the family: ' . $e->getMessage());
+
+            return back()->with('error', 'There is an error while creating the family.');
         }
-
-        if ($request->filled('website')) {
-            $dataFields['website'] = $request->input('website');
-        }
-
-        if ($request->filled('description')) {
-            $dataFields['description'] = $request->input('description');
-        }
-
-        $dataFields['user_id'] = auth()->id();
-
-        Family::create($dataFields);
-
-        return redirect('/')->with('message', 'Family succesfully added!');
+        
     }
 
     public function edit(Family $family)
@@ -80,9 +85,10 @@ class FamilyController extends Controller
     }
 
     // Update Family
-    public function update(Request $request, Family $family)
-    {
-        $dataFields = $request->validate(Family::rules($family));
+    public function update(Request $request, Family $family) {
+
+        try {
+            $dataFields = $request->validate(Family::rules($family));
         // Optional fields, but if filled, its added
         if ($request->filled('tags')) {
             $dataFields['tags'] = $request->input('tags');
@@ -99,55 +105,36 @@ class FamilyController extends Controller
         $family->update($dataFields);
 
         return back()->with('message', 'Family succesfully updated');
+
+        } catch (\Exception $e) {
+            Log::error('Error while updating the family: ' . $e->getMessage());
+
+            return back()->with('error', 'There is an error while updating the family.');
+        }
     }
 
     // Delete family
-    public function destroy(Family $family)
-    {
-        // Is logged in user owner?
-        if ($family->user_id != auth()->id()) {
-            abort(403, 'Unauthorized Action');
-        }
+    public function destroy(Family $family) {
 
-        $family->delete();
-        return redirect('/')->with('message', 'Family succesfully deleted');
+        try {
+            // Is logged in user owner?
+            if ($family->user_id != auth()->id()) {
+                abort(403, 'Unauthorized Action');
+            }
+
+            $family->delete();
+            return redirect('/')->with('message', 'Family succesfully deleted');
+
+        } catch (\Exception $e) {
+            Log::error('Error while deleting the family: ' . $e->getMessage());
+
+            return back()->with('error', 'There is an error while deleting the family.');
+        }
     }
 
-    // Manage Families and show them on beheer families (manage pagina)
+    // Manage Families and show them on manage families
     public function manage()
     {
         return view('families.manage', ['families' => auth()->user()->families]);
-    }
-
-
-    // Function to calculate the contribution based on the discount
-    // protected function calculateAmountPerYear($membershipId, $baseAmount)
-    // {
-    //     $membership = Membership::find($membershipId);
-    //     $contribution = $membership->contribution;
-
-    //     if ($contribution) {
-    //         $discount = $contribution->discount;
-    //         $calculatedDiscount = $baseAmount * ($discount / 100);
-    //         $calculatedAmountPerYear = $baseAmount - $calculatedDiscount;
-    //     } else {
-    //         $calculatedAmountPerYear = $baseAmount;
-    //     }
-
-    //     return $calculatedAmountPerYear;
-    // }
-
-    public function getFamilyContributions($familyId)
-    {
-        $familymembers = Familymember::where('family_id', $familyId)->get();
-        $totalContribution = 0;
-
-        foreach ($familymembers as $familymember) {
-            $membershipId = $familymember->membership_id;
-            $contribution = $this->calculateAmountPerYear($membershipId, 100);
-            $totalContribution += $contribution;
-        }
-
-        return $totalContribution;
     }
 }

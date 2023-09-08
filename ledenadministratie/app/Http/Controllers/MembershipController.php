@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Membership;
 use App\Models\Contribution;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 
 class MembershipController extends Controller
@@ -13,6 +14,7 @@ class MembershipController extends Controller
         return view('memberships.create');
     }
 
+    // Shows available memberships on Membership page
     public function index() {
         $memberships = Membership::all(['*']);
 
@@ -20,16 +22,23 @@ class MembershipController extends Controller
     }
 
     public function store(Request $request) {
-        $dataFields = $request->validate(Membership::rules());
 
-        if ($request->filled('description')) {
-            $dataFields['description'] = $request->input('description');
+        try {
+            $dataFields = $request->validate(Membership::rules());
+
+            if ($request->filled('description')) {
+                $dataFields['description'] = $request->input('description');
+            }
+
+            Membership::create($dataFields);
+
+            return redirect('/')->with('message', 'Membership is updated');
+
+        } catch (\Exception $e) {
+            Log::error('Error while creating the membership: ' . $e->getMessage());
+
+            return back()->with('error', 'There is an error while creating the membership.');
         }
-
-        Membership::create($dataFields);
-
-        return redirect('/')->with('message', 'Membership is updated');
-
     }
 
     public function edit(Membership $membership){
@@ -37,28 +46,42 @@ class MembershipController extends Controller
         return view('memberships.edit', ['membership' => $membership]);
     }
 
-    public function update(Request $request, Membership $membership)
-    {
-        $dataFields = $request->validate(Membership::rules());
+    public function update(Request $request, Membership $membership) {
 
-        if ($request->filled('description')) {
-            $dataFields['description'] = $request->input('description');
+        try {
+            $dataFields = $request->validate(Membership::rules());
+
+            if ($request->filled('description')) {
+                $dataFields['description'] = $request->input('description');
+            }
+
+            $membership->update($dataFields);
+
+            return redirect('/')->with('message', 'Membership is updated');
+
+        } catch (\Exception $e) {
+            Log::error('Error while updating the familymember: ' . $e->getMessage());
+
+            return back()->with('error', 'There is an error while updating the familymember.');
         }
-
-        $membership->update($dataFields);
-
-        return redirect('/')->with('message', 'Membership is updated');
-
     }
 
     public function destroy($id) {
-        // No problems with RESTRICTION using Foreighn keys
-        $membership = Membership::findOrFail($id);
-        Contribution::where('membership_id', $membership->id)->delete();
 
-        $membership->delete();
+        try {
+            // No problems with RESTRICTION using Foreighn keys and delete contribution as well. Sets membership_id on NULL (familymember)
+            $membership = Membership::findOrFail($id);
+            Contribution::where('membership_id', $membership->id)->delete();
 
-        return redirect('/')
-            ->with('message', 'Membership is successfully deleted');
+            $membership->delete();
+
+            return redirect('/')
+                ->with('message', 'Membership is successfully deleted');
+            
+        } catch (\Exception $e) {
+            Log::error('Error while deleting the membership: ' . $e->getMessage());
+
+            return back()->with('error', 'There is an error while deleting the membership.');
+        }
     }
 }

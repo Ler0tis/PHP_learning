@@ -19,7 +19,6 @@
                             <th class="text-center">Min age</th>
                             <th class="text-center">Max age</th>
                             <th class="text-center">Discount</th>
-                            <th class="text-center">Total per year</th>
                         </tr>
                     </thead>
 
@@ -41,7 +40,6 @@
                         <td class="px-4 py-8 border-t border-b border-gray-300 text-lg text-center">
                             {{ $contribution->discount_with_symbol }}
                         </td>
-
                         <td class="px-4 py-8 border-t border-b border-gray-300 text-lg text-center">
                             <div class="flex items-center justify-center space-x-4">
                                 <a href="{{ route('contributions.edit', ['contribution' => $contribution->id]) }}"

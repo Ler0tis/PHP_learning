@@ -8,6 +8,7 @@ use App\Models\Membership;
 class MembershipService
 {
 
+    // Select a available membership when a familymember gets created. 
     public function selectMembership($dateOfBirth)
     {
         $birthDate = Carbon::createFromFormat('d-m-Y', $dateOfBirth);

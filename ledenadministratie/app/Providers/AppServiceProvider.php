@@ -30,9 +30,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Validator::extend('unique_name_in_family', function ($attribute, $value, $parameters, $validator) {
-            // $value = name
-            // $parameters[0] is family_id
-            // $parameters[1] is current familymember_id (optional. Only with familymemberid)
 
             $familyId = $parameters[0];
             $familymemberId = isset($parameters[1]) ? $parameters[1] : null;

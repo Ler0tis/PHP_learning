@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Family;
 use App\Models\Membership;
 use App\Models\Contribution;
-use App\Models\Family;
 use Illuminate\Http\Request;
 use App\Models\FinancialYear;
+use Illuminate\Support\Facades\Log;
 use App\Services\ContributionService;
 
 
@@ -27,8 +28,10 @@ class ContributionController extends Controller
         $financialYears = FinancialYear::all(['*']);
         $contributions = Contribution::with('membership', 'financialYear')->get(['*']);
 
+        // Send variables to the view
         return view('contributions.index', compact('financialYears', 'contributions'));
     }
+
 
     public function create()
     {
@@ -42,30 +45,38 @@ class ContributionController extends Controller
     }
 
 
-    public function store(Request $request, Contribution $contribution, Family $familyId)
-    {
-        $dataFields = $request->validate(Contribution::rules($contribution));
+    public function store(Request $request, Contribution $contribution, Family $familyId) {
 
-        // Variable for current year
-        $currentYear = date('Y');
+        try {
+            $dataFields = $request->validate(Contribution::rules($contribution));
 
-        // Is current year already in database?
-        $financialYear = FinancialYear::where('year', $currentYear)->first();
+            // Variable for current year
+            $currentYear = date('Y');
 
-        // No current year, make new on.
-        if (!$financialYear) {
-            $financialYear = FinancialYear::create(['year' => $currentYear]);
+            // Is current year already in database?
+            $financialYear = FinancialYear::where('year', $currentYear)->first();
+
+            // No current year, make new on.
+            if (!$financialYear) {
+                $financialYear = FinancialYear::create(['year' => $currentYear]);
+            }
+
+            // Connect FinancialYear to Contribution by ID
+            $dataFields['financial_year_id'] = $financialYear->id;
+
+            Contribution::create($dataFields);
+
+            $this->contributionService->updateFamilyMembersMembership($contribution);
+
+            $contributions = Contribution::with('membership')->get(['*']);
+            return view('contributions.index', compact('contributions'))->with('message', 'Contribution successfully created');
+
+        } catch (\Exception $e) {
+            Log::error('Error while creating the contribution: ' . $e->getMessage());
+
+            return back()->with('error', 'There is an error while creating the contribution.');
         }
 
-        // Connect FinancialYear to Contribution by ID
-        $dataFields['financial_year_id'] = $financialYear->id;
-
-        Contribution::create($dataFields);
-
-        $this->contributionService->updateFamilyMembersMembership($contribution);
-
-        $contributions = Contribution::with('membership')->get(['*']);
-        return view('contributions.index', compact('contributions'))->with('message', 'Contribution successfully created');
     }
 
     public function edit($id)
@@ -79,30 +90,41 @@ class ContributionController extends Controller
 
     public function update(Request $request, Contribution $contribution)
     {
-        $dataFields = $request->validate(Contribution::rules($contribution));
-        // Remove symbol before saving to DB
-        // $dataFields['amount'] = preg_replace('/[^0-9.]/', '', $request->input('amount_display'));
+        try {
+            $dataFields = $request->validate(Contribution::rules($contribution));
 
-        $contribution->update($dataFields);
+            $contribution->update($dataFields);
 
-        // Get the contribution from DB
-        $updatedContribution = Contribution::findOrFail($contribution->id);
+            // Get the contribution from DB
+            $updatedContribution = Contribution::findOrFail($contribution->id);
 
-        // Update contribution with new data
-        $updatedContribution->update($dataFields);
+            $updatedContribution->update($dataFields);
 
-        // Call update_method from Service to update the new data for contribution 
-        $this->contributionService->updateFamilyMembersMembership($updatedContribution);
+            // Call update_method from Service to update the new data for contribution 
+            $this->contributionService->updateFamilyMembersMembership($updatedContribution);
 
-        return redirect('/')->with('message', 'Contribution succesfully updated');
+            return redirect('/')->with('message', 'Contribution succesfully updated');
+
+        } catch (\Exception $e) {
+            Log::error('Error while updating the contribution: ' . $e->getMessage());
+
+            return back()->with('error', 'There is an error while updating the contribution.');
+        }
+        
     }
 
     public function destroy($id)
     {
+        try {
+            $contribution = Contribution::findOrFail($id);
+            $contribution->delete();
 
-        $contribution = Contribution::findOrFail($id);
-        $contribution->delete();
+            return redirect('/')->with('message', 'Contribution is succesfully deleted');
 
-        return redirect('/')->with('message', 'Contribution is succesfully deleted');
+        } catch (\Exception $e) {
+            Log::error('Error while deleting the contribution: ' . $e->getMessage());
+
+            return back()->with('error', 'There is an error while deleting the contribution.');
+        }
     }
 }

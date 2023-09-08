@@ -27,7 +27,7 @@
             <div class="mb-6">
                 <label for="address" class="inline-block text-lg mb-2">Address</label>
                 <input type="text" class="border border-gray-200 rounded p-2 w-full" name="address"
-                    placeholder="Example: Vlietstraat 1, 2233GG, Utrecht"
+                    placeholder="Example: Vlierstraat 1, 2233GG, Utrecht"
                     value="{{$family->address}}" />
 
                     @error('address')

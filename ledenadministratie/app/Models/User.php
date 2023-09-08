@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -43,7 +42,7 @@ class User extends Authenticatable
     ];
 
 
-    // Relations with Family. Ook dit ipv user_id ga ik family_id gebruiken om het te koppelen.
+    ////////////////////// Relations  See which user made a family //////////////////////
     public function families() {
         return $this->hasMany(Family::class, 'user_id');
     }

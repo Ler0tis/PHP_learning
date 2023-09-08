@@ -11,18 +11,17 @@ class ContributionService {
 
 
     public function updateFamilyMembersMembership(Contribution $contribution) {
-        // Haal alle familymembers op die aan de betreffende familie zijn gekoppeld
+
         $allFamilymembers = Familymember::all();
 
         foreach ($allFamilymembers as $familymember) {
-            // Controleer of membership_id NULL is
-            if ($familymember->membership_id === null) {
-                // Bereken de leeftijd van de familymember
-                $age = Carbon::parse($familymember->date_of_birth)->age;
 
-                // Controleer of de leeftijd binnen de criteria van de contributie valt
+            if ($familymember->membership_id === null) {
+                // Calculate age based on date_of_birth for the calculation
+                $age = Carbon::parse($familymember->date_of_birth)->age;
+                // Is age between min_ and max_age?
                 if ($age >= $contribution->min_age && $age <= $contribution->max_age) {
-                    // Wijs het nieuwe membership_id toe
+                    // Add membership_id to familymember
                     $familymember->membership_id = $contribution->membership_id;
                     $familymember->save();
                 }
@@ -30,18 +29,17 @@ class ContributionService {
         }
     }
 
-
-
     public function calculateAmountPerYear($membershipId, $baseAmount)
     {
         $membership = Membership::find($membershipId);
-
+        // If membership_id = NULL, return baseamount
         if (!$membership) {
             return $baseAmount;
         }
 
         $contribution = $membership->contribution()->first();
 
+        // If there is a membership, calculate the discount based on baseAmount 
         if ($contribution) {
             $discount = $contribution->discount;
             $calculatedDiscount = $baseAmount * ($discount / 100);

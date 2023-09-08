@@ -35,7 +35,8 @@ use App\Http\Controllers\FinancialYearController;
 // Route::get('/families/{family}', [FamilyController::class, 'show'])->name('families.show');
 
 
-///////////////////////////// Families ////////////////////////////////////
+////////////////////// Families //////////////////////
+
 // All families
 Route::get('/', [FamilyController::class,'index'])
 ->Middleware('auth');
@@ -70,7 +71,8 @@ Route::get('/families/{family}', [FamilyController::class,'show'])
 ->Middleware('auth');
 
 
- ///////////// FAMILY MEMBERS////////////////////////////////////////
+////////////////////// FAMILY MEMBERS//////////////////////
+
  // Show FamilyMember create form
 Route::get('/familymembers/create/{family_id?}', [FamilymemberController::class, 'create'])
 ->name('familymembers.create');
@@ -94,7 +96,8 @@ Route::delete('/familymembers/{id}', [FamilymemberController::class,'destroy'])
 ->Middleware('auth');
 
 
-/////////////////////////// Memberships ///////////////////////////////////////
+////////////////////// Memberships //////////////////////
+
 // Show Memberships
 Route::get('/memberships', [MembershipController::class, 'index'])
 ->Middleware('auth');
@@ -122,11 +125,13 @@ Route::delete('/memberships/{id}', [MembershipController::class, 'destroy'])
 ->Middleware('auth');
 
 
-/////////// CONTRIBUTION ////////////////
+////////////////////// CONTRIBUTION //////////////////////
+
 // All contributions
 Route::get('/contributions', [ContributionController::class, 'index'])
-->name('contributions.index')
-->Middleware('auth');
+    ->name('contributions.index')
+    ->middleware('auth');
+
 
 // Store contribution in DB
 Route::post('contributions', [ContributionController::class, 'store'])
@@ -152,7 +157,7 @@ Route::delete('/contributions/{id}', [ContributionController::class, 'destroy'])
 ->Middleware('auth');
 
 
-/////////// Financial Years ////////////////
+////////////////////// Financial Years //////////////////////
 
 Route::get('/financialyears', [FinancialYearController::class, 'index'])
 ->name('financialyears.index')
@@ -161,7 +166,8 @@ Route::get('/financialyears', [FinancialYearController::class, 'index'])
 Route::resource('financial-years', FinancialYearController::class)
 ->Middleware('auth');
 
-//////////////////// USER Account //////////////////////
+////////////////////// USER Account //////////////////////
+
 // Show USER register form
 Route::get('/register', [UserController::class,'create'])
 ->Middleware('guest');

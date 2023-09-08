@@ -10,16 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Contribution extends Model
 {
     use HasFactory;
-
-    protected static function boot() {
-        parent::boot();
-
-        // Event listener for creating Event as set amount to 100 with new Contribution ( also see migration)
-        static:: creating(function ($contribution) {
-            $contribution->amount = 100;
-        });
-    }
-
+    
     protected $fillable = [
         'membership_id',
         'min_age',
@@ -28,7 +19,6 @@ class Contribution extends Model
         'financial_year_id',
     ];
 
-    // Should be a error message when using a double membership for contribution?? Still TODO
     public static function rules($contribution = null)
     {
         $rules = [
@@ -40,7 +30,7 @@ class Contribution extends Model
                     // Error message when membership_id is already used
                     $existingContribution = Contribution::where('membership_id', $value)->where('id', '!=', optional($contribution)->id)->first();
                     if ($existingContribution) {
-                        $fail('The selected membership has already been used.');
+                        $fail('This membership has already been used. Please select a different one.');
                     }
                 }
             ],
@@ -59,11 +49,6 @@ class Contribution extends Model
         return $rules;
     }
 
-    // Accessor to add symbol to an input or view field
-    // public function getAmountWithSymbolAttribute()
-    // {
-    //     return '€' . $this->attributes['amount'];
-    // }
 
     public function getDiscountWithSymbolAttribute() {
 
