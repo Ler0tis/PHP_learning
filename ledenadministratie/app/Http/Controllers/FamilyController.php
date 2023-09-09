@@ -18,7 +18,7 @@ class FamilyController extends Controller
             'families' => Family::latest()->filter(request([
                 'tag',
                 'search'
-            ]))->paginate(16)
+            ]))->paginate(8)
         ]);
     }
 
@@ -121,7 +121,8 @@ class FamilyController extends Controller
             }
 
             $family->delete();
-            return redirect('/')->with('message', 'Family succesfully deleted');
+            
+            return redirect()->route('families.manage')->with('message', 'Family succesfully deleted');
 
         } catch (\Exception $e) {
             Log::error('Error while deleting the family: ' . $e->getMessage());

@@ -52,6 +52,7 @@ Route::post('/families', [FamilyController::class,'store'])
 
 // Manage families
 Route::get('/families/manage', [FamilyController::class,'manage'])
+->name('families.manage')
 ->Middleware('auth');
 
 //Show Family edit form

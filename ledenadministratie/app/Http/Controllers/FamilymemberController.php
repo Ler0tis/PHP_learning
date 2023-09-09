@@ -30,7 +30,6 @@ class FamilymemberController extends Controller
     public function store(Request $request, Familymember $familymember) {
         try {
             $dataFields = $request->validate(Familymember::rules($familymember));
-            $family = Family::find($request->input('family_id'));
 
             $dateOfBirth = Carbon::createFromFormat('d-m-Y', $request->input('date_of_birth'))->format('Y-m-d');
 
@@ -52,6 +51,7 @@ class FamilymemberController extends Controller
 
             $familyMember->save();
 
+            $family = Family::find($request->input('family_id'));
             return redirect()->route('families.show', ['family' => $family->id])
             ->with('message', 'Familymember is successfully added.');
 
@@ -98,9 +98,8 @@ class FamilymemberController extends Controller
             $familymember->save();
 
             $family = Family::find($request->input('family_id'));
-            
             return redirect()->route('families.show', ['family' => $family->id])
-            ->with('message', 'Familymember is successfully updated.');
+                ->with('message', 'Familymember is successfully added.');
 
         } catch (\Exception $e) {
             Log::error('Error while updating the familymember: ' . $e->getMessage());
