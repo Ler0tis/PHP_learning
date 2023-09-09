@@ -2,85 +2,80 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\LoginRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
-    // Show Registrate form
+    // Show register form
     public function create()
     {
         return view('users.register');
     }
 
-    // Create new User
-    public function store(Request $request) {
-
+    // Create new user
+    public function store(RegisterRequest $request)
+    {
         try {
-            $dataFields = $request->validate([
-                'name' => ['required', 'min:3'],
-                'email' => ['required', 'email', Rule::unique('users', 'email')],
-                'password' => 'required|confirmed|min:6'
-            ]);
+            $dataFields = $request->validated();
 
-            // Hash password with Bcrypt
+            // Hash password with  Bcrypt
             $dataFields['password'] = bcrypt($dataFields['password']);
 
-            //create USER
+            // Create USER
             $user = User::create($dataFields);
 
-            // Login
-            auth()->login($user);
+            // LOGIN
+            Auth::login($user);
 
-            return redirect('/')->with('message', 'User created and logged in');
-
+            return redirect('/')->with('message', 'Created user and logged in.');
         } catch (\Exception $e) {
-            Log::error('Error while creating the user: ' . $e->getMessage());
+            Log::error('Error while creating this user: ' . $e->getMessage());
 
-            return back()->with('error', 'There is an error while creating the user.');
-        }
-    }
-
-    // Logout USER
-    public function logout(Request $request) {
-
-        try {
-            auth()->logout();
-
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-
-            return redirect('/')->with('message', 'User logged out');
-
-        } catch (\Exception $e) {
-            Log::error('Error while logging out the user: ' . $e->getMessage());
-
-            return back()->with('error', 'There is an error while logging out the user.');
+            return back()->with('error', 'There was an Error while creating this user.');
         }
     }
 
     // Show login form
-    public function login() {
+    public function login()
+    {
         return view('users.login');
     }
 
-    // Authenticate USER
-    public function authenticate(Request $request) {
-        $dataFields = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => 'required'
-        ]);
+    // Authenticate user
+    public function authenticate(LoginRequest $request)
+    {
+        $dataFields = $request->validated();
 
-        // attempt to login user and if failed, gets errormessage.
-        if(auth()->attempt($dataFields, $request->remember)) {
+        // Checked user Remember me? Cookie gets saved for next time login
+        $remember = $request->has('remember') ? true : false;
+
+        if (Auth::attempt($dataFields, $remember)) {
             $request->session()->regenerate();
 
             return redirect('/')->with('message', 'User logged in');
         }
 
-        return back()
-        ->withErrors(['email' => 'Invalid username/password combination']);
+        return back()->withErrors(['email' => 'Invalid combination of credentials.']);
+    }
+
+
+    // Logout user
+    public function logout()
+    {
+        try {
+            Auth::logout();
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
+
+            return redirect('/')->with('message', 'User logged out.');
+        } catch (\Exception $e) {
+            Log::error('Error while logging out user: ' . $e->getMessage());
+
+            return back()->with('error', 'There was an Error while loggin out this user.');
+        }
     }
 }

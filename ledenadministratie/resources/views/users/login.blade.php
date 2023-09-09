@@ -29,6 +29,13 @@
                 <p class="text-red-500 text-xs mt-1">{{$message}}</p>
                 @enderror
             </div>
+            <div class="mb-6">
+                <label for="remember" class="inline-block text-lg mb-2">
+                    Remember me
+                </label>
+                <input type="checkbox" class="border border-gray-200 rounded p-2"
+                 name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+            </div>
 
 
             <div class="mb-6">

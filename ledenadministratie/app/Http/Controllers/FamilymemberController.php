@@ -97,9 +97,9 @@ class FamilymemberController extends Controller
             $familymember->date_of_birth = $formattedDateOfBirth;
             $familymember->save();
 
-            $family = Family::find($request->input('family_id'));
-            return redirect()->route('families.show', ['family' => $family->id])
-                ->with('message', 'Familymember is successfully added.');
+
+            return redirect()->route('families.show', ['family' => $familymember->family_id])
+                ->with('message', 'Familymember is successfully updated.');
 
         } catch (\Exception $e) {
             Log::error('Error while updating the familymember: ' . $e->getMessage());

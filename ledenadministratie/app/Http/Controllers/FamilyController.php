@@ -32,7 +32,14 @@ class FamilyController extends Controller
 
         foreach ($familymembers as $familymember) {
             $membershipId = $familymember->membership_id;
-            $calculatedAmountPerYear = $contributionService->calculateAmountPerYear($membershipId, 100);
+            // Check if there is a membership for the familymember
+            if ($membershipId !== null) {
+                $calculatedAmountPerYear = $contributionService->calculateAmountPerYear($membershipId, 100);
+            } else {
+                // No membership? 
+                $calculatedAmountPerYear = 0;
+            }
+
             $calculatedAmounts[$familymember->id] = $calculatedAmountPerYear;
         }
 

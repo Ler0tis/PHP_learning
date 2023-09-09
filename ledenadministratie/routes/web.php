@@ -1,13 +1,11 @@
 <?php
 
-use App\Http\Controllers\ContributionController;
-use App\Models\Family;
 use GuzzleHttp\Middleware;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FamilyController;
 use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\ContributionController;
 use App\Http\Controllers\FamilymemberController;
 use App\Http\Controllers\FinancialYearController;
 
@@ -31,13 +29,9 @@ use App\Http\Controllers\FinancialYearController;
 
 */
 
-// Redirect for getting back to the family page (werkt nog niet 
-// Route::get('/families/{family}', [FamilyController::class, 'show'])->name('families.show');
-
-
 ////////////////////// Families //////////////////////
 
-// All families
+// All Families
 Route::get('/', [FamilyController::class,'index'])
 
 ->Middleware('auth');
@@ -46,7 +40,7 @@ Route::get('/', [FamilyController::class,'index'])
 Route::get('/families/create', [FamilyController::class,'create'])
 ->Middleware('auth');
 
-// Store familie data
+// Store Family data
 Route::post('/families', [FamilyController::class,'store'])
 ->Middleware('auth');
 
@@ -59,16 +53,15 @@ Route::get('/families/manage', [FamilyController::class,'manage'])
 Route::get('/families/{family}/edit', [FamilyController::class,'edit'])
 ->Middleware('auth');
 
-// Update family
+// Update Family
 Route::put('/families/{family}', [FamilyController::class,'update'])
 ->Middleware('auth');
 
-// Delete family
+// Delete Family
 Route::delete('/families/{family}', [FamilyController::class,'destroy'])
 ->Middleware('auth');
 
-//Single family
-// A family where Family is the name of the model
+//Single Family
 Route::get('/families/{family}', [FamilyController::class,'show'])
 ->name('families.show')
 ->Middleware('auth');
@@ -76,25 +69,25 @@ Route::get('/families/{family}', [FamilyController::class,'show'])
 
 ////////////////////// FAMILY MEMBERS//////////////////////
 
- // Show FamilyMember create form
+ // Show Familymember create form
 Route::get('/familymembers/create/{family_id?}', [FamilymemberController::class, 'create'])
 ->name('familymembers.create');
 
-// Store family member data
+// Store Familymember data
 Route::post('/familymembers', [FamilymemberController::class, 'store'])
 ->Middleware('auth');
 
-//Show Family member edit form
+//Show Familymember edit form
 Route::get('/familymembers/{familymember}/edit', [FamilymemberController::class, 'edit'])
-->name('familymembers.edit')
-->Middleware('auth');
+    ->name('familymembers.edit')
+    ->Middleware('auth');
 
-// Update Family members
+// Update Familymember
 Route::put('/familymembers/{familymember}', [FamilymemberController::class, 'update'])
 ->name('familymembers.update')
 ->Middleware('auth');
 
-// Delete familymember
+// Delete Familymember
 Route::delete('/familymembers/{id}', [FamilymemberController::class,'destroy'])
 ->Middleware('auth');
 
