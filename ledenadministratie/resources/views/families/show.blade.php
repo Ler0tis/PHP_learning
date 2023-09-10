@@ -32,7 +32,7 @@
                     Familymembers
                 </h3>
                 <a href="{{ route('familymembers.create', ['family_id' => $family->id]) }}"
-                    class="w-40 whitespace-nowrap block bg-black text-white py-2 rounded-xl hover:opacity-80 text-center">
+                    class="w-40 whitespace-nowrap block bg-black text-white p-2 m-2 rounded-xl hover:opacity-80 text-center">
                     <i class="fa-solid fa-plus pr-2"></i>  Add member</a>
                 <table class="w-full table-auto rounded-sm">
 

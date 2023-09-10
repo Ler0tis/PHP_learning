@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,13 +25,6 @@ class Contribution extends Model
                 'nullable',
                 'exists:memberships,id',
                 Rule::unique('contributions')->ignore($contribution),
-                function ($attribute, $value, $fail) use ($contribution) {
-                    // Error message when membership_id is already used
-                    $existingContribution = Contribution::where('membership_id', $value)->where('id', '!=', optional($contribution)->id)->first();
-                    if ($existingContribution) {
-                        $fail('This membership has already been used. Please select a different one.');
-                    }
-                }
             ],
             'min_age' => 'required|integer|min:0',
             'max_age' => [
@@ -42,7 +34,6 @@ class Contribution extends Model
                 'max:100',
             ],
             'discount' => 'required|numeric',
-            // 'amount' => 'required|numeric',
             'financial_year_id' => 'nullable|exists:financial_year,id'
         ];
 

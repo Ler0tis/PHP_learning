@@ -27,10 +27,12 @@ class FamilymemberController extends Controller
     }
 
     // Store familymember data
-    public function store(Request $request, Familymember $familymember) {
-        try {
-            $dataFields = $request->validate(Familymember::rules($familymember));
+    public function store(Request $request, Familymember $familymember) 
+    {
+        $validatedData = $request->validate(Familymember::rules($familymember));
 
+        try {
+        
             $dateOfBirth = Carbon::createFromFormat('d-m-Y', $request->input('date_of_birth'))->format('Y-m-d');
 
             $familyMember = new Familymember([
@@ -74,14 +76,16 @@ class FamilymemberController extends Controller
 
     public function update(Request $request, Familymember $familymember) {
 
+        $validatedData = $request->validate(Familymember::rules($familymember));
+
         try{
-            $dataFields = $request->validate(Familymember::rules($familymember));
+            
 
             $formattedDateOfBirth = Carbon::createFromFormat('d-m-Y', $request->input('date_of_birth'));
             $formattedDateOfBirth = $formattedDateOfBirth->format('Y-m-d');
 
-            $familymember->name = $dataFields['name'];
-            $familymember->email = $dataFields['email'];
+            $familymember->name = $validatedData['name'];
+            $familymember->email = $validatedData['email'];
 
             if ($request->hasFile('picture')) {
                 $path = $request->file('picture')->store('pictures', 'public');

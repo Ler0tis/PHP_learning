@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Family;
 use App\Models\Membership;
 use App\Models\Contribution;
+use App\Models\Familymember;
 use Illuminate\Http\Request;
 use App\Models\FinancialYear;
 use Illuminate\Support\Facades\Log;
@@ -45,11 +46,11 @@ class ContributionController extends Controller
     }
 
 
-    public function store(Request $request, Contribution $contribution, Family $familyId) {
+    public function store(Request $request, Contribution $contribution) 
+    {
+        $validatedData = $request->validate(Contribution::rules());
 
         try {
-            $dataFields = $request->validate(Contribution::rules($contribution));
-
             // Variable for current year
             $currentYear = date('Y');
 
@@ -62,11 +63,11 @@ class ContributionController extends Controller
             }
 
             // Connect FinancialYear to Contribution by ID
-            $dataFields['financial_year_id'] = $financialYear->id;
+            $validatedData['financial_year_id'] = $financialYear->id;
 
-            Contribution::create($dataFields);
+            Contribution::create($validatedData);
 
-            $this->contributionService->updateFamilyMembersMembership($contribution);
+            $this->contributionService->updateFamilyMembersContribution($contribution);
 
             $contributions = Contribution::with('membership')->get(['*']);
             return view('contributions.index', compact('contributions'))->with('message', 'Contribution successfully created');
@@ -76,7 +77,6 @@ class ContributionController extends Controller
 
             return back()->with('error', 'There is an error while creating the contribution.');
         }
-
     }
 
     public function edit($id)
@@ -90,18 +90,18 @@ class ContributionController extends Controller
 
     public function update(Request $request, Contribution $contribution)
     {
-        try {
-            $dataFields = $request->validate(Contribution::rules($contribution));
+        $validatedData = $request->validate(Contribution::rules($contribution));
 
-            $contribution->update($dataFields);
+        try {
+            $contribution->update($validatedData);
 
             // Get the contribution from DB
             $updatedContribution = Contribution::findOrFail($contribution->id);
 
-            $updatedContribution->update($dataFields);
+            $updatedContribution->update($validatedData);
 
             // Call update_method from Service to update the new data for contribution 
-            $this->contributionService->updateFamilyMembersMembership($updatedContribution);
+            $this->contributionService->updateFamilyMembersContribution($updatedContribution);
 
             return redirect()->route('contributions.index')->with('message', 'Contribution succesfully updated');
 
@@ -116,9 +116,24 @@ class ContributionController extends Controller
     {
         try {
             $contribution = Contribution::findOrFail($id);
+
+            // Get the correct membership
+            $membership = $contribution->membership;
+
+            // Delete the contribution
             $contribution->delete();
 
-            return redirect()->route('contributions.index')->with('message', 'Contribution is succesfully deleted');
+            // Get the familymembers connected to the membership_id
+            $familyMembers = Familymember::where('membership_id', $membership->id)->get();
+
+            // Put membership_id on NULL for those familymembers
+            foreach ($familyMembers as $familyMember) {
+                $familyMember->membership_id = null;
+                $familyMember->save();
+            }
+
+            return redirect('contributions')
+                ->with('message', 'Contribution is successfully deleted');
 
         } catch (\Exception $e) {
             Log::error('Error while deleting the contribution: ' . $e->getMessage());
@@ -126,4 +141,5 @@ class ContributionController extends Controller
             return back()->with('error', 'There is an error while deleting the contribution.');
         }
     }
+
 }

@@ -54,25 +54,26 @@ class FamilyController extends Controller
 
     // Store familie data
     public function store(Request $request) {
+        $validatedData = $request->validate(Family::rules());
 
         try {
-            $dataFields = $request->validate(Family::rules());
+        
             // Optional fields, but if filled, its added
             if ($request->filled('tags')) {
-                $dataFields['tags'] = $request->input('tags');
+                $validatedData['tags'] = $request->input('tags');
             }
 
             if ($request->filled('website')) {
-                $dataFields['website'] = $request->input('website');
+                $validatedData['website'] = $request->input('website');
             }
 
             if ($request->filled('description')) {
-                $dataFields['description'] = $request->input('description');
+                $validatedData['description'] = $request->input('description');
             }
 
-            $dataFields['user_id'] = auth()->id();
+            $validatedData['user_id'] = auth()->id();
 
-            Family::create($dataFields);
+            Family::create($validatedData);
 
             return redirect('/')->with('message', 'Family succesfully added!');
 
@@ -93,22 +94,23 @@ class FamilyController extends Controller
     // Update Family
     public function update(Request $request, Family $family) {
 
+        $validatedData = $request->validate(Family::rules($family));
+
         try {
-            $dataFields = $request->validate(Family::rules($family));
         // Optional fields, but if filled, its added
         if ($request->filled('tags')) {
-            $dataFields['tags'] = $request->input('tags');
+            $validatedData['tags'] = $request->input('tags');
         }
 
         if ($request->filled('website')) {
-            $dataFields['website'] = $request->input('website');
+            $validatedData['website'] = $request->input('website');
         }
 
         if ($request->filled('description')) {
-            $dataFields['description'] = $request->input('description');
+            $validatedData['description'] = $request->input('description');
         }
 
-        $family->update($dataFields);
+        $family->update($validatedData);
 
         return redirect('/')->with('message', 'Family succesfully updated');
 

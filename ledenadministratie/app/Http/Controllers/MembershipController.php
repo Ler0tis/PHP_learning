@@ -22,16 +22,16 @@ class MembershipController extends Controller
         return view('memberships.index', compact('memberships'));
     }
 
-    public function store(Request $request) {
+    public function store(Request $request) 
+    {
+        $validatedData = $request->validate(Membership::rules());
 
         try {
-            $dataFields = $request->validate(Membership::rules());
-
             if ($request->filled('description')) {
-                $dataFields['description'] = $request->input('description');
+                $validatedData['description'] = $request->input('description');
             }
 
-            Membership::create($dataFields);
+            Membership::create($validatedData);
 
             return redirect('memberships')->with('message', 'Membership is created');
 
@@ -47,16 +47,16 @@ class MembershipController extends Controller
         return view('memberships.edit', ['membership' => $membership]);
     }
 
-    public function update(Request $request, Membership $membership) {
+    public function update(Request $request, Membership $membership) 
+    {
+        $validatedData = $request->validate(Membership::rules());
 
         try {
-            $dataFields = $request->validate(Membership::rules());
-
             if ($request->filled('description')) {
-                $dataFields['description'] = $request->input('description');
+                $validatedData['description'] = $request->input('description');
             }
 
-            $membership->update($dataFields);
+            $membership->update($validatedData);
 
             return redirect('memberships')->with('message', 'Membership is updated');
 
@@ -72,23 +72,23 @@ class MembershipController extends Controller
         try {
             $membership = Membership::findOrFail($id);
 
-            // Verwijder gerelateerde contributies
+            // Delete related contributions
             Contribution::where('membership_id', $membership->id)->delete();
 
-            // Haal de bijbehorende familymembers op
+            // Get the members that have this membership_id
             $familymembers = Familymember::where('membership_id', $membership->id)->get();
 
-            // Zet membership_id op NULL voor elk van de familymembers
+            // Put membership_id with these members on NULL
             foreach ($familymembers as $familymember) {
                 $familymember->membership_id = null;
                 $familymember->save();
             }
 
-            // Verwijder het membership zelf
+            // Delete the membership
             $membership->delete();
 
             return redirect('memberships')
-                ->with('message', 'Membership is successfully deleted');
+                ->with('message', 'Membership and related contribution are successfully deleted');
 
         } catch (\Exception $e) {
             Log::error('Error while deleting the membership: ' . $e->getMessage());
