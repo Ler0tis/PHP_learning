@@ -24,9 +24,6 @@ class Membership extends Model
         return $rules; 
     }
 
-    public function getBaseContribution() {
-        return $this->contribution->amount;
-    }
 
     ////////////////////// RELATIONS //////////////////////
     public function familymember() {

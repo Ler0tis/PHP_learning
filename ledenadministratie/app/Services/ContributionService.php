@@ -19,7 +19,7 @@ class ContributionService {
             // Calculate age based on date_of_birth for the calculation
             $age = Carbon::parse($familymember->date_of_birth)->age;
 
-            // Calcualte the right age? 
+            // Calcualte the right age
             Log::info("Familymember ID: {$familymember->id}, Age: $age");
 
             // Is age between min_ and max_age?
@@ -54,6 +54,4 @@ class ContributionService {
 
         return $calculatedAmountPerYear;
     }
-
-    
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Family;
+use App\Models\Contribution;
 use App\Models\Familymember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -28,15 +29,24 @@ class FamilyController extends Controller
         $family = Family::findOrFail($id);
         $familymembers = Familymember::where('family_id', $id)->get();
 
-        $calculatedAmounts = []; // An array to store the calculated amount for members
+        $calculatedAmounts = [];
+
+        // Retrieve the contribution records for the familymembers
+        $contributions = Contribution::whereIn('membership_id', $familymembers->pluck('membership_id'))->get();
 
         foreach ($familymembers as $familymember) {
             $membershipId = $familymember->membership_id;
-            // Check if there is a membership for the familymember
+
+            // Check if there is an amount available
+            $contribution = $contributions->where('membership_id', $membershipId)->first();
+
+            // Set a default when there is not. 
+            $contributedAmount = $contribution ? $contribution->amount : 0;
+
+            // Calculate amountPerYear not available outside Statement
             if ($membershipId !== null) {
-                $calculatedAmountPerYear = $contributionService->calculateAmountPerYear($membershipId, 100);
+                $calculatedAmountPerYear = $contributionService->calculateAmountPerYear($membershipId, $contributedAmount);
             } else {
-                // No membership? 
                 $calculatedAmountPerYear = 0;
             }
 

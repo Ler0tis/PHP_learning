@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Family;
 use App\Models\Membership;
 use App\Models\Contribution;
 use App\Models\Familymember;
@@ -51,6 +50,9 @@ class ContributionController extends Controller
         $validatedData = $request->validate(Contribution::rules());
 
         try {
+            // Default value for contribution
+            $validatedData['amount'] = 100;
+
             // Variable for current year
             $currentYear = date('Y');
 
@@ -61,7 +63,6 @@ class ContributionController extends Controller
             if (!$financialYear) {
                 $financialYear = FinancialYear::create(['year' => $currentYear]);
             }
-
             // Connect FinancialYear to Contribution by ID
             $validatedData['financial_year_id'] = $financialYear->id;
 
@@ -70,6 +71,7 @@ class ContributionController extends Controller
             $this->contributionService->updateFamilyMembersContribution($contribution);
 
             $contributions = Contribution::with('membership')->get(['*']);
+
             return view('contributions.index', compact('contributions'))->with('message', 'Contribution successfully created');
 
         } catch (\Exception $e) {
@@ -90,7 +92,7 @@ class ContributionController extends Controller
 
     public function update(Request $request, Contribution $contribution)
     {
-        $validatedData = $request->validate(Contribution::rules($contribution));
+        $validatedData = $request->validate(Contribution::rules());
 
         try {
             $contribution->update($validatedData);

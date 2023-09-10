@@ -16,6 +16,9 @@
                     <option value="{{ $membership->id }}">{{ $membership->description }}</option>
                     @endforeach
                 </select>
+                @error('membership_id')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
             
             <div class="mb-6">

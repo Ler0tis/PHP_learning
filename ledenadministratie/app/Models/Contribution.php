@@ -15,6 +15,7 @@ class Contribution extends Model
         'min_age',
         'max_age',
         'discount',
+        'amount',
         'financial_year_id',
     ];
 
@@ -24,7 +25,9 @@ class Contribution extends Model
             'membership_id' => [
                 'nullable',
                 'exists:memberships,id',
-                Rule::unique('contributions')->ignore($contribution),
+                Rule::unique('contributions')->where(function ($query) use ($contribution) {
+                    $query->where('membership_id', '!=', request('membership_id'));
+                }),
             ],
             'min_age' => 'required|integer|min:0',
             'max_age' => [
