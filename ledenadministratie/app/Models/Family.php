@@ -60,7 +60,8 @@ class Family extends Model
         return $rules;
     }
 
-    //Relation between Family and their members
+
+    //////////// RELATIONS ////////////
     public function familymembers()
     {
         return $this->hasMany(Familymember::class);

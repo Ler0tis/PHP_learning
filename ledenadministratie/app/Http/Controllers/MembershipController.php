@@ -75,10 +75,10 @@ class MembershipController extends Controller
             // Delete related contributions
             Contribution::where('membership_id', $membership->id)->delete();
 
-            // Get the members that have this membership_id
+            // Get the familymembers that have this membership_id
             $familymembers = Familymember::where('membership_id', $membership->id)->get();
 
-            // Put membership_id with these members on NULL
+            // Put membership_id with these familymembers on NULL
             foreach ($familymembers as $familymember) {
                 $familymember->membership_id = null;
                 $familymember->save();

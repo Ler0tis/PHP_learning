@@ -48,7 +48,7 @@ class Contribution extends Model
         return $this->attributes['discount'] . '%';
     }
 
-    /////////// Relations between tables ////////////////
+    //////////////// RELATIONS ////////////////
     public function membership() {
         return $this->belongsTo(Membership::class);
     }

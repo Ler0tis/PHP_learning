@@ -10,8 +10,9 @@ class FinancialYear extends Model
     use HasFactory;
 
     protected $fillable = ['year'];
-    
-    // Relation with contributions
+
+
+    //////////// RELATIONS ////////////
     public function contributions()
     {
         return $this->hasMany(Contribution::class);

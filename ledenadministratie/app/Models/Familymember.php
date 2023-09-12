@@ -24,6 +24,7 @@ class Familymember extends Model
     {
         $familyId = optional($familymember)->family_id;
 
+        // Validation that name cannot be the same within a family
         return [
             'name' => [
                 'required',
@@ -74,7 +75,8 @@ class Familymember extends Model
         ];
     }
 
-    // Relations
+
+    //////////// RELATIONS ////////////
     public function membership() {
         return $this->belongsTo(Membership::class, 'membership_id')
         ->withDefault();

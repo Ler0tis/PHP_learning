@@ -16,6 +16,7 @@ class ContributionService {
         $allFamilymembers = Familymember::all();
 
         foreach ($allFamilymembers as $familymember) {
+
             // Calculate age based on date_of_birth for the calculation
             $age = Carbon::parse($familymember->date_of_birth)->age;
 
@@ -24,6 +25,7 @@ class ContributionService {
 
             // Is age between min_ and max_age?
             if ($age >= $contribution->min_age && $age <= $contribution->max_age) {
+                
                 // Add membership_id to familymember
                 $familymember->membership_id = $contribution->membership_id;
                 $familymember->save();

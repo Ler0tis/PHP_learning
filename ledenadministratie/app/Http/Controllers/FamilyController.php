@@ -29,6 +29,7 @@ class FamilyController extends Controller
         $family = Family::findOrFail($id);
         $familymembers = Familymember::where('family_id', $id)->get();
 
+        // Empty array to store the calculated contributions in
         $calculatedAmounts = [];
 
         // Retrieve the contribution records for the familymembers
@@ -62,7 +63,7 @@ class FamilyController extends Controller
         return view('families.create');
     }
 
-    // Store familie data
+
     public function store(Request $request) {
         $validatedData = $request->validate(Family::rules());
 
@@ -101,7 +102,7 @@ class FamilyController extends Controller
         return view('families.edit', ['family' => $family]);
     }
 
-    // Update Family
+
     public function update(Request $request, Family $family) {
 
         $validatedData = $request->validate(Family::rules($family));
@@ -150,7 +151,7 @@ class FamilyController extends Controller
         }
     }
 
-    // Manage Families and show them on manage families
+    // Manage Families and show them on manage families ( if you are the user that created them)
     public function manage()
     {
         return view('families.manage', ['families' => auth()->user()->families]);

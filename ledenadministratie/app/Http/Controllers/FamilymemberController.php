@@ -26,7 +26,7 @@ class FamilymemberController extends Controller
         return view('familymembers.create', compact('family_id'));
     }
 
-    // Store familymember data
+
     public function store(Request $request, Familymember $familymember) 
     {
         $validatedData = $request->validate(Familymember::rules($familymember));
@@ -64,10 +64,10 @@ class FamilymemberController extends Controller
         }
     }
 
-    // Show edit form for Family members
+   
     public function edit(Familymember $familymember)
     {
-        // Retrieve available memberships
+
         $memberships = Membership::all(['*']);
 
         return view('familymembers.edit', compact('familymember', 'memberships'));

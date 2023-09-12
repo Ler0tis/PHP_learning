@@ -42,7 +42,8 @@ class User extends Authenticatable
     ];
 
 
-    ////////////////////// Relations  See which user made a family //////////////////////
+    ////////////////////// Relations  //////////////////////
+    // User can only manage families they made //
     public function families() {
         return $this->hasMany(Family::class, 'user_id');
     }
