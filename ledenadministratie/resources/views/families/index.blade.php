@@ -1,6 +1,7 @@
 
 {{--Use the x-layout instead of extends and section for better maintainability--}}
 
+
 <x-layout>
     @include('partials._search')
 

@@ -1,4 +1,13 @@
 
+
+
+<!-- 
+    Reasons for use of TAILWIND CSS
+    - Control over styling
+    - Faster CSS styling
+    - Responsiveness and security
+-->>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
